@@ -74,4 +74,5 @@ minima:
   markdown: kramdown
 
 #MathJax Support
+#https://webdocs.cs.ualberta.ca/~zichen2/blog/coding/setup/2019/02/17/how-to-add-mathjax-support-to-jekyll.html
 #https://singyuan.github.io/posts/mathjax/add_tex/
