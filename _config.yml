@@ -73,3 +73,5 @@ minima:
  # Build settings
   markdown: kramdown
 
+#MathJax Support
+#https://singyuan.github.io/posts/mathjax/add_tex/
