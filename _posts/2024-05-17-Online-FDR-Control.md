@@ -25,8 +25,14 @@ that try to control either the stricter _FWER_ (family-wise error rate) or the _
 rate). While the FWER describes the probability to make _at least_ one _false discovery_, the FDR
 describes the proportion of false discoveries in proportion to the entirety of declared discoveries.
 
-$$FWER = 1-(1-\alpha)^{p}\ge\alpha$$
-$$FDR = \frac{False Positive}{False Positive + True Positives}$$
+\begin{equation}
+   FWER = 1-(1-\alpha)^{p}\ge\alpha
+\end{equation}
+
+\begin{equation}
+   $$FDR = \frac{\text{False Positive}}{\text{False Positive + True Positives}}$$
+\end{equation}
+
 
 
 
