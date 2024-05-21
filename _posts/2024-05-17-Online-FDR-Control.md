@@ -16,7 +16,7 @@ initial hypothesis does not hold).
 Problems arise when dozens up to millions of such (hypothesis) tests are conducted simultaneously.
 In this scenario, the chance to observe a statistically significant result by mere chance increases
 with the number of tests conducted. Given a significance level of $\alpha=0.05$ and 100 simultaneous
-tests, the number of committing _Type I_ errors will be $100 * 0.05 = 5$ as _p_-values under
+tests, the number of committing _Type I_ errors will be $$100 * 0.05 = 5$$ as _p_-values under
 $$H_{\text{0}}$$ are uniformly distributed [0,1] and a _p_-value of 0.05 still has a 5% chance turning
 out to be a _Type I_ error.
 
