@@ -103,8 +103,10 @@ constants $${\gamma_{t}}^\infty_{t=1}$$ that sums up to $$1$$ the test levels $$
 are chosen as:
 
 \begin{equation}
-   \alpha_{t} = w_{0} \gamma_{t} + \sum_{j:\tau_{j} \l t, \tau_{j} \neq \mathbb{1}} \gamma_{t-\tau_{j}}b_{0}
+   \alpha_{t} = w_{0} \gamma_{t} + \sum_{j:\tau_{j} \lt, \tau_{j} \neq \mathbb{1}} \gamma_{t-\tau_{j}}b_{0}
 \end{equation}
 
+where $$\tau_{j}$$ denotes the \textit{j}th rejection with $$w_{0} + b_{0} \le \alpha$$ in order to
+control the FDR.
 
 # References
