@@ -69,7 +69,7 @@ controlling the FDR for future tests.
 Following the procedure described, _GAI_ results in a growing series of test levels
 $${\alpha_{1}}, {\alpha_{2}}, {\alpha_{3}}, ...$$ to determine corresponding decision
 towards $${R{1}}, {R{2}}, {R{3}}, ...$$ the statistical significance of an observation.
-Within the online setting, a future decision $${R{t}}$$ ($${\alpha{t}}$$) can only be made
+Within the online setting, a future decision $${R{t}}$$ (and $${\alpha_{t}}$$) can only be made
 based on $$R_{1}, R_{2}, ... R_{t-1}$$. At each point in time $$t$$ the available _alpha wealth_
 $$W(t)$$ decreases by $$\phi_{t}$$. As hypotheses $$H_{t}$$ are rejected ($$R_{t}=1$$),
 the _alpha wealth_ increases by $$\varphi_{t}$$. With that the initial wealth is continuously
@@ -77,6 +77,33 @@ updated as:
 
 \begin{equation}
    W(t) = W(t-1) - \phi_{t} + R_{t\varphi t}
+\end{equation}
+
+Within the given constraint, $$\alpha_{t}\text{,} \phi_{t} \text{and} \varphi_(t)$$ can be 
+freely defined. Following the initial _alpha investing_ rule given in 
+[Foster and Stine, 2008](https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-9868.2007.00643.x),
+the variables are chosen as
+
+\begin{equation}
+   \alpha_{t} = \frac{\phi_{t}}{1 + \phi_{t}}, \phi_{t} \le W(t-1)
+\end{equation}
+
+\begin{equation}
+   \varphi_{t} = \phi_{t} + \alpha
+\end{equation}
+
+Particular definitions come with different trade-offs and implications, as discussed in [Aharoni and Rosset, 2014](https://www.jstor.org/stable/24774568).
+
+## LORD, SAFFRON and ADDIS
+
+The _LORD_ algorithms was proposed by
+[Javanmard and Montanari, 2018](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7615519/#R1)
+and represents a _monotone_ GAI rule. Given an _infinite non-increasing_ sequence of positive
+constants $${\gamma_{t}}^\infty_{t=1}$$ that sums up to $$1$$ the test levels $$\alpha{t}$$ for LORD
+are chosen as:
+
+\begin{equation}
+   \alpha_{t} = w_{0} \gamma_{t} + \sum_{j:\tau_{j} \l t, \tau_{j} \neq \mathbb{1}} \gamma_{t-\tau_{j}}b_{0}
 \end{equation}
 
 
