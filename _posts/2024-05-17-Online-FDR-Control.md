@@ -103,10 +103,20 @@ constants $${\gamma_{t}}^\infty_{t=1}$$ that sums up to $$1$$ the test levels $$
 are chosen as:
 
 \begin{equation}
-   \alpha_{t} = w_{0} \gamma_{t} + \sum_{j:\tau_{j} \lt, \tau_{j} \neq \mathbb{1}} \gamma_{t-\tau_{j}}b_{0}
+   \alpha_{t} = w_{0} \gamma_{t} + \sum_{j:\tau_{j} \lt t, \tau_{j} \neq \mathbb{1}} \gamma_{t-\tau_{j}}b_{0}
 \end{equation}
 
 where $$\tau_{j}$$ denotes the \textit{j}th rejection with $$w_{0} + b_{0} \le \alpha$$ in order to
 control the FDR.
 
 # References
+
+[1] Foster, D. and Stine R. (2008). Alpha-Investing: 
+A Procedure for Sequential Control of Expected False Discoveries.
+Journal of the Royal Statistical Society (Series B), 29(4):429-444.<br>
+[2] Aharoni, E. and Rosset, S. (2014). Alpha-Investing:
+Definitions, Optimality Results and Applications to Public Databases.
+Journal of the Royal Statistical Society (Series B), 76(4):771–794.<br>
+[3] Javanmard, A., and Montanari, A. (2018).
+Online Rules for Control of False Discovery Rate and False Discovery Exceedance.
+Annals of Statistics, 46(2):526-554.<br>
