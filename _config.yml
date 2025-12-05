@@ -50,8 +50,8 @@ header_pages:
 # Minima theme settings
 minima:
   skin: academic
-
 # Exclude from processing
+
 exclude:
   - Gemfile
   - Gemfile.lock
