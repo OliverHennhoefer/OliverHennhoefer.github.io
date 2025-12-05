@@ -1,9 +1,7 @@
 ---
-#
-# By default, content added below the "---" mark will appear in the home page
-# between the top bar and the list of recent posts.
-# To change the home page layout, edit the _layouts/home.html file.
-# See: https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-#
 layout: home
 ---
+
+I am a researcher focused on developing statistical methods for reliable machine learning systems. My work centers on anomaly detection, conformal inference, and online learning algorithms that provide formal guarantees under distribution shift.
+
+I am particularly interested in methods that maintain statistical validity in dynamic environments, including online false discovery rate control and adaptive conformal prediction.
