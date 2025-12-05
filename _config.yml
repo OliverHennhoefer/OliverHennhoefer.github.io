@@ -1,61 +1,73 @@
-title: ohennhoefer
-author:
-  name: Oliver Hennhöfer
-  email: oliver.hennhoefer@mail.de
+# Site Settings
+title: Oliver Hennhöfer
+name: Oliver Hennhöfer
+email: oliver.hennhoefer@mail.de
 
-# The `>` after `description:` means to ignore line-breaks until next key.
-# If you want to omit the line-break after the end of text, use `>-` instead.
 description: >
-  Writing about anomaly detection, conformal inference and related topics.
+  Academic researcher specializing in anomaly detection, conformal inference,
+  and statistical machine learning.
+
+url: ""
+baseurl: ""
+
+# Academic/Professional Info
+position: Researcher
+institution: ""
+department: ""
+location: Germany
+
+# Research Interests (used on homepage)
+research_interests:
+  - Anomaly Detection
+  - Conformal Inference
+  - Online Learning
+  - Statistical Machine Learning
+  - False Discovery Rate Control
+
+# Social/Academic Links
+google_scholar: ""
+orcid: ""
+github: "OliverHennhoefer"
+linkedin: ""
+twitter: ""
 
 # Build settings
-
-# If you clone the Minima repo and build locally, use this setting.
 theme: minima
-
-# As of November 2023, GitHub Pages still uses Minima 2.5.1 (https://pages.github.com/versions/).
-# If you want to use the latest Minima version on GitHub Pages, use the following setting and
-# add a line comment on "theme: minima" above.
-#remote_theme: jekyll/minima
+markdown: kramdown
 
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
 
-# Theme-specific settings
-
-# If you want to link only specific pages in your header, use this and add the path to the pages
-# in order as they should show up.
+# Navigation
 header_pages:
   - about.md
+  - research.md
+  - publications.md
+  - talks.md
+  - teaching.md
 
-# Set to `true` to show excerpts on the homepage.
-#show_excerpts: false
-
-# Minima specific settings, which are only available from Minima 3.0 onward.
+# Minima theme settings
 minima:
-  # Minima skin selection.
-  # Available skins are:
-  # classic	           Default, light color scheme.
-  # dark	             Dark variant of the classic skin.
-  # auto	             Adaptive skin based on the default classic and dark skins.
-  # solarized-light	   Light variant of solarized color scheme.
-  # solarized-dark	   Dark variant of solarized color scheme.
-  # solarized	         Adaptive skin for solarized color scheme skins.
-  skin: classic
+  skin: academic
+# Exclude from processing
 
-  # Minima date format.
-  # The default value is "%b %d, %Y" (e.g. Nov 14, 2023)
-  # Refer to https://shopify.github.io/liquid/filters/date/ if you want to customize this.
-  #date_format: "%b-%d-%Y"
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .git
+  - .gitignore
+  - README.md
+  - script
 
-  # Generate social links in footer.
-  social_links:
-    - { platform: linkedin, user_url: "https://www.linkedin.com/in/oliver-hennhoefer" }
+# MathJax Support
+mathjax: true
 
- # Build settings
-  markdown: kramdown
-
-#MathJax Support
-#https://webdocs.cs.ualberta.ca/~zichen2/blog/coding/setup/2019/02/17/how-to-add-mathjax-support-to-jekyll.html
-#https://singyuan.github.io/posts/mathjax/add_tex/
+# Collections for academic content
+collections:
+  publications:
+    output: false
+  talks:
+    output: false
