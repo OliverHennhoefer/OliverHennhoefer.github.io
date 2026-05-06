@@ -5,9 +5,31 @@ layout: base
 <div class="hero">
   <h1 class="hero-name">{{ site.name }}</h1>
   <p class="hero-title">{{ site.position }}</p>
-  {%- if site.institution != "" -%}
-  <p class="hero-affiliation">{{ site.institution }}</p>
+  {%- if site.department or site.location -%}
+  <p class="hero-affiliation">
+    {%- if site.department -%}{{ site.department }}{%- endif -%}
+    {%- if site.department and site.location -%} / {%- endif -%}
+    {%- if site.location -%}{{ site.location }}{%- endif -%}
+  </p>
   {%- endif -%}
+
+  <nav class="profile-links" aria-label="Profile links">
+    {%- if site.email -%}
+    <a href="mailto:{{ site.email }}">email</a>
+    {%- endif -%}
+    {%- if site.github != "" -%}
+    <a href="https://github.com/{{ site.github }}">github</a>
+    {%- endif -%}
+    {%- if site.linkedin != "" -%}
+    <a href="https://linkedin.com/in/{{ site.linkedin }}">linkedin</a>
+    {%- endif -%}
+    {%- if site.orcid != "" -%}
+    <a href="https://orcid.org/{{ site.orcid }}">orcid</a>
+    {%- endif -%}
+    {%- if site.twitter != "" -%}
+    <a href="https://x.com/{{ site.twitter }}">x</a>
+    {%- endif -%}
+  </nav>
 </div>
 
 <section class="intro">
@@ -16,10 +38,55 @@ layout: base
 
 {%- if site.research_interests.size > 0 -%}
 <section class="research-interests">
-  <h2>Research Interests</h2>
-  <ul class="interest-list">
+  <h2>Interests</h2>
+  <p class="interest-line">
     {%- for interest in site.research_interests -%}
-    <li>{{ interest }}</li>
+      <span>{{ interest }}</span>{% unless forloop.last %}<span class="separator">/</span>{% endunless %}
+    {%- endfor -%}
+  </p>
+</section>
+{%- endif -%}
+
+{%- if site.featured_projects.size > 0 -%}
+<section class="featured-projects">
+  <h2>Projects</h2>
+  <ul class="project-list">
+    {%- for project in site.featured_projects -%}
+    <li class="project-item">
+      <p class="project-title">{{ project.name }}</p>
+      <p class="project-description">{{ project.description }}</p>
+      <p class="project-meta">{{ project.stack }}</p>
+      {%- if project.links.size > 0 -%}
+      <p class="project-links">
+        {%- for link in project.links -%}
+        <a href="{{ link.url }}">{{ link.label }}</a>
+        {%- endfor -%}
+      </p>
+      {%- endif -%}
+    </li>
+    {%- endfor -%}
+  </ul>
+</section>
+{%- endif -%}
+
+{%- if site.selected_publications.size > 0 -%}
+<section class="selected-publications">
+  <h2>Selected Publications</h2>
+  <ul class="publication-list">
+    {%- for publication in site.selected_publications -%}
+    <li class="publication-item">
+      <p class="publication-title">{{ publication.title }}</p>
+      <p class="publication-authors">{{ publication.authors }}</p>
+      <p class="publication-venue">{{ publication.venue }}</p>
+      <p class="publication-year">{{ publication.year }}</p>
+      {%- if publication.links.size > 0 -%}
+      <p class="publication-links">
+        {%- for link in publication.links -%}
+        <a href="{{ link.url }}">{{ link.label }}</a>
+        {%- endfor -%}
+      </p>
+      {%- endif -%}
+    </li>
     {%- endfor -%}
   </ul>
 </section>
@@ -28,10 +95,10 @@ layout: base
 {%- assign posts = site.posts | where_exp: "post", "post.draft != true" -%}
 {%- if posts.size > 0 -%}
 <section class="recent-posts">
-  <h2>Recent Writing</h2>
+  <h2>Writing</h2>
   <ul class="post-list">
-    {%- assign date_format = site.minima.date_format | default: "%B %Y" -%}
-    {%- for post in posts limit: 5 -%}
+    {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+    {%- for post in posts limit: 2 -%}
     <li class="post-item">
       <span class="post-date">{{ post.date | date: date_format }}</span>
       <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
@@ -40,24 +107,3 @@ layout: base
   </ul>
 </section>
 {%- endif -%}
-
-<section class="contact">
-  <h2>Contact</h2>
-  <p class="email">
-    <a href="mailto:{{ site.email }}">{{ site.email }}</a>
-  </p>
-  <div class="social-links">
-    {%- if site.github != "" -%}
-    <a href="https://github.com/{{ site.github }}" class="social-link">GitHub</a>
-    {%- endif -%}
-    {%- if site.google_scholar != "" -%}
-    <a href="{{ site.google_scholar }}" class="social-link">Google Scholar</a>
-    {%- endif -%}
-    {%- if site.orcid != "" -%}
-    <a href="https://orcid.org/{{ site.orcid }}" class="social-link">ORCID</a>
-    {%- endif -%}
-    {%- if site.linkedin != "" -%}
-    <a href="https://linkedin.com/in/{{ site.linkedin }}" class="social-link">LinkedIn</a>
-    {%- endif -%}
-  </div>
-</section>

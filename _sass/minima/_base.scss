@@ -1,6 +1,5 @@
-// Base Styles - Typographic-First Academic Design
+// Base Styles
 
-// Reset
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -17,7 +16,6 @@ dl, dd, ol, ul, figure {
   padding: 0;
 }
 
-// Body
 body {
   font-family: $base-font-family;
   font-weight: $base-font-weight;
@@ -28,70 +26,54 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  font-feature-settings: "kern" 1, "liga" 1;
 }
 
-// Typography Scale - Expressive
 h1, h2, h3, h4, h5, h6 {
   font-family: $heading-font-family;
-  font-weight: 500;
-  line-height: 1.2;
+  font-weight: 600;
+  line-height: 1.25;
   color: $text-color;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 h1 {
-  @include relative-font-size(3.5);
-  font-weight: 400;
-  letter-spacing: -0.03em;
+  @include relative-font-size(2.5);
+  font-weight: 600;
   margin-bottom: $spacing-unit;
 
   @include media-query($on-palm) {
-    @include relative-font-size(2.5);
+    @include relative-font-size(2);
   }
 }
 
 h2 {
-  @include relative-font-size(2);
-  margin-top: $spacing-unit * 2;
-  margin-bottom: $spacing-unit * 0.75;
-
-  @include media-query($on-palm) {
-    @include relative-font-size(1.5);
-  }
+  @include relative-font-size(1.2);
+  margin-top: $spacing-unit * 1.75;
+  margin-bottom: $spacing-unit * 0.6;
 }
 
 h3 {
-  @include relative-font-size(1.5);
-  margin-top: $spacing-unit * 1.5;
-  margin-bottom: $spacing-unit * 0.5;
-}
-
-h4 {
-  @include relative-font-size(1.25);
-  margin-top: $spacing-unit;
-  margin-bottom: $spacing-unit * 0.25;
-}
-
-h5, h6 {
   @include relative-font-size(1);
-  font-weight: 600;
+  margin-top: $spacing-unit * 1.25;
+  margin-bottom: $spacing-unit * 0.4;
+}
+
+h4, h5, h6 {
+  @include relative-font-size(1);
   margin-top: $spacing-unit;
-  margin-bottom: $spacing-unit * 0.25;
+  margin-bottom: $spacing-unit * 0.3;
 }
 
-// Paragraphs
 p {
-  margin-bottom: $spacing-unit * 0.75;
-  max-width: 65ch;
+  margin-bottom: $spacing-unit * 0.7;
+  max-width: 68ch;
 }
 
-// Links
 a {
   color: $link-base-color;
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-underline-offset: 2px;
+  text-underline-offset: 3px;
   transition: color 0.15s ease;
 
   &:visited {
@@ -103,27 +85,19 @@ a {
   }
 }
 
-// Lists
 ul, ol {
   margin-left: $spacing-unit;
-  margin-bottom: $spacing-unit * 0.75;
+  margin-bottom: $spacing-unit * 0.7;
 }
 
 li {
-  margin-bottom: $spacing-unit * 0.25;
-
-  > ul, > ol {
-    margin-bottom: 0;
-    margin-top: $spacing-unit * 0.25;
-  }
+  margin-bottom: $spacing-unit * 0.2;
 }
 
-// Blockquotes
 blockquote {
-  border-left: 3px solid $border-color-03;
-  padding-left: $spacing-unit;
+  border-left: 2px solid $border-color-02;
+  padding-left: $spacing-unit * 0.7;
   margin: $spacing-unit 0;
-  font-style: italic;
   color: $text-color-light;
 
   > :last-child {
@@ -132,37 +106,34 @@ blockquote {
 
   cite {
     display: block;
-    margin-top: $spacing-unit * 0.5;
+    margin-top: $spacing-unit * 0.4;
     font-style: normal;
-    font-size: 0.875rem;
+    font-size: 0.9rem;
 
     &::before {
-      content: "— ";
+      content: "- ";
     }
   }
 }
 
-// Horizontal Rule
 hr {
-  border: none;
+  border: 0;
   border-top: 1px solid $border-color-01;
-  margin: $spacing-unit * 2 0;
+  margin: $spacing-unit * 1.5 0;
 }
 
-// Code
 pre, code {
   font-family: $code-font-family;
-  font-size: 0.875em;
+  font-size: 0.9em;
   background-color: $code-background-color;
-  border-radius: 3px;
 }
 
 code {
-  padding: 2px 6px;
+  padding: 1px 4px;
 }
 
 pre {
-  padding: $spacing-unit * 0.75;
+  padding: $spacing-unit * 0.7;
   overflow-x: auto;
   margin-bottom: $spacing-unit;
   border: 1px solid $border-color-01;
@@ -170,11 +141,10 @@ pre {
   > code {
     padding: 0;
     background: none;
-    border: none;
+    border: 0;
   }
 }
 
-// Images
 img {
   max-width: 100%;
   height: auto;
@@ -186,47 +156,37 @@ figure {
 }
 
 figcaption {
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   color: $text-color-light;
-  margin-top: $spacing-unit * 0.5;
-  text-align: center;
+  margin-top: $spacing-unit * 0.4;
 }
 
-// Tables
 table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: $spacing-unit;
-  font-size: 0.9375rem;
+  font-size: 0.95rem;
 }
 
 th, td {
-  padding: $spacing-unit * 0.5;
+  padding: $spacing-unit * 0.35 0;
   text-align: left;
   border-bottom: 1px solid $border-color-01;
 }
 
 th {
   font-weight: 600;
-  border-bottom-width: 2px;
 }
 
-tbody tr:hover {
-  background-color: $code-background-color;
-}
-
-// Selection
 ::selection {
   background-color: $text-color;
   color: $background-color;
 }
 
-// Main element
 main {
   display: block;
 }
 
-// Clearfix
 %clearfix::after {
   content: "";
   display: table;

@@ -1,19 +1,17 @@
-// Layout Styles - Academic Typographic Design
+// Layout Styles
 
-// Site Container
 .site-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-// Header
 .site-header {
-  padding: $spacing-unit * 1.5 $spacing-unit;
+  padding: $spacing-unit * 0.8 $spacing-unit;
   border-bottom: 1px solid $border-color-01;
 
   @include media-query($on-palm) {
-    padding: $spacing-unit $spacing-unit * 0.75;
+    padding: $spacing-unit * 0.7 $spacing-unit * 0.75;
   }
 }
 
@@ -22,17 +20,16 @@
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
+  align-items: baseline;
   gap: $spacing-unit * 0.5;
 }
 
 .site-title {
-  font-family: $heading-font-family;
-  @include relative-font-size(1.25);
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0;
   text-decoration: none;
+  white-space: nowrap;
 
   &, &:visited, &:hover {
     color: $text-color;
@@ -42,102 +39,55 @@
 
 .site-nav {
   display: flex;
-  gap: $spacing-unit;
+  gap: $spacing-unit * 0.65;
   flex-wrap: wrap;
-
-  @include media-query($on-palm) {
-    gap: $spacing-unit * 0.75;
-  }
-
-  .nav-trigger {
-    display: none;
-  }
-
-  .menu-icon {
-    display: none;
-  }
+  justify-content: flex-end;
 }
 
 .nav-link {
-  font-size: 0.875rem;
+  font-size: 0.82rem;
   font-weight: 400;
   color: $text-color-light;
   text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  transition: color 0.15s ease;
+  letter-spacing: 0;
 
   &:hover, &:focus, &.active {
     color: $text-color;
+    text-decoration: underline;
   }
 }
 
-// Mobile Navigation
 @include media-query($on-palm) {
+  .header-wrapper {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
   .site-nav {
-    position: relative;
-
-    .nav-trigger {
-      display: none;
-    }
-
-    .menu-icon {
-      display: block;
-      cursor: pointer;
-      padding: 10px;
-      margin: -10px;
-
-      .bar {
-        display: block;
-        width: 20px;
-        height: 2px;
-        background-color: $text-color;
-        margin: 4px 0;
-        transition: transform 0.2s ease;
-      }
-    }
-
-    .nav-links {
-      display: none;
-      position: absolute;
-      top: 100%;
-      right: 0;
-      background: $background-color;
-      border: 1px solid $border-color-01;
-      padding: $spacing-unit * 0.5;
-      flex-direction: column;
-      gap: $spacing-unit * 0.5;
-      min-width: 150px;
-      z-index: 100;
-    }
-
-    input:checked ~ .nav-links {
-      display: flex;
-    }
+    justify-content: flex-start;
+    gap: $spacing-unit * 0.55;
   }
 }
 
-// Main Content
 .main-content {
   flex: 1;
-  padding: $spacing-unit * 2 $spacing-unit;
   max-width: $content-width;
   margin: 0 auto;
   width: 100%;
+  padding: $spacing-unit * 1.6 $spacing-unit $spacing-unit * 2.4;
 
   @include media-query($on-palm) {
-    padding: $spacing-unit $spacing-unit * 0.75;
+    padding: $spacing-unit $spacing-unit * 0.75 $spacing-unit * 1.8;
   }
 }
 
-// Footer
 .site-footer {
-  padding: $spacing-unit * 2 $spacing-unit;
+  padding: $spacing-unit $spacing-unit $spacing-unit * 1.4;
   border-top: 1px solid $border-color-01;
   margin-top: auto;
 
   @include media-query($on-palm) {
-    padding: $spacing-unit $spacing-unit * 0.75;
+    padding: $spacing-unit * 0.8 $spacing-unit * 0.75;
   }
 }
 
@@ -152,33 +102,26 @@
   align-items: flex-start;
   gap: $spacing-unit;
   flex-wrap: wrap;
-
-  @include media-query($on-palm) {
-    flex-direction: column;
-  }
 }
 
 .footer-info {
-  font-size: 0.875rem;
+  font-size: 0.86rem;
   color: $text-color-light;
 
   p {
-    margin-bottom: $spacing-unit * 0.25;
+    margin-bottom: $spacing-unit * 0.2;
   }
 
   a {
     color: $text-color-light;
-
-    &:hover {
-      color: $text-color;
-    }
   }
 }
 
 .footer-links {
   display: flex;
-  gap: $spacing-unit;
-  font-size: 0.875rem;
+  gap: $spacing-unit * 0.55;
+  flex-wrap: wrap;
+  font-size: 0.86rem;
 
   a {
     color: $text-color-light;
@@ -186,405 +129,266 @@
 
     &:hover {
       color: $text-color;
+      text-decoration: underline;
     }
   }
 }
 
-// Hero Section (Homepage)
 .hero {
-  margin-bottom: $spacing-unit * 2;
-  padding-bottom: $spacing-unit * 2;
+  margin-bottom: $spacing-unit * 1.35;
+  padding-bottom: $spacing-unit * 1.15;
   border-bottom: 1px solid $border-color-01;
 }
 
 .hero-name {
-  font-family: $heading-font-family;
-  @include relative-font-size(4);
-  font-weight: 400;
-  letter-spacing: -0.03em;
+  @include relative-font-size(2.65);
+  font-weight: 600;
+  letter-spacing: 0;
   line-height: 1.1;
-  margin-bottom: $spacing-unit * 0.5;
+  margin-bottom: $spacing-unit * 0.35;
 
   @include media-query($on-palm) {
-    @include relative-font-size(2.5);
+    @include relative-font-size(2.1);
   }
 }
 
 .hero-title {
-  @include relative-font-size(1.25);
-  color: $text-color-light;
+  @include relative-font-size(1.05);
+  color: $text-color;
   margin-bottom: $spacing-unit * 0.25;
-  font-weight: 400;
+  max-width: 54ch;
 }
 
 .hero-affiliation {
-  @include relative-font-size(1.125);
+  font-size: 0.95rem;
   color: $text-color-light;
-  font-weight: 300;
+  margin-bottom: $spacing-unit * 0.45;
 }
 
-// Sections
+.profile-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-unit * 0.55;
+  font-size: 0.9rem;
+
+  a {
+    color: $text-color-light;
+    text-decoration: none;
+
+    &:hover, &:focus {
+      color: $text-color;
+      text-decoration: underline;
+    }
+  }
+}
+
 section {
-  margin-bottom: $spacing-unit * 2;
+  margin-bottom: $spacing-unit * 1.55;
 
   h2 {
-    font-family: $heading-font-family;
-    @include relative-font-size(1.5);
-    font-weight: 500;
-    letter-spacing: -0.01em;
+    @include relative-font-size(1.05);
+    font-weight: 600;
+    letter-spacing: 0;
     margin-top: 0;
-    margin-bottom: $spacing-unit;
-    padding-bottom: $spacing-unit * 0.5;
+    margin-bottom: $spacing-unit * 0.55;
+    padding-bottom: $spacing-unit * 0.28;
     border-bottom: 1px solid $border-color-01;
   }
 }
 
 .intro {
-  @include relative-font-size(1.125);
-  line-height: 1.7;
-  color: $text-color;
+  @include relative-font-size(1.02);
+  line-height: 1.68;
 
   p {
-    max-width: 60ch;
+    max-width: 62ch;
   }
 }
 
-// Research Interests
-.research-interests {
-  .interest-list {
-    list-style: none;
-    margin-left: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: $spacing-unit * 0.5;
+.interest-line {
+  color: $text-color-light;
+  font-size: 0.94rem;
+  max-width: none;
 
-    li {
-      display: inline-block;
-      padding: $spacing-unit * 0.25 $spacing-unit * 0.5;
-      background-color: $code-background-color;
-      font-size: 0.9375rem;
-      margin-bottom: 0;
-    }
+  span {
+    display: inline-block;
+    margin-right: $spacing-unit * 0.25;
+  }
+
+  .separator {
+    color: $border-color-03;
   }
 }
 
-// Post List
+.project-list,
+.publication-list,
 .post-list {
   list-style: none;
   margin-left: 0;
 }
 
-.post-item {
+.project-item,
+.publication-item {
+  padding: $spacing-unit * 0.75 0;
+  margin-bottom: 0;
+  border-bottom: 1px solid $border-color-01;
+
+  &:first-child {
+    padding-top: 0;
+  }
+
+  &:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
+.project-title,
+.publication-title {
+  font-weight: 600;
+  margin-bottom: $spacing-unit * 0.18;
+}
+
+.project-description {
+  margin-bottom: $spacing-unit * 0.22;
+}
+
+.project-meta,
+.publication-authors,
+.publication-venue,
+.publication-year {
+  font-size: 0.9rem;
+  color: $text-color-light;
+  margin-bottom: $spacing-unit * 0.16;
+}
+
+.publication-venue {
+  font-style: normal;
+}
+
+.project-links,
+.publication-links {
   display: flex;
-  gap: $spacing-unit;
+  gap: $spacing-unit * 0.5;
+  flex-wrap: wrap;
+  margin-top: $spacing-unit * 0.25;
+  margin-bottom: 0;
+
+  a {
+    font-size: 0.86rem;
+    color: $text-color-light;
+    text-decoration: none;
+
+    &:hover, &:focus {
+      color: $text-color;
+      text-decoration: underline;
+    }
+  }
+}
+
+.post-item {
+  display: grid;
+  grid-template-columns: 108px 1fr;
+  gap: $spacing-unit * 0.8;
   align-items: baseline;
-  margin-bottom: $spacing-unit * 0.5;
+  margin-bottom: $spacing-unit * 0.35;
 
   @include media-query($on-palm) {
-    flex-direction: column;
-    gap: $spacing-unit * 0.25;
+    grid-template-columns: 1fr;
+    gap: $spacing-unit * 0.1;
   }
 }
 
 .post-date {
-  font-size: 0.875rem;
+  font-size: 0.86rem;
   color: $text-color-light;
-  flex-shrink: 0;
-  min-width: 100px;
 }
 
 .post-link {
-  font-weight: 400;
   text-decoration: none;
 
-  &:hover {
+  &:hover, &:focus {
     text-decoration: underline;
   }
 }
 
-// Contact Section
-.contact {
-  .email {
-    @include relative-font-size(1.125);
-    margin-bottom: $spacing-unit * 0.5;
-
-    a {
-      text-decoration: none;
-      border-bottom: 1px solid $border-color-01;
-      padding-bottom: 2px;
-
-      &:hover {
-        border-color: $text-color;
-      }
-    }
-  }
-
-  .social-links {
-    display: flex;
-    gap: $spacing-unit;
-    flex-wrap: wrap;
-  }
-
-  .social-link {
-    font-size: 0.875rem;
-    color: $text-color-light;
-    text-decoration: none;
-
-    &:hover {
-      color: $text-color;
-    }
-  }
-}
-
-// Page Styles
-.page {
-  max-width: 65ch;
-}
-
-.page-header {
-  margin-bottom: $spacing-unit * 2;
-}
-
-.page-title {
-  font-family: $heading-font-family;
-  @include relative-font-size(3);
-  font-weight: 400;
-  letter-spacing: -0.03em;
-  margin-bottom: $spacing-unit * 0.5;
-
-  @include media-query($on-palm) {
-    @include relative-font-size(2.25);
-  }
-}
-
-.page-subtitle {
-  @include relative-font-size(1.25);
-  color: $text-color-light;
-  font-weight: 400;
-}
-
-.page-content {
-  line-height: 1.75;
-
-  h2:first-child,
-  h3:first-child {
-    margin-top: 0;
-  }
-}
-
-// Post Styles
+.page,
 .post {
-  max-width: 65ch;
+  max-width: 68ch;
 }
 
+.page-header,
 .post-header {
-  margin-bottom: $spacing-unit * 2;
+  margin-bottom: $spacing-unit * 1.25;
 }
 
+.page-title,
 .post-title {
-  font-family: $heading-font-family;
-  @include relative-font-size(2.5);
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-  margin-bottom: $spacing-unit * 0.5;
+  @include relative-font-size(2);
+  font-weight: 600;
+  letter-spacing: 0;
+  margin-bottom: $spacing-unit * 0.4;
 
   @include media-query($on-palm) {
-    @include relative-font-size(2);
+    @include relative-font-size(1.65);
   }
 }
 
+.page-subtitle,
 .post-meta {
-  font-size: 0.875rem;
+  font-size: 0.95rem;
   color: $text-color-light;
-
-  time {
-    display: inline;
-  }
-
-  .post-author {
-    margin-left: $spacing-unit * 0.5;
-
-    &::before {
-      content: "·";
-      margin-right: $spacing-unit * 0.5;
-    }
-  }
 }
 
+.page-content,
 .post-content {
-  line-height: 1.75;
-
-  h2, h3, h4, h5, h6 {
-    font-family: $heading-font-family;
-  }
+  line-height: 1.7;
 
   h2:first-child,
   h3:first-child {
     margin-top: 0;
   }
 
-  // Ensure MathJax equations are visible
-  .MathJax, .MathJax_Display {
+  .MathJax,
+  .MathJax_Display {
     overflow-x: auto;
     overflow-y: hidden;
   }
 }
 
+.post-author {
+  margin-left: $spacing-unit * 0.35;
+
+  &::before {
+    content: "/";
+    margin-right: $spacing-unit * 0.35;
+    color: $text-color-light;
+  }
+}
+
 .post-footer {
-  margin-top: $spacing-unit * 2;
-  padding-top: $spacing-unit;
+  margin-top: $spacing-unit * 1.4;
+  padding-top: $spacing-unit * 0.7;
   border-top: 1px solid $border-color-01;
 }
 
 .back-link {
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   color: $text-color-light;
   text-decoration: none;
 
-  &:hover {
+  &:hover, &:focus {
     color: $text-color;
+    text-decoration: underline;
   }
 }
 
-// Publication List
-.publication-list {
-  list-style: none;
-  margin-left: 0;
-}
-
-.publication-item {
-  margin-bottom: $spacing-unit * 1.5;
-  padding-bottom: $spacing-unit * 1.5;
-  border-bottom: 1px solid $border-color-01;
-
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-.publication-title {
-  font-weight: 500;
-  margin-bottom: $spacing-unit * 0.25;
-}
-
-.publication-authors {
-  font-size: 0.9375rem;
-  color: $text-color-light;
-  margin-bottom: $spacing-unit * 0.25;
-}
-
-.publication-venue {
-  font-size: 0.875rem;
-  font-style: italic;
-  color: $text-color-light;
-  margin-bottom: $spacing-unit * 0.25;
-}
-
-.publication-year {
-  font-size: 0.875rem;
-  color: $text-color-light;
-}
-
-.publication-links {
-  margin-top: $spacing-unit * 0.5;
-  display: flex;
-  gap: $spacing-unit * 0.75;
-
-  a {
-    font-size: 0.8125rem;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    color: $text-color-light;
-    text-decoration: none;
-    padding: $spacing-unit * 0.15 $spacing-unit * 0.35;
-    border: 1px solid $border-color-01;
-    transition: all 0.15s ease;
-
-    &:hover {
-      color: $text-color;
-      border-color: $text-color;
-    }
-  }
-}
-
-// Talk List
-.talk-list {
-  list-style: none;
-  margin-left: 0;
-}
-
-.talk-item {
-  margin-bottom: $spacing-unit * 1.25;
-  padding-bottom: $spacing-unit * 1.25;
-  border-bottom: 1px solid $border-color-01;
-
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-.talk-title {
-  font-weight: 500;
-  margin-bottom: $spacing-unit * 0.25;
-}
-
-.talk-venue {
-  font-size: 0.9375rem;
-  color: $text-color-light;
-  margin-bottom: $spacing-unit * 0.15;
-}
-
-.talk-date {
-  font-size: 0.875rem;
-  color: $text-color-light;
-}
-
-// Teaching List
-.teaching-list {
-  list-style: none;
-  margin-left: 0;
-}
-
-.teaching-item {
-  margin-bottom: $spacing-unit * 1.25;
-  padding-bottom: $spacing-unit * 1.25;
-  border-bottom: 1px solid $border-color-01;
-
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-.course-title {
-  font-weight: 500;
-  margin-bottom: $spacing-unit * 0.25;
-}
-
-.course-role {
-  font-size: 0.9375rem;
-  color: $text-color-light;
-  margin-bottom: $spacing-unit * 0.15;
-}
-
-.course-term {
-  font-size: 0.875rem;
-  color: $text-color-light;
-}
-
-.course-description {
-  margin-top: $spacing-unit * 0.5;
-  font-size: 0.9375rem;
-  color: $text-color;
-}
-
-// Utility Classes
 .text-muted {
   color: $text-color-light;
 }
 
 .text-small {
-  font-size: 0.875rem;
+  font-size: 0.9rem;
 }
 
 .mt-0 { margin-top: 0; }

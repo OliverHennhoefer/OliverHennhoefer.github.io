@@ -4,20 +4,20 @@ title: Research
 permalink: /research/
 ---
 
-My research focuses on developing statistically principled methods for machine learning systems that operate in uncertain and dynamic environments.
+My research focuses on statistically principled machine learning systems for uncertain and dynamic environments.
 
-## Anomaly Detection
+## Conformal Anomaly Detection
 
-I develop methods for detecting anomalies in streaming data while controlling the rate of false discoveries. This includes online algorithms that adapt to distribution shift and maintain formal statistical guarantees.
+Anomaly detectors often produce scores without calibrated uncertainty. I study conformal methods that convert such scores into p-values and enable principled decisions with error control. Recent work includes leave-one-out, bootstrap, and cross-conformal anomaly detectors.
 
-## Conformal Inference
+## Low-Data and Shifted Settings
 
-Conformal prediction provides distribution-free uncertainty quantification for machine learning models. I work on extending these methods to online settings where data arrives sequentially and the underlying distribution may change over time.
+Real data often violate the clean exchangeability assumptions behind standard conformal methods. I am interested in weighted and adaptive conformal procedures that remain useful under data scarcity, local non-stationarity, and distribution shift.
 
-## Online Learning
+## Online Error Control
 
-I am interested in algorithms that learn and adapt in real-time, particularly methods that provide finite-sample guarantees. This includes online multiple testing procedures and adaptive prediction intervals.
+Many applications require decisions while data arrive sequentially. I work with online false discovery rate control and related sequential testing procedures for settings where discoveries need to be made before the full dataset exists.
 
-## False Discovery Rate Control
+## Research Software
 
-Controlling the false discovery rate (FDR) is crucial in many scientific applications. I develop online FDR control methods that handle sequential hypothesis testing with dependent test statistics.
+I build Python libraries around these ideas, including [`nonconform`](https://github.com/OliverHennhoefer/nonconform) for conformal anomaly detection and [`online-fdr`](https://github.com/OliverHennhoefer/online-fdr) for online multiple testing.
