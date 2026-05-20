@@ -14,11 +14,30 @@ layout: base
     line-height: 1;
     letter-spacing: -1px;
   }
+  .navigation-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  .navigation-links a {
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    text-decoration: none;
+  }
 </style>
 
 <div class="container">
   <h1>404</h1>
 
   <p><strong>Page not found :(</strong></p>
-  <p>The requested page could not be found.</p>
+  <p>The requested page could not be found. These links may help you get back on track.</p>
+
+  <nav class="navigation-links" aria-label="Helpful links">
+    <a href="{{ '/' | relative_url }}">Home</a>
+    <a href="{{ '/projects/' | relative_url }}">Projects</a>
+    <a href="https://oliverhennhoefer.github.io/nonconform/">nonconform docs</a>
+  </nav>
 </div>
