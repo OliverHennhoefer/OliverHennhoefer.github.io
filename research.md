@@ -6,9 +6,13 @@ permalink: /research/
 
 My research focuses on statistically principled machine learning systems for uncertain and dynamic environments.
 
+## Uncertainty Quantification
+
+I work on uncertainty quantification methods that make model outputs statistically interpretable. A central tool is conformal inference: a model-agnostic framework for calibrating predictions, scores, and decisions with explicit error guarantees under stated assumptions. I am especially interested in how these guarantees behave when data are limited, shifted, or observed sequentially.
+
 ## Conformal Anomaly Detection
 
-Anomaly detectors often produce scores without calibrated uncertainty. I study conformal methods that convert such scores into p-values and enable principled decisions with error control. Recent work includes leave-one-out, bootstrap, and cross-conformal anomaly detectors, plus implementation-oriented work around `nonconform`, a Python package for conformal anomaly detection workflows.
+Anomaly detectors often produce scores without calibrated decisions. I study conformal methods that convert such scores into p-values and enable principled outlier detection with error control. Recent work includes leave-one-out, bootstrap, and cross-conformal anomaly detectors, plus implementation-oriented work around `nonconform`, a Python package for conformal anomaly detection workflows.
 
 ## Low-Data and Shifted Settings
 

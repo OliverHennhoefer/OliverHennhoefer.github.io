@@ -74,13 +74,6 @@ selected_publications:
     links:
       - label: arXiv
         url: https://arxiv.org/abs/2603.23205
-  - title: "Interdisciplinary Harmonies: A Story-Driven Course on AI and Music to Increase Interest in Computer Science"
-    authors: "Kai Marquardt, Qiongdan Shang, Oliver Hennhöfer, Lucia Happe"
-    venue: "ECSEE 2025, pp. 145-153"
-    year: "2025"
-    links:
-      - label: DOI
-        url: https://doi.org/10.1145/3723010.3723031
   - title: "Leave-One-Out-, Bootstrap- and Cross-Conformal Anomaly Detectors"
     authors: "Oliver Hennhöfer, Christine Preisach"
     venue: "IEEE ICKG 2024, pp. 110-119"
@@ -113,7 +106,6 @@ header_pages:
   - research.md
   - publications.md
   - teaching.md
-  - writing.md
 
 # Minima theme settings
 minima:

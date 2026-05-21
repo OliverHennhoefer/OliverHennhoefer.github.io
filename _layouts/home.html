@@ -91,19 +91,3 @@ layout: base
   </ul>
 </section>
 {%- endif -%}
-
-{%- assign posts = site.posts | where_exp: "post", "post.draft != true" -%}
-{%- if posts.size > 0 -%}
-<section class="recent-posts">
-  <h2>Writing</h2>
-  <ul class="post-list">
-    {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-    {%- for post in posts limit: 2 -%}
-    <li class="post-item">
-      <span class="post-date">{{ post.date | date: date_format }}</span>
-      <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
-    </li>
-    {%- endfor -%}
-  </ul>
-</section>
-{%- endif -%}
