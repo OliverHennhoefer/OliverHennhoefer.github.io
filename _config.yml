@@ -28,8 +28,8 @@ research_interests:
 # Homepage Projects
 featured_projects:
   - name: nonconform
-    description: Conformal anomaly detection and change-point detection for turning anomaly scores into p-values and FDR-controlled decisions.
-    stack: Python, conformal inference, anomaly detection
+    description: Conformal anomaly detection and change-point detection for turning anomaly scores into calibrated p-values, with split, cross, and weighted conformal workflows plus FDR-controlled decisions.
+    stack: Python, conformal inference, anomaly detection, FDR control
     links:
       - label: GitHub
         url: https://github.com/OliverHennhoefer/nonconform
@@ -38,8 +38,8 @@ featured_projects:
       - label: PyPI
         url: https://pypi.org/project/nonconform/
   - name: online-fdr
-    description: Sequential multiple-testing procedures for online false discovery rate and family-wise error rate control.
-    stack: Python, online FDR, sequential testing
+    description: Sequential multiple-testing procedures for online FDR and FWER control, including one-by-one APIs for LORD, SAFFRON, ADDIS, alpha-spending, and batch baselines.
+    stack: Python, online FDR, FWER, sequential testing
     links:
       - label: GitHub
         url: https://github.com/OliverHennhoefer/online-fdr
@@ -60,6 +60,13 @@ featured_projects:
 
 # Homepage Publications
 selected_publications:
+  - title: "Conformal Anomaly Detection in Python: Moving Beyond Heuristic Thresholds with 'nonconform'"
+    authors: "Oliver Hennhöfer, Maximilian Kirsch, Christine Preisach"
+    venue: "Preprint, arXiv:2605.13642"
+    year: "2026"
+    links:
+      - label: arXiv
+        url: https://arxiv.org/abs/2605.13642
   - title: "Between Resolution Collapse and Variance Inflation: Weighted Conformal Anomaly Detection in Low-Data Regimes"
     authors: "Oliver Hennhöfer, Christine Preisach"
     venue: "Preprint, arXiv:2603.23205"

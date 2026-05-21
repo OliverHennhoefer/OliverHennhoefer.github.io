@@ -1,2 +1,153 @@
-// Placeholder to allow defining custom styles that override everything else.
-// (Use `_sass/minima/custom-variables.scss` to override variable defaults)
+// Site-specific refinements layered on top of the academic skin.
+
+:root {
+  --accent: #176b65;
+  --accent-soft: #e8f3f1;
+  --ink-soft: #f7f7f4;
+  --rule-strong: #d7d5cc;
+}
+
+body {
+  background:
+    linear-gradient(180deg, var(--ink-soft) 0, #ffffff 280px);
+}
+
+::selection {
+  background: var(--accent-soft);
+}
+
+.site-header {
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(10px);
+}
+
+.nav-link,
+.profile-links a,
+.footer-links a,
+.project-links a,
+.publication-links a {
+  text-underline-offset: 0.18em;
+}
+
+.hero {
+  position: relative;
+  padding-top: $spacing-unit * 0.55;
+  padding-left: $spacing-unit * 0.7;
+  border-left: 3px solid var(--accent);
+}
+
+.hero-name {
+  max-width: 12ch;
+}
+
+.hero-title {
+  font-size: 1.08rem;
+}
+
+.profile-links {
+  margin-top: $spacing-unit * 0.55;
+
+  a {
+    padding: 0.18rem 0.48rem;
+    border: 1px solid $border-color-01;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+
+    &:hover,
+    &:focus {
+      border-color: var(--rule-strong);
+      background: var(--accent-soft);
+      text-decoration: none;
+    }
+  }
+}
+
+section h2,
+.page-content h2 {
+  color: $text-color;
+  border-bottom-color: var(--rule-strong);
+}
+
+.intro p:first-child {
+  font-size: 1.08rem;
+  line-height: 1.64;
+}
+
+.interest-line span:not(.separator) {
+  padding: 0.1rem 0.36rem;
+  margin-bottom: 0.22rem;
+  border-radius: 999px;
+  background: #f1f1ee;
+  color: $text-color;
+}
+
+.project-item,
+.publication-item {
+  padding: $spacing-unit * 0.8;
+  border: 1px solid $border-color-01;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 12px 32px rgba(17, 17, 17, 0.035);
+
+  &:first-child {
+    padding-top: $spacing-unit * 0.8;
+  }
+
+  &:last-child {
+    border-bottom: 1px solid $border-color-01;
+    padding-bottom: $spacing-unit * 0.8;
+  }
+}
+
+.project-item + .project-item,
+.publication-item + .publication-item {
+  margin-top: $spacing-unit * 0.55;
+}
+
+.project-title,
+.publication-title {
+  font-size: 1.02rem;
+}
+
+.project-meta,
+.publication-authors,
+.publication-venue,
+.publication-year,
+.post-date {
+  color: #5c615d;
+}
+
+.project-links a,
+.publication-links a {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.post-item {
+  padding: $spacing-unit * 0.25 0;
+  border-bottom: 1px solid $border-color-01;
+}
+
+.page-content a,
+.intro a {
+  color: var(--accent);
+}
+
+@include media-query($on-palm) {
+  .hero {
+    padding-left: $spacing-unit * 0.5;
+  }
+
+  .project-item,
+  .publication-item {
+    padding: $spacing-unit * 0.62;
+
+    &:first-child {
+      padding-top: $spacing-unit * 0.62;
+    }
+
+    &:last-child {
+      padding-bottom: $spacing-unit * 0.62;
+    }
+  }
+}
