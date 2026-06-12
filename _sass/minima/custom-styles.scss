@@ -441,6 +441,53 @@ a {
   }
 }
 
+.page-content {
+  > .project-list,
+  > .publication-list {
+    margin-top: $spacing-unit * 0.92;
+  }
+
+  .project-item,
+  .publication-item {
+    display: block;
+    padding: $spacing-unit * 0.95 0 $spacing-unit;
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .project-title,
+  .publication-title {
+    max-width: 42ch;
+    margin-bottom: $spacing-unit * 0.46;
+    font-size: 1.22rem;
+    line-height: 1.25;
+  }
+
+  .project-description {
+    max-width: 58ch;
+    margin-bottom: $spacing-unit * 0.54;
+  }
+
+  .project-meta,
+  .publication-authors,
+  .publication-venue,
+  .publication-year {
+    max-width: 54ch;
+    margin-bottom: $spacing-unit * 0.34;
+  }
+
+  .project-links,
+  .publication-links {
+    margin-top: $spacing-unit * 0.62;
+  }
+
+  > .publication-list + p {
+    margin-top: $spacing-unit * 0.85;
+  }
+}
+
 .item-number {
   color: var(--ink-soft);
   font-variant-numeric: lining-nums;
