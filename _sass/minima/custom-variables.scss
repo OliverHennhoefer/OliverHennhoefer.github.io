@@ -1,1 +1,6 @@
-// Placeholder to allow overriding predefined variables smoothly.
+// Site-level theme variables.
+$base-font-family: Georgia, "Times New Roman", serif;
+$heading-font-family: $base-font-family;
+$code-font-family: "SF Mono", Menlo, Consolas, monospace;
+$base-line-height: 1.58;
+$content-width: 1180px;
