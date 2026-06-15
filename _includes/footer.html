@@ -1,30 +1,28 @@
-<footer class="site-footer">
-  <div class="footer-wrapper">
-    <div class="footer-content">
-      <div class="footer-info">
-        <p>{{ site.name }}</p>
-        {%- if site.email -%}
-        <p><a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
-        {%- endif -%}
-      </div>
+<footer class="site-footer paper-footer">
+  <a class="footer-mark" href="{{ '/' | relative_url }}" aria-label="{{ site.title | escape }} home">OH</a>
 
-      <div class="footer-links">
-        {%- if site.github != "" -%}
-        <a href="https://github.com/{{ site.github }}">GitHub</a>
-        {%- endif -%}
-        {%- if site.google_scholar != "" -%}
-        <a href="{{ site.google_scholar }}">Scholar</a>
-        {%- endif -%}
-        {%- if site.orcid != "" -%}
-        <a href="https://orcid.org/{{ site.orcid }}">ORCID</a>
-        {%- endif -%}
-        {%- if site.linkedin != "" -%}
-        <a href="https://linkedin.com/in/{{ site.linkedin }}">LinkedIn</a>
-        {%- endif -%}
-        {%- if site.twitter != "" -%}
-        <a href="https://x.com/{{ site.twitter }}">X</a>
-        {%- endif -%}
-      </div>
-    </div>
+  <div class="footer-info">
+    <p>{{ site.name }}</p>
+    {%- if site.email -%}
+    <p><a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+    {%- endif -%}
+  </div>
+
+  <div class="footer-links socials" aria-label="Profile links">
+    {%- if site.github != "" -%}
+    <a href="https://github.com/{{ site.github }}">GitHub</a>
+    {%- endif -%}
+    {%- if site.google_scholar != "" -%}
+    <a href="{{ site.google_scholar }}">Scholar</a>
+    {%- endif -%}
+    {%- if site.orcid != "" -%}
+    <a href="https://orcid.org/{{ site.orcid }}">ORCID</a>
+    {%- endif -%}
+    {%- if site.linkedin != "" -%}
+    <a href="https://linkedin.com/in/{{ site.linkedin }}">LinkedIn</a>
+    {%- endif -%}
+    {%- if site.twitter != "" -%}
+    <a href="https://x.com/{{ site.twitter }}">X</a>
+    {%- endif -%}
   </div>
 </footer>

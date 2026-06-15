@@ -7,6 +7,9 @@
 
     {%- seo -%}
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 
     {%- feed_meta -%}
@@ -28,11 +31,15 @@
     {%- endif -%}
   </head>
 
-  <body>
+  <body class="paper-shell{% if page.body_class %} {{ page.body_class }}{% endif %}">
+    <div class="paper-vignette" aria-hidden="true"></div>
+    <div class="paper-grain" aria-hidden="true"></div>
     <div class="site-container">
       {%- include header.html -%}
 
-      <main class="main-content" role="main">
+      <div class="marginalia" aria-hidden="true">Reliable ML / Statistical Software</div>
+
+      <main class="main-content{% if page.layout == 'post' or page.layout == 'page' %} narrow{% endif %}{% if page.main_class %} {{ page.main_class }}{% endif %}" role="main">
         {{ content }}
       </main>
 

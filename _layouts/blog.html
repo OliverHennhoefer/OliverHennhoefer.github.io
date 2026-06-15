@@ -1,0 +1,46 @@
+---
+layout: base
+---
+
+<section class="paper-hero blog-hero" aria-labelledby="blog-title">
+  <span class="vulgar">{{ page.kicker | default: "Notes" }}</span>
+  <h1 id="blog-title" class="latin">{{ page.display_title | default: page.title | escape }}</h1>
+  {%- if page.description -%}
+  <p class="thesis">{{ page.description }}</p>
+  {%- endif -%}
+</section>
+
+<div class="plates blog-plates" aria-label="Blog posts">
+  {%- for post in site.posts -%}
+  <a class="plate" href="{{ post.url | relative_url }}">
+    <div class="plate-body">
+      <div class="plate-sig">
+        <span class="tag">{{ post.category | default: "Notes" }}</span>
+        <span class="dot" aria-hidden="true"></span>
+        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.minima.date_format }}</time>
+        {%- if post.tags.size > 0 -%}
+        <span class="dot" aria-hidden="true"></span>
+        <span class="v">{{ post.tags | join: " / " }}</span>
+        {%- endif -%}
+      </div>
+      <h2 class="plate-title">{{ post.title }}</h2>
+      <p class="plate-excerpt">{{ post.description | default: post.excerpt | strip_html | normalize_whitespace | truncate: 260 }}</p>
+      <span class="plate-readmore">Read <span class="arrow" aria-hidden="true">-&gt;</span></span>
+    </div>
+  </a>
+  {%- else -%}
+  <article class="plate">
+    <div class="plate-body">
+      <div class="plate-sig">
+        <span class="tag">Notes</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span class="v">No entries yet</span>
+      </div>
+      <h2 class="plate-title">The blog is ready for Markdown posts.</h2>
+      <p class="plate-excerpt">Add files to <code>_posts</code> with standard Jekyll front matter and they will appear here automatically.</p>
+    </div>
+  </article>
+  {%- endfor -%}
+</div>
+
+{{ content }}

@@ -3,145 +3,115 @@ layout: base
 ---
 
 <div class="home-page">
-  <section class="identity-hero" aria-labelledby="home-title">
-    <div class="identity-rail" aria-label="Profile metadata">
-      <span>Karlsruhe</span>
-      <span>Research Staff</span>
-      <span>2026</span>
-    </div>
+  <section class="paper-hero home-hero" aria-labelledby="home-title">
+    <span class="vulgar">Reliable machine learning / Research software</span>
+    <h1 id="home-title" class="latin">{{ site.name }}</h1>
+    <p class="thesis">{{ site.position }}</p>
 
-    <div class="identity-copy">
-      <p class="hero-kicker">Reliable machine learning / research software</p>
-      <h1 id="home-title" class="hero-name">{{ site.name }}</h1>
-      <p class="hero-title">{{ site.position }}</p>
-      {%- if site.department or site.location -%}
-      <p class="hero-affiliation">{% if site.department %}{{ site.department }}{% endif %}{% if site.department and site.location %} / {% endif %}{% if site.location %}{{ site.location }}{% endif %}</p>
+    <nav class="profile-links home-contact" aria-label="Profile links">
+      {%- if site.email -%}
+      <a href="mailto:{{ site.email }}"><span class="b">[</span>Email<span class="b">]</span></a>
       {%- endif -%}
+      {%- if site.github != "" -%}
+      <a href="https://github.com/{{ site.github }}"><span class="b">[</span>GitHub<span class="b">]</span></a>
+      {%- endif -%}
+      {%- if site.linkedin != "" -%}
+      <a href="https://linkedin.com/in/{{ site.linkedin }}"><span class="b">[</span>LinkedIn<span class="b">]</span></a>
+      {%- endif -%}
+      {%- if site.orcid != "" -%}
+      <a href="https://orcid.org/{{ site.orcid }}"><span class="b">[</span>ORCID<span class="b">]</span></a>
+      {%- endif -%}
+    </nav>
 
-      <nav class="profile-links" aria-label="Profile links">
-        {%- if site.email -%}
-        <a href="mailto:{{ site.email }}">Email</a>
-        {%- endif -%}
-        {%- if site.github != "" -%}
-        <a href="https://github.com/{{ site.github }}">GitHub</a>
-        {%- endif -%}
-        {%- if site.linkedin != "" -%}
-        <a href="https://linkedin.com/in/{{ site.linkedin }}">LinkedIn</a>
-        {%- endif -%}
-        {%- if site.orcid != "" -%}
-        <a href="https://orcid.org/{{ site.orcid }}">ORCID</a>
-        {%- endif -%}
-        {%- if site.twitter != "" -%}
-        <a href="https://x.com/{{ site.twitter }}">X</a>
-        {%- endif -%}
-      </nav>
-    </div>
-
-    <figure class="hero-visual" aria-label="Abstract signal visualization">
+    <figure class="post-hero home-specimen" aria-label="Abstract signal visualization">
       <img src="{{ '/assets/img/research-signal.jpg' | relative_url }}" alt="">
-      <figcaption>Conformal inference, anomaly detection, uncertainty.</figcaption>
     </figure>
   </section>
 
-  <nav class="home-index" aria-label="Homepage sections">
-    <p class="home-index-kicker">Index</p>
-    <ol class="home-index-list">
-      <li><a href="#profile"><span>01</span><strong>Profile</strong></a></li>
-      {%- if site.research_interests.size > 0 -%}
-      <li><a href="#focus"><span>02</span><strong>Focus</strong></a></li>
-      {%- endif -%}
-      {%- if site.featured_projects.size > 0 -%}
-      <li><a href="#work"><span>03</span><strong>Selected work</strong></a></li>
-      {%- endif -%}
-      {%- if site.selected_publications.size > 0 -%}
-      <li><a href="#publications"><span>04</span><strong>Publications</strong></a></li>
-      {%- endif -%}
-    </ol>
-  </nav>
-
-  <section id="profile" class="section-block intro">
-    <div class="section-label">
-      <span>01</span>
-      <h2>Profile</h2>
-    </div>
-    <div class="section-body">
-      {{ content }}
-    </div>
+  <section id="profile" class="home-profile post-body">
+    {{ content }}
   </section>
 
   {%- if site.research_interests.size > 0 -%}
-  <section id="focus" class="section-block research-interests">
-    <div class="section-label">
-      <span>02</span>
-      <h2>Focus</h2>
-    </div>
-    <div class="section-body">
-      <ul class="interest-line">
-        {%- for interest in site.research_interests -%}
-        <li>{{ interest }}</li>
-        {%- endfor -%}
-      </ul>
-    </div>
-  </section>
+  <div class="section-label">Research focus</div>
+  <ul id="focus" class="interest-line" aria-label="Research interests">
+    {%- for interest in site.research_interests -%}
+    <li>{{ interest }}</li>
+    {%- endfor -%}
+  </ul>
   {%- endif -%}
 
   {%- if site.featured_projects.size > 0 -%}
-  <section id="work" class="section-block featured-projects">
-    <div class="section-label">
-      <span>03</span>
-      <h2>Selected work</h2>
-    </div>
-    <div class="section-body">
-      <ul class="project-list">
-        {%- for project in site.featured_projects -%}
-        <li class="project-item">
-          <span class="item-number">0{{ forloop.index }}</span>
-          <div class="item-content">
-            <p class="project-title">{{ project.name }}</p>
-            <p class="project-description">{{ project.description }}</p>
-            <p class="project-meta">{{ project.stack }}</p>
-            {%- if project.links.size > 0 -%}
-            <p class="project-links">
-              {%- for link in project.links -%}
-              <a href="{{ link.url }}">{{ link.label }}</a>
-              {%- endfor -%}
-            </p>
-            {%- endif -%}
-          </div>
-        </li>
-        {%- endfor -%}
-      </ul>
-    </div>
-  </section>
+  <div class="section-label">Selected work</div>
+  <div id="work" class="plates home-plates">
+    {%- for project in site.featured_projects -%}
+    <article class="plate">
+      <div class="plate-body">
+        <div class="plate-sig">
+          <span class="tag">Project</span>
+          <span class="dot" aria-hidden="true"></span>
+          <span class="v">0{{ forloop.index }}</span>
+        </div>
+        <h2 class="plate-title">{{ project.name }}</h2>
+        <p class="plate-excerpt">{{ project.description }}</p>
+        <p class="project-meta">{{ project.stack }}</p>
+        {%- if project.links.size > 0 -%}
+        <p class="project-links">
+          {%- for link in project.links -%}
+          <a href="{{ link.url }}">{{ link.label }}</a>
+          {%- endfor -%}
+        </p>
+        {%- endif -%}
+      </div>
+    </article>
+    {%- endfor -%}
+  </div>
   {%- endif -%}
 
   {%- if site.selected_publications.size > 0 -%}
-  <section id="publications" class="section-block selected-publications">
-    <div class="section-label">
-      <span>04</span>
-      <h2>Publications</h2>
-    </div>
-    <div class="section-body">
-      <ul class="publication-list">
-        {%- for publication in site.selected_publications -%}
-        <li class="publication-item">
-          <span class="item-number">{{ publication.year }}</span>
-          <div class="item-content">
-            <p class="publication-title">{{ publication.title }}</p>
-            <p class="publication-authors">{{ publication.authors }}</p>
-            <p class="publication-venue">{{ publication.venue }}</p>
-            {%- if publication.links.size > 0 -%}
-            <p class="publication-links">
-              {%- for link in publication.links -%}
-              <a href="{{ link.url }}">{{ link.label }}</a>
-              {%- endfor -%}
-            </p>
-            {%- endif -%}
-          </div>
-        </li>
-        {%- endfor -%}
-      </ul>
-    </div>
-  </section>
+  <div class="section-label">Publications</div>
+  <div id="publications" class="plates home-plates">
+    {%- for publication in site.selected_publications -%}
+    <article class="plate">
+      <div class="plate-body">
+        <div class="plate-sig">
+          <span class="tag">Publication</span>
+          <span class="dot" aria-hidden="true"></span>
+          <span class="v">{{ publication.year }}</span>
+        </div>
+        <h2 class="plate-title">{{ publication.title }}</h2>
+        <p class="plate-excerpt">{{ publication.authors }}</p>
+        <p class="project-meta">{{ publication.venue }}</p>
+        {%- if publication.links.size > 0 -%}
+        <p class="publication-links">
+          {%- for link in publication.links -%}
+          <a href="{{ link.url }}">{{ link.label }}</a>
+          {%- endfor -%}
+        </p>
+        {%- endif -%}
+      </div>
+    </article>
+    {%- endfor -%}
+  </div>
+  {%- endif -%}
+
+  {%- if site.posts.size > 0 -%}
+  <div class="section-label">Recent notes</div>
+  <div class="plates home-plates">
+    {%- for post in site.posts limit:2 -%}
+    <a class="plate" href="{{ post.url | relative_url }}">
+      <div class="plate-body">
+        <div class="plate-sig">
+          <span class="tag">{{ post.category | default: "Notes" }}</span>
+          <span class="dot" aria-hidden="true"></span>
+          <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: site.minima.date_format }}</time>
+        </div>
+        <h2 class="plate-title">{{ post.title }}</h2>
+        <p class="plate-excerpt">{{ post.description | default: post.excerpt | strip_html | normalize_whitespace | truncate: 220 }}</p>
+        <span class="plate-readmore">Read <span class="arrow" aria-hidden="true">-&gt;</span></span>
+      </div>
+    </a>
+    {%- endfor -%}
+  </div>
   {%- endif -%}
 </div>

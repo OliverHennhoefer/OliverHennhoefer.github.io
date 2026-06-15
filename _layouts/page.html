@@ -2,15 +2,21 @@
 layout: base
 ---
 
-<article class="page">
-  <header class="page-header">
-    <h1 class="page-title">{{ page.title | escape }}</h1>
+<article class="page paper-page">
+  <header class="page-header post-header">
+    <div class="post-sig">
+      <span class="tag">Page</span>
+      <span class="dot" aria-hidden="true"></span>
+      <span class="v">{{ page.title | escape }}</span>
+    </div>
+    <h1 class="page-title post-title">{{ page.title | escape }}</h1>
     {%- if page.subtitle -%}
     <p class="page-subtitle">{{ page.subtitle }}</p>
     {%- endif -%}
+    <div class="post-rule" aria-hidden="true"><span class="fig">folio</span></div>
   </header>
 
-  <div class="page-content">
+  <div class="page-content post-body">
     {{ content }}
   </div>
 </article>
