@@ -1,43 +1,33 @@
----
-layout: base
----
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page not found - Oliver Hennh&ouml;fer</title>
+  <style>
+    body {
+      color: #111;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+      margin: 0;
+    }
 
-<style type="text/css" media="screen">
-  .container {
-    margin: 10px auto;
-    max-width: 600px;
-    text-align: center;
-  }
-  h1 {
-    margin: 30px 0;
-    font-size: 4em;
-    line-height: 1;
-    letter-spacing: -1px;
-  }
-  .navigation-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    justify-content: center;
-    margin-top: 2rem;
-  }
-  .navigation-links a {
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    padding: 0.5rem 0.75rem;
-    text-decoration: none;
-  }
-</style>
+    main {
+      margin: 4rem auto;
+      max-width: 600px;
+      padding: 0 1rem;
+    }
 
-<div class="container">
-  <h1>404</h1>
-
-  <p><strong>Page not found :(</strong></p>
-  <p>The requested page could not be found. These links may help you get back on track.</p>
-
-  <nav class="navigation-links" aria-label="Helpful links">
-    <a href="{{ '/' | relative_url }}">Home</a>
-    <a href="{{ '/projects/' | relative_url }}">Projects</a>
-    <a href="https://oliverhennhoefer.github.io/nonconform/">nonconform docs</a>
-  </nav>
-</div>
+    a {
+      color: #0645ad;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Page not found</h1>
+    <p>The requested page could not be found.</p>
+    <p><a href="/">Return to the homepage</a></p>
+  </main>
+</body>
+</html>
