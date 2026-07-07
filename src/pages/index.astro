@@ -2,6 +2,41 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { site } from "../site";
+import { faLinkedinIn } from "@fortawesome/free-brands-svg-icons";
+import {
+  siGithub,
+  siGmail,
+  siOrcid,
+  siGooglescholar,
+  siX,
+} from "simple-icons";
+
+type IconData = {
+  path: string;
+  viewBox: string;
+  transform?: string;
+};
+
+const simpleIcon = (icon: { path: string }, viewBox = "0 0 24 24"): IconData => ({
+  path: icon.path,
+  viewBox,
+});
+const faIcon = (icon: { icon: [number, number, string[], string, string] }): IconData => ({
+  path: icon.icon[4],
+  viewBox: "0 0 24 24",
+  transform: `scale(${24 / icon.icon[0]} ${24 / icon.icon[1]})`,
+});
+const iconSet = {
+  github: simpleIcon(siGithub),
+  orcid: simpleIcon(siOrcid),
+  linkedin: faIcon(faLinkedinIn),
+  x: {
+    ...simpleIcon(siX),
+    transform: "translate(1.2 1.2) scale(0.9)",
+  },
+  dblp: simpleIcon(siGooglescholar),
+  gmail: simpleIcon(siGmail),
+};
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -22,10 +57,48 @@ const formatDate = new Intl.DateTimeFormat("en", {
       I focus on ML systems that make uncertainty explicit, especially through conformal inference.
     </p>
     <ul class="link-row" aria-label="Profile links">
-      <li><a href={site.socials.github}>GitHub</a></li>
-      <li><a href={site.socials.orcid}>ORCID</a></li>
-      <li><a href={site.socials.dblp}>dblp</a></li>
-      <li><a href={`mailto:${site.email}`}>Email</a></li>
+      <li>
+        <a class="icon-link" href={site.socials.github} aria-label="GitHub">
+          <svg viewBox={iconSet.github.viewBox} aria-hidden="true">
+            <path d={iconSet.github.path} />
+          </svg>
+        </a>
+      </li>
+      <li>
+        <a class="icon-link" href={site.socials.orcid} aria-label="ORCID">
+          <svg viewBox={iconSet.orcid.viewBox} aria-hidden="true">
+            <path d={iconSet.orcid.path} />
+          </svg>
+        </a>
+      </li>
+      <li>
+        <a class="icon-link" href={site.socials.linkedin} aria-label="LinkedIn">
+          <svg viewBox={iconSet.linkedin.viewBox} aria-hidden="true">
+            <path d={iconSet.linkedin.path} transform={iconSet.linkedin.transform} />
+          </svg>
+        </a>
+      </li>
+      <li>
+        <a class="icon-link" href={site.socials.x} aria-label="X">
+          <svg viewBox={iconSet.x.viewBox} aria-hidden="true">
+            <path d={iconSet.x.path} transform={iconSet.x.transform} />
+          </svg>
+        </a>
+      </li>
+      <li>
+        <a class="icon-link" href={site.socials.dblp} aria-label="Google Scholar">
+          <svg viewBox={iconSet.dblp.viewBox} aria-hidden="true">
+            <path d={iconSet.dblp.path} />
+          </svg>
+        </a>
+      </li>
+      <li>
+        <a class="icon-link" href={`mailto:${site.email}`} aria-label="Email">
+          <svg viewBox={iconSet.gmail.viewBox} aria-hidden="true">
+            <path d={iconSet.gmail.path} />
+          </svg>
+        </a>
+      </li>
     </ul>
   </section>
 
@@ -81,17 +154,28 @@ const formatDate = new Intl.DateTimeFormat("en", {
         <article>
           <h3>nonconform</h3>
           <p>Python package for calibrated anomaly detection and decision-aware conformal inference methods.</p>
-          <p><a href="https://github.com/OliverHennhoefer/nonconform">GitHub</a> / <a href="https://oliverhennhoefer.github.io/nonconform/">Docs</a> / <a href="https://pypi.org/project/nonconform/">PyPI</a> / <a href="https://arxiv.org/pdf/2605.13642">Paper</a></p>
+          <p class="project-links">
+            <a href="https://github.com/OliverHennhoefer/nonconform">GitHub</a> /
+            <a href="https://oliverhennhoefer.github.io/nonconform/">Docs</a> /
+            <a href="https://pypi.org/project/nonconform/">PyPI</a> /
+            <a href="https://arxiv.org/pdf/2605.13642">Paper</a>
+          </p>
         </article>
         <article>
           <h3>online-fdr</h3>
           <p>Online false discovery rate and sequential decision-control methods for hypothesis testing streams.</p>
-          <p><a href="https://github.com/OliverHennhoefer/online-fdr">GitHub</a> / <a href="https://oliverhennhoefer.github.io/online-fdr/">Docs</a></p>
+          <p class="project-links">
+            <a href="https://github.com/OliverHennhoefer/online-fdr">GitHub</a> /
+            <a href="https://oliverhennhoefer.github.io/online-fdr/">Docs</a>
+          </p>
         </article>
         <article>
           <h3>aberrant</h3>
           <p>Anomaly detection experiments and streaming workflows for reproducible baseline comparisons.</p>
-          <p><a href="https://github.com/OliverHennhoefer/aberrant">GitHub</a> / <a href="https://oliverhennhoefer.github.io/aberrant/">Docs</a></p>
+          <p class="project-links">
+            <a href="https://github.com/OliverHennhoefer/aberrant">GitHub</a> /
+            <a href="https://oliverhennhoefer.github.io/aberrant/">Docs</a>
+          </p>
         </article>
       </div>
     </div>
@@ -107,7 +191,7 @@ const formatDate = new Intl.DateTimeFormat("en", {
           <li>Between Resolution Collapse and Variance Inflation: Weighted Conformal Anomaly Detection in Low-Data Regimes. arXiv:2603.23205, 2026.</li>
           <li>Leave-One-Out-, Bootstrap- and Cross-Conformal Anomaly Detectors. IEEE ICKG 2024.</li>
         </ol>
-        <p><a href={site.socials.dblp}>Full bibliography on dblp</a></p>
+        <p><a href={site.socials.dblp}>Full bibliography on Google Scholar</a></p>
       </div>
     </div>
   </section>

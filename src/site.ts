@@ -9,7 +9,8 @@ export const site = {
   socials: {
     github: "https://github.com/OliverHennhoefer",
     linkedin: "https://linkedin.com/in/oliver-hennhoefer",
+    x: "https://x.com/OHennhoefer",
     orcid: "https://orcid.org/0000-0001-9834-4685",
-    dblp: "https://dblp.org/pid/371/4401.html",
+    dblp: "https://scholar.google.com/citations?user=Q6W4KREAAAAJ&hl=de",
   },
 };
