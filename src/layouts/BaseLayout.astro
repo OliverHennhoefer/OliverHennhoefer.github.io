@@ -424,6 +424,43 @@ const structuredData = {
     padding-left: 1.25rem;
   }
 
+  .publication-group {
+    margin-top: 0;
+  }
+
+  .publication-group + .publication-group {
+    margin-top: 1.35rem;
+  }
+
+  .publication-year {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: var(--ink);
+    font-size: 0.94rem;
+    letter-spacing: 0.09em;
+    white-space: nowrap;
+    margin: 0;
+    max-width: 100%;
+    line-height: 1.05;
+    text-transform: uppercase;
+  }
+
+  .publication-year span {
+    border: 1px solid var(--line);
+    border-radius: 0.22rem;
+    line-height: 1;
+    max-width: max-content;
+    padding: 0.12rem 0.48rem;
+  }
+
+  .publication-year::after {
+    content: "";
+    border-top: 1px solid var(--line);
+    display: block;
+    flex: 1 1 auto;
+  }
+
   .publication-list li {
     margin: 0;
   }
