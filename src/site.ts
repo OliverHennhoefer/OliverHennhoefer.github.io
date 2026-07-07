@@ -5,7 +5,7 @@ export const site = {
   url: "https://oliverhennhoefer.github.io",
   author: "Oliver Hennhoefer",
   email: "oliver.hennhoefer@h-ka.de",
-  affiliation: "Hochschule Karlsruhe, Intelligent Systems Research Group",
+  affiliation: "Karlsruhe University of Applied Sciences, Intelligent Systems Research Group",
   socials: {
     github: "https://github.com/OliverHennhoefer",
     linkedin: "https://linkedin.com/in/oliver-hennhoefer",
