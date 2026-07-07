@@ -88,6 +88,26 @@ const structuredData = {
     </ul>
       </aside>
     </div>
+    <script is:inline>
+      (() => {
+        const currentHost = document.location.host;
+        document.querySelectorAll("a[href]").forEach((link) => {
+          const href = link.getAttribute("href");
+          if (!href || link.hasAttribute("target")) return;
+          if (href.startsWith("mailto:") || href.startsWith("tel:") || href.startsWith("#")) return;
+          if (href.startsWith("/")) return;
+          try {
+            const url = new URL(href);
+            if (url.host !== currentHost && (url.protocol === "http:" || url.protocol === "https:")) {
+              link.target = "_blank";
+              link.rel = "noopener noreferrer";
+            }
+          } catch (error) {
+            // Non-standard relative paths already handled by start-with-slash checks.
+          }
+        });
+      })();
+    </script>
   </body>
 </html>
 
