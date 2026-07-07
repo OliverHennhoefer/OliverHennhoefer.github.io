@@ -1,0 +1,47 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const formatDate = new Intl.DateTimeFormat("en", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+});
+---
+
+<BaseLayout
+  title="Blog"
+  description="Research notes on conformal inference, anomaly detection, uncertainty quantification, and online error control."
+  canonical="/blog/"
+>
+  <section>
+    <p class="eyebrow">Writing</p>
+    <h1>Blog</h1>
+    <p class="lede">
+      Technical notes for machine learning work where scores, uncertainty, and
+      repeated decisions need explicit statistical meaning.
+    </p>
+  </section>
+
+  <section class="post-list" aria-label="Blog posts">
+    {
+      posts.map((post) => (
+        <article class="post-card">
+          <time datetime={post.data.pubDate.toISOString()}>
+            {formatDate.format(post.data.pubDate)}
+          </time>
+          <div>
+            <h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>
+            <p>{post.data.description}</p>
+            <ul class="tag-row" aria-label="Tags">
+              {post.data.tags.map((tag) => <li>{tag}</li>)}
+            </ul>
+          </div>
+        </article>
+      ))
+    }
+  </section>
+</BaseLayout>

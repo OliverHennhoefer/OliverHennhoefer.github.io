@@ -1,0 +1,135 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { site } from "../site";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const latestPosts = posts.slice(0, 3);
+const formatDate = new Intl.DateTimeFormat("en", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+});
+---
+
+<BaseLayout>
+  <section aria-labelledby="intro-heading">
+    <p class="eyebrow">Research staff / machine learning / uncertainty</p>
+    <h1 id="intro-heading">Oliver Hennh&ouml;fer</h1>
+    <p class="lede">
+      I write about machine learning systems that need statistical accounting:
+      conformal inference, anomaly detection, uncertainty quantification, and
+      sequential error control.
+    </p>
+    <ul class="link-row" aria-label="Profile links">
+      <li><a href={site.socials.github}>GitHub</a></li>
+      <li><a href={site.socials.orcid}>ORCID</a></li>
+      <li><a href={site.socials.dblp}>dblp</a></li>
+      <li><a href={`mailto:${site.email}`}>Email</a></li>
+    </ul>
+    <figure class="frontispiece" aria-hidden="true">
+      <img
+        src="/frontispiece.png"
+        alt=""
+        width="1983"
+        height="793"
+        loading="eager"
+        decoding="async"
+      />
+    </figure>
+  </section>
+
+  <section aria-labelledby="latest-heading">
+    <div class="split">
+      <p>Latest</p>
+      <div>
+        <h2 id="latest-heading">Blog</h2>
+        <div class="post-list">
+          {
+            latestPosts.map((post) => (
+              <article class="post-card">
+                <time datetime={post.data.pubDate.toISOString()}>
+                  {formatDate.format(post.data.pubDate)}
+                </time>
+                <div>
+                  <h3><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3>
+                  <p>{post.data.description}</p>
+                  <ul class="tag-row" aria-label="Tags">
+                    {post.data.tags.map((tag) => <li>{tag}</li>)}
+                  </ul>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+        <p><a href="/blog/">All posts</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="work-heading">
+    <div class="split">
+      <p>Work</p>
+      <div class="section-grid">
+        <h2 id="work-heading">Research And Software</h2>
+        <p>
+          My work sits at the intersection of statistics and machine learning,
+          especially when data are scarce, noisy, non-stationary, or arrive
+          sequentially.
+        </p>
+        <ul>
+          <li><strong>Uncertainty quantification.</strong> Conformal methods for interpretable prediction, scoring, and decision layers.</li>
+          <li><strong>Conformal anomaly detection.</strong> Calibration layers that turn raw anomaly scores into statistically meaningful evidence.</li>
+          <li><strong>Online error control.</strong> Online FDR and FWER procedures for streams of decisions made before the full dataset exists.</li>
+        </ul>
+        <div class="note">
+          <p>
+            The blog is the main surface. This page stays as the compact
+            business card: affiliation, links, software, and selected papers.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="projects-heading">
+    <div class="split">
+      <p>Code</p>
+      <div class="section-grid">
+        <h2 id="projects-heading">Projects</h2>
+        <article>
+          <h3>nonconform</h3>
+          <p>Conformal anomaly detection and change-point detection for calibrated p-values and FDR-controlled decisions.</p>
+          <p><a href="https://github.com/OliverHennhoefer/nonconform">GitHub</a> / <a href="https://oliverhennhoefer.github.io/nonconform/">Docs</a> / <a href="https://pypi.org/project/nonconform/">PyPI</a></p>
+        </article>
+        <article>
+          <h3>online-fdr</h3>
+          <p>Sequential multiple-testing procedures including LORD, SAFFRON, ADDIS, alpha-spending, and batch baselines.</p>
+          <p><a href="https://github.com/OliverHennhoefer/online-fdr">GitHub</a> / <a href="https://oliverhennhoefer.github.io/online-fdr/">Docs</a></p>
+        </article>
+        <article>
+          <h3>oddball / aberrant</h3>
+          <p>Lightweight anomaly-detection datasets and streaming anomaly-detection algorithms for reproducible experiments.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="publications-heading">
+    <div class="split">
+      <p>Papers</p>
+      <div>
+        <h2 id="publications-heading">Selected Publications</h2>
+        <ol>
+          <li>TalkTag: Fine-Grained Morphosyntactic Error Annotation for Transcribed Speech. arXiv:2606.01820, 2026.</li>
+          <li>Conformal Anomaly Detection in Python: Moving Beyond Heuristic Thresholds with 'nonconform'. arXiv:2605.13642, 2026.</li>
+          <li>Between Resolution Collapse and Variance Inflation: Weighted Conformal Anomaly Detection in Low-Data Regimes. arXiv:2603.23205, 2026.</li>
+          <li>Leave-One-Out-, Bootstrap- and Cross-Conformal Anomaly Detectors. IEEE ICKG 2024.</li>
+        </ol>
+        <p><a href={site.socials.dblp}>Full bibliography on dblp</a></p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

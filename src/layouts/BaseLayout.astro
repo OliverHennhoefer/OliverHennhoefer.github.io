@@ -1,0 +1,526 @@
+---
+import "katex/dist/katex.min.css";
+import { site } from "../site";
+
+type Props = {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  type?: "website" | "article";
+  publishDate?: Date;
+  updatedDate?: Date;
+};
+
+const {
+  title = site.title,
+  description = site.description,
+  canonical = Astro.url.pathname,
+  type = "website",
+  publishDate,
+  updatedDate,
+} = Astro.props;
+
+const pageTitle = title === site.title ? title : `${title} - ${site.title}`;
+const canonicalUrl = new URL(canonical, site.url).toString();
+const imageUrl = new URL("/frontispiece.png", site.url).toString();
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": type === "article" ? "BlogPosting" : "Person",
+  name: site.author,
+  headline: title,
+  description,
+  url: canonicalUrl,
+  image: imageUrl,
+  author: {
+    "@type": "Person",
+    name: site.author,
+    affiliation: site.affiliation,
+    url: site.url,
+  },
+  datePublished: publishDate?.toISOString(),
+  dateModified: updatedDate?.toISOString() ?? publishDate?.toISOString(),
+  sameAs: Object.values(site.socials),
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" type="application/rss+xml" title={`${site.title} RSS`} href="/rss.xml" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={imageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="theme-color" content="#ffffff" />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="site-shell">
+      <header class="site-rail">
+        <a class="mark" href="/" aria-label="Oliver Hennhoefer home">OH</a>
+        <nav aria-label="Main navigation">
+          <a href="/">Home</a>
+          <a href="/blog/">Blog</a>
+          <a href="/rss.xml">RSS</a>
+        </nav>
+        <p>{site.affiliation}</p>
+      </header>
+      <main id="main">
+        <slot />
+      </main>
+      <aside class="site-index" aria-label="Research index">
+        <p>Index</p>
+        <ul>
+          <li>Conformal inference</li>
+          <li>Anomaly detection</li>
+          <li>Uncertainty quantification</li>
+          <li>Online FDR</li>
+        </ul>
+      </aside>
+    </div>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    color-scheme: light;
+    --paper: #fbfbf8;
+    --ink: #050505;
+    --muted: #5f5f59;
+    --line: #d8d8d0;
+    --soft: #efefea;
+    --reverse: #fff;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      linear-gradient(90deg, rgba(0, 0, 0, 0.035) 1px, transparent 1px) 0 0 / 7.5rem 100%,
+      var(--paper);
+  }
+
+  a {
+    color: inherit;
+    text-decoration-color: currentColor;
+    text-decoration-thickness: 0.06em;
+    text-underline-offset: 0.18em;
+  }
+
+  a:hover {
+    text-decoration-thickness: 0.12em;
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 4px;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  .skip-link {
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    left: 1rem;
+    padding: 0.35rem 0.55rem;
+    position: absolute;
+    top: -4rem;
+    z-index: 20;
+  }
+
+  .skip-link:focus {
+    top: 1rem;
+  }
+
+  .site-shell {
+    display: grid;
+    grid-template-columns: minmax(10rem, 0.45fr) minmax(0, 45rem) minmax(7rem, 0.35fr);
+    gap: clamp(1.25rem, 4vw, 4rem);
+    margin: 0 auto;
+    max-width: 76rem;
+    min-height: 100vh;
+    padding: clamp(1rem, 2.5vw, 2rem);
+  }
+
+  .site-rail {
+    border-right: 1px solid var(--ink);
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    gap: 2rem;
+    min-height: calc(100vh - clamp(2rem, 5vw, 4rem));
+    padding-right: clamp(1rem, 2vw, 1.5rem);
+    position: sticky;
+    top: clamp(1rem, 2.5vw, 2rem);
+  }
+
+  .mark {
+    align-items: center;
+    aspect-ratio: 1;
+    border: 1px solid var(--ink);
+    display: inline-flex;
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+    font-size: 1.25rem;
+    justify-content: center;
+    letter-spacing: 0;
+    text-decoration: none;
+    width: 3.75rem;
+  }
+
+  .site-rail nav {
+    display: grid;
+    gap: 0.45rem;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+  }
+
+  .site-rail p {
+    align-self: end;
+    color: var(--muted);
+    font-size: 0.74rem;
+    line-height: 1.35;
+    margin: 0;
+    max-width: 10rem;
+  }
+
+  .site-index {
+    border-left: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    line-height: 1.35;
+    padding-left: 1rem;
+    position: sticky;
+    text-transform: uppercase;
+    top: clamp(1rem, 2.5vw, 2rem);
+    height: max-content;
+    margin-top: clamp(2rem, 8vw, 5.5rem);
+  }
+
+  .site-index p {
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    margin-bottom: 0.7rem;
+    padding-bottom: 0.45rem;
+  }
+
+  .site-index ul {
+    display: grid;
+    gap: 0.65rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  main {
+    padding: clamp(2rem, 8vw, 5.5rem) 0 5rem;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  ul,
+  ol {
+    margin-block-start: 0;
+  }
+
+  h1,
+  h2,
+  h3 {
+    line-height: 1.08;
+  }
+
+  h1 {
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+    font-size: clamp(3.6rem, 12vw, 8.5rem);
+    font-weight: 400;
+    letter-spacing: 0;
+    margin-bottom: 1.25rem;
+  }
+
+  h2 {
+    border-top: 1px solid var(--ink);
+    font-size: clamp(1.55rem, 3vw, 2.35rem);
+    font-weight: 520;
+    margin: 4.5rem 0 1.25rem;
+    padding-top: 0.75rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.35rem;
+    text-transform: uppercase;
+  }
+
+  p,
+  li {
+    max-width: 38rem;
+  }
+
+  code,
+  pre {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  }
+
+  code {
+    background: var(--soft);
+    padding: 0.05rem 0.25rem;
+  }
+
+  pre {
+    border: 1px solid var(--line);
+    overflow-x: auto;
+    padding: 1rem;
+  }
+
+  .eyebrow {
+    border-bottom: 1px solid var(--ink);
+    display: inline-block;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.22rem;
+    text-transform: uppercase;
+  }
+
+  .lede {
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+    font-size: clamp(1.45rem, 3.3vw, 2.35rem);
+    line-height: 1.18;
+    max-width: 42rem;
+  }
+
+  .frontispiece {
+    border-bottom: 1px solid var(--ink);
+    border-top: 1px solid var(--ink);
+    margin: clamp(2rem, 5vw, 3.5rem) 0 0;
+    padding: 0.45rem 0;
+  }
+
+  .frontispiece img {
+    aspect-ratio: 1983 / 793;
+    filter: grayscale(1) contrast(1.08);
+    mix-blend-mode: multiply;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .muted {
+    color: var(--muted);
+  }
+
+  .section-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .split {
+    display: grid;
+    gap: 1.2rem;
+    grid-template-columns: minmax(8rem, 0.55fr) minmax(0, 1fr);
+  }
+
+  .split > :first-child {
+    color: var(--muted);
+    font-size: 0.78rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .link-row,
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.8rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  .link-row li,
+  .tag-row li {
+    margin: 0;
+  }
+
+  .tag-row {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  .post-list {
+    border-top: 1px solid var(--ink);
+    counter-reset: posts;
+  }
+
+  .post-card {
+    counter-increment: posts;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 7rem minmax(0, 1fr);
+    padding: 1.2rem 0;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+
+  .post-card::after {
+    color: var(--line);
+    content: counter(posts, decimal-leading-zero);
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+    font-size: 2.4rem;
+    line-height: 1;
+    position: absolute;
+    right: 0;
+    top: 1rem;
+  }
+
+  .post-card time {
+    color: var(--muted);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .post-card h2,
+  .post-card h3 {
+    border: 0;
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
+    font-weight: 400;
+    letter-spacing: 0;
+    margin: 0 0 0.35rem;
+    padding: 0;
+    text-transform: none;
+  }
+
+  .post-card p {
+    margin-bottom: 0;
+    padding-right: 3rem;
+  }
+
+  .note {
+    background: var(--ink);
+    color: var(--reverse);
+    display: grid;
+    gap: 0.75rem;
+    margin: 2rem 0;
+    padding: clamp(1rem, 3vw, 1.5rem);
+  }
+
+  .note a {
+    color: var(--reverse);
+  }
+
+  .prose {
+    font-size: 1.02rem;
+  }
+
+  .prose h2,
+  .prose h3 {
+    max-width: 38rem;
+  }
+
+  .prose blockquote {
+    border-left: 2px solid var(--ink);
+    margin: 2rem 0;
+    padding-left: 1rem;
+  }
+
+  .prose .katex-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.5rem 0;
+  }
+
+  .post-meta {
+    border-top: 1px solid var(--ink);
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin: 1.5rem 0 2.5rem;
+    padding-top: 0.75rem;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 760px) {
+    :root {
+      font-size: 16px;
+    }
+
+    body {
+      background: var(--paper);
+    }
+
+    .site-shell {
+      display: block;
+      padding: 1rem;
+    }
+
+    .site-rail {
+      align-items: center;
+      border-bottom: 1px solid var(--ink);
+      border-right: 0;
+      display: flex;
+      justify-content: space-between;
+      min-height: 0;
+      padding: 0 0 1rem;
+      position: static;
+    }
+
+    .site-rail nav {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .site-rail p {
+      display: none;
+    }
+
+    .site-index {
+      display: none;
+    }
+
+    main {
+      padding-top: 2.75rem;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 18vw, 4.8rem);
+    }
+
+    .split,
+    .post-card {
+      grid-template-columns: 1fr;
+    }
+
+    .post-card::after {
+      font-size: 1.8rem;
+    }
+  }
+</style>
