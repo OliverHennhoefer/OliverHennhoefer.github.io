@@ -6,7 +6,6 @@ import { faLinkedinIn } from "@fortawesome/free-brands-svg-icons";
 import {
   siGithub,
   siGmail,
-  siOrcid,
   siGooglescholar,
   siX,
 } from "simple-icons";
@@ -28,7 +27,6 @@ const faIcon = (icon: { icon: [number, number, string[], string, string] }): Ico
 });
 const iconSet = {
   github: simpleIcon(siGithub),
-  orcid: simpleIcon(siOrcid),
   linkedin: faIcon(faLinkedinIn),
   x: {
     ...simpleIcon(siX),
@@ -61,13 +59,6 @@ const formatDate = new Intl.DateTimeFormat("en", {
         <a class="icon-link" href={site.socials.github} aria-label="GitHub">
           <svg viewBox={iconSet.github.viewBox} aria-hidden="true">
             <path d={iconSet.github.path} />
-          </svg>
-        </a>
-      </li>
-      <li>
-        <a class="icon-link" href={site.socials.orcid} aria-label="ORCID">
-          <svg viewBox={iconSet.orcid.viewBox} aria-hidden="true">
-            <path d={iconSet.orcid.path} />
           </svg>
         </a>
       </li>
