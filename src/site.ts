@@ -6,6 +6,15 @@ export const site = {
   author: "Oliver Hennhoefer",
   email: "oliver.hennhoefer@h-ka.de",
   affiliation: "Karlsruhe University of Applied Sciences, Intelligent Systems Research Group",
+  impressum: {
+    legalName: "Oliver Nino Hennhöfer",
+    addressLine1: "Lachnerstraße 18",
+    postalCode: "76131",
+    city: "Karlsruhe",
+    country: "Germany",
+    email: "oliver.hennhoefer@mail.de",
+  },
+  impressumPath: "/impressum/",
   socials: {
     github: "https://github.com/OliverHennhoefer",
     linkedin: "https://linkedin.com/in/oliver-hennhoefer",

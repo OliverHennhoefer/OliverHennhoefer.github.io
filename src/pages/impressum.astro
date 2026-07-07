@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { site } from "../site";
+
+const impressum = site.impressum;
+---
+
+<BaseLayout title="Impressum">
+  <section aria-labelledby="impressum-heading">
+    <div class="split">
+      <div class="section-grid">
+        <h2 id="impressum-heading">Impressum</h2>
+        <p><strong>{impressum.legalName}</strong></p>
+        <p>{impressum.addressLine1}</p>
+        <p>{impressum.postalCode} {impressum.city}, {impressum.country}</p>
+        <p>Email: {impressum.email}</p>
+        {impressum.phone && impressum.phone !== "<placeholder: phone>" ? <p>Phone: {impressum.phone}</p> : null}
+        {impressum.vatId && impressum.vatId !== "<placeholder: VAT ID>" ? <p>VAT ID: {impressum.vatId}</p> : null}
+        {impressum.registerCourt && impressum.registerCourt !== "<placeholder: register court>" ? (
+          <p>Register court: {impressum.registerCourt}</p>
+        ) : null}
+        {impressum.registerNumber && impressum.registerNumber !== "<placeholder: register number>" ? (
+          <p>Register no.: {impressum.registerNumber}</p>
+        ) : null}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

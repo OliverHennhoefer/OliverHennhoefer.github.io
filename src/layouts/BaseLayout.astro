@@ -81,13 +81,16 @@ const structuredData = {
       </main>
       <aside class="site-index" aria-label="Research index">
         <p>Index</p>
-    <ul>
+        <ul>
       <li>Machine learning</li>
       <li>Conformal inference</li>
       <li>Uncertainty quantification</li>
     </ul>
       </aside>
     </div>
+    <footer class="site-footer" aria-label="Impressum">
+      <a href={site.impressumPath}>Impressum</a>
+    </footer>
     <script is:inline>
       (() => {
         const currentHost = document.location.host;
@@ -176,6 +179,21 @@ const structuredData = {
 
   .skip-link:focus {
     top: 1rem;
+  }
+
+  .site-footer {
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: clamp(0.66rem, 1.2vw, 0.7rem);
+    letter-spacing: 0.08em;
+    margin: 0 auto;
+    max-width: 76rem;
+    padding: 1rem clamp(1rem, 2.5vw, 2rem);
+    text-transform: uppercase;
+  }
+
+  .site-footer a {
+    color: inherit;
   }
 
   .site-shell {
@@ -581,6 +599,10 @@ const structuredData = {
 
     main {
       padding-top: 2.75rem;
+    }
+
+    .site-footer {
+      padding-bottom: 1rem;
     }
 
     h1 {
