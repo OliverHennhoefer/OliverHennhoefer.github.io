@@ -10,19 +10,58 @@ const impressum = site.impressum;
     <div class="split">
       <div class="section-grid">
         <h2 id="impressum-heading">Impressum</h2>
-        <p><strong>{impressum.legalName}</strong></p>
-        <p>{impressum.addressLine1}</p>
-        <p>{impressum.postalCode} {impressum.city}, {impressum.country}</p>
-        <p>Email: {impressum.email}</p>
-        {impressum.phone && impressum.phone !== "<placeholder: phone>" ? <p>Phone: {impressum.phone}</p> : null}
-        {impressum.vatId && impressum.vatId !== "<placeholder: VAT ID>" ? <p>VAT ID: {impressum.vatId}</p> : null}
+        <p><span class="impressum-label">Name:</span> {impressum.legalName}</p>
+        <div class="impressum-kv">
+          <span class="impressum-label">Address:</span>
+          <div class="impressum-address">
+            <p>{impressum.addressLine1}</p>
+            <p>{impressum.postalCode} {impressum.city}, {impressum.country}</p>
+          </div>
+        </div>
+        <p><span class="impressum-label">Email:</span> {impressum.email}</p>
+        {impressum.phone && impressum.phone !== "<placeholder: phone>" ? (
+          <p><span class="impressum-label">Phone:</span> {impressum.phone}</p>
+        ) : null}
+        {impressum.vatId && impressum.vatId !== "<placeholder: VAT ID>" ? (
+          <p><span class="impressum-label">VAT ID:</span> {impressum.vatId}</p>
+        ) : null}
         {impressum.registerCourt && impressum.registerCourt !== "<placeholder: register court>" ? (
-          <p>Register court: {impressum.registerCourt}</p>
+          <p><span class="impressum-label">Register court:</span> {impressum.registerCourt}</p>
         ) : null}
         {impressum.registerNumber && impressum.registerNumber !== "<placeholder: register number>" ? (
-          <p>Register no.: {impressum.registerNumber}</p>
+          <p><span class="impressum-label">Register no.:</span> {impressum.registerNumber}</p>
         ) : null}
       </div>
     </div>
   </section>
+
+  <style>
+    .section-grid p {
+      margin-bottom: 0.35rem;
+      margin-top: 0;
+      line-height: 1.3;
+    }
+
+    .impressum-label {
+      font-weight: 700;
+    }
+
+    .impressum-address {
+      display: grid;
+      gap: 0.08rem;
+      line-height: 1.3;
+      margin: 0;
+      padding: 0;
+    }
+
+    .impressum-kv {
+      align-items: flex-start;
+      display: flex;
+      gap: 0.55rem;
+    }
+
+    .impressum-address p {
+      margin: 0;
+    }
+  </style>
 </BaseLayout>

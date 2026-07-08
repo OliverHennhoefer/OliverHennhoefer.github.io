@@ -1,0 +1,256 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="CV"
+  description="Curriculum vitae and selected research profile of Oliver Hennh&ouml;fer."
+  canonical="/cv/"
+>
+  <section aria-labelledby="cv-intro-heading">
+    <p class="eyebrow">Curriculum vitae</p>
+    <h1 id="cv-intro-heading">Oliver Hennh&ouml;fer</h1>
+    <p class="lede">
+      Research Assistant / Research Staff in uncertainty-aware machine learning and statistical methodology.
+    </p>
+  </section>
+
+  <section aria-labelledby="profile-heading">
+    <div class="split">
+      <div class="section-grid profile-grid">
+        <h2 id="profile-heading">Profile</h2>
+        <p>[Replace this paragraph with your profile summary.]</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="experience-heading">
+    <div class="split">
+      <div class="section-grid cv-timeline">
+        <h2 id="experience-heading">Experience</h2>
+        <article>
+          <h3>Research Staff</h3>
+          <p class="cv-item-meta">Intelligent Systems Research Group, Hochschule Karlsruhe · 2024 — Present</p>
+          <ul class="cv-item-bullets">
+            <li>Contribute to uncertainty-aware machine learning methodology for decision systems.</li>
+            <li>Guide reproducible experimentation in anomaly detection and conformal inference workflows.</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Research Assistant</h3>
+          <p class="cv-item-meta">Institut f&uuml;r Angewandte Forschung, Hochschule Karlsruhe · 2022 — 2024</p>
+          <ul class="cv-item-bullets">
+            <li>Supported applied projects in uncertainty quantification and statistical decision support.</li>
+            <li>Developed and maintained reproducible code for early-stage research tooling.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="education-heading">
+    <div class="split">
+      <div class="section-grid cv-timeline">
+        <h2 id="education-heading">Education</h2>
+        <article>
+          <h3>Graduate Education</h3>
+          <p class="cv-item-meta">Karlsruhe University of Applied Sciences · 2020 — Present</p>
+          <ul class="cv-item-bullets">
+            <li>Thesis and coursework in machine learning, statistics, and uncertainty-aware systems.</li>
+            <li>Focus on trustworthy inference and uncertainty quantification in applied settings.</li>
+          </ul>
+        </article>
+        <article>
+          <h3>Undergraduate Education</h3>
+          <p class="cv-item-meta">Institution / Program (to be completed) · [from] — [to]</p>
+          <ul class="cv-item-bullets">
+            <li>Foundational coursework in mathematics, statistics, and software engineering.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="skills-heading">
+    <div class="split">
+      <div class="section-grid">
+        <h2 id="skills-heading">Skills</h2>
+        <ul>
+          <li>Python, JavaScript/TypeScript, Git, Docker, GitHub Actions</li>
+          <li>Machine learning: uncertainty estimation, anomaly detection, conformal inference</li>
+          <li>Statistics &amp; probability: sequential methods, risk control, evaluation protocols</li>
+          <li>Scientific tooling: packaging, reproducible experiments, documentation</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="projects-heading">
+    <div class="split">
+      <div class="section-grid">
+        <h2 id="projects-heading">Projects</h2>
+        <article>
+          <h3>nonconform</h3>
+          <p>Python pacakge for Conformal Anomaly Detection &amp; Change-Point Detection.</p>
+          <p class="project-links">
+            <a href="https://github.com/OliverHennhoefer/nonconform">GitHub</a> /
+            <a href="https://oliverhennhoefer.github.io/nonconform/">Docs</a> /
+            <a href="https://pypi.org/project/nonconform/">PyPI</a>
+            / <a href="https://arxiv.org/pdf/2605.13642">Paper</a>
+          </p>
+        </article>
+        <article>
+          <h3>online-fdr</h3>
+          <p>Python pacakge for false discovery rate control in sequential hypotheses testing.</p>
+          <p class="project-links">
+            <a href="https://github.com/OliverHennhoefer/online-fdr">GitHub</a> /
+            <a href="https://oliverhennhoefer.github.io/online-fdr/">Docs</a> /
+            <a href="https://pypi.org/project/online-fdr/">PyPI</a>
+          </p>
+        </article>
+        <article>
+          <h3>aberrant</h3>
+          <p>Python package for online anomaly detection in streaming data and related tooling.</p>
+          <p class="project-links">
+            <a href="https://github.com/OliverHennhoefer/aberrant">GitHub</a> /
+            <a href="https://oliverhennhoefer.github.io/aberrant/">Docs</a> /
+            <a href="https://pypi.org/project/aberrant/">PyPI</a>
+          </p>
+        </article>
+        <article>
+          <h3>talk-tag</h3>
+          <p>Resource and tooling for language and annotation-focused NLP workflows.</p>
+          <p class="project-links">
+            <a href="https://github.com/OliverHennhoefer/talk-tag">GitHub</a> /
+            <a href="https://pypi.org/project/talk-tag/">PyPI</a> /
+            <a href="https://aclanthology.org/2026.law-main.20/">Paper</a>
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="cv-publications-heading">
+    <div class="split">
+      <div>
+        <h2 id="cv-publications-heading">Publications</h2>
+        <div class="publication-group">
+          <p class="publication-year"><span>2026</span></p>
+          <ol class="publication-list">
+            <li>
+              <a href="https://scholar.google.com/citations?view_op=view_citation&hl=de&user=Q6W4KREAAAAJ&citation_for_view=Q6W4KREAAAAJ:qjMakFHDy7sC">
+                <strong>Between Resolution Collapse and Variance Inflation: Weighted Conformal Anomaly Detection in Low-Data Regimes</strong>
+              </a><br />
+              <span class="publication-meta">
+                <span class="author-self">O Hennh&ouml;fer</span>, C Preisach, <em>arXiv preprint arXiv:2603.23205</em> (2026).
+              </span>
+            </li>
+            <li>
+              <a href="https://aclanthology.org/2026.law-main.20/">
+                <strong>TalkTag: Fine-Grained Morphosyntactic Error Annotation for Transcribed Speech</strong>
+              </a><br />
+              <span class="publication-meta">
+                S Venturini, <span class="author-self">O Hennh&ouml;fer</span>, S Kinkel, J Str&ouml;tgen, <em>Proceedings of the 20th Linguistic Annotation Workshop (LAW XX)</em> (2026).
+              </span>
+            </li>
+            <li>
+              <a href="https://scholar.google.com/citations?view_op=view_citation&hl=de&user=Q6W4KREAAAAJ&citation_for_view=Q6W4KREAAAAJ:UeHWp8X0CEIC">
+                <strong>Conformal Anomaly Detection in Python: Moving Beyond Heuristic Thresholds with 'nonconform'</strong>
+              </a><br />
+              <span class="publication-meta">
+                <span class="author-self">O Hennh&ouml;fer</span>, M Kirsch, C Preisach, <em>arXiv preprint arXiv:2605.13642</em> (2026).
+              </span>
+            </li>
+          </ol>
+        </div>
+
+        <div class="publication-group">
+          <p class="publication-year"><span>2025</span></p>
+          <ol class="publication-list">
+            <li>
+              <a href="https://scholar.google.com/citations?view_op=view_citation&hl=de&user=Q6W4KREAAAAJ&citation_for_view=Q6W4KREAAAAJ:2osOgNQ5qMEC">
+                <strong>Interdisciplinary Harmonies: A Story-Driven Course on AI and Music to Increase Interest in Computer Science</strong>
+              </a><br />
+              <span class="publication-meta">
+                K Marquardt, Q Shang, <span class="author-self">O Hennh&ouml;fer</span>, L Happe, <em>Proceedings of the 6th European Conference on Software Engineering Education</em> (2025).
+              </span>
+            </li>
+          </ol>
+        </div>
+
+        <div class="publication-group">
+          <p class="publication-year"><span>2024</span></p>
+          <ol class="publication-list">
+            <li>
+              <a href="https://scholar.google.com/citations?view_op=view_citation&hl=de&user=Q6W4KREAAAAJ&citation_for_view=Q6W4KREAAAAJ:d1gkVwhDpl0C">
+                <strong>Leave-One-Out-, Bootstrap- and Cross-Conformal Anomaly Detectors</strong>
+              </a><br />
+              <span class="publication-meta">
+                <span class="author-self">O Hennh&ouml;fer</span>, C Preisach, <em>IEEE International Conference on Knowledge Graph (ICKG) 15 (1), 110 - 119</em> (2024).
+              </span>
+            </li>
+          </ol>
+        </div>
+
+        <div class="publication-group">
+          <p class="publication-year"><span>2021</span></p>
+          <ol class="publication-list">
+            <li>
+              <a href="https://scholar.google.com/citations?view_op=view_citation&hl=de&user=Q6W4KREAAAAJ&citation_for_view=Q6W4KREAAAAJ:9yKSN-GCB0IC">
+                <strong>Multidimensional Exploratory Spatial Data Analysis</strong>
+              </a><br />
+              <span class="publication-meta">
+                <span class="author-self">O Hennh&ouml;fer</span>, J Bruns, P Ullrich, A Hei&szlig;, G Sharipov, D Paraforos, <em>GI_Forum 2021, 9, 136-151</em> (2021).
+              </span>
+            </li>
+          </ol>
+        </div>
+
+        <div class="publication-group">
+          <p class="publication-year"><span>2020</span></p>
+          <ol class="publication-list">
+            <li>
+              <a href="https://scholar.google.com/citations?view_op=view_citation&hl=de&user=Q6W4KREAAAAJ&citation_for_view=Q6W4KREAAAAJ:u-x6o8ySG0sC">
+                <strong>Anomaly Detection in Precision Agriculture with R</strong>
+              </a><br />
+              <span class="publication-meta">
+                <span class="author-self">O Hennh&ouml;fer</span>, Karlsruhe University of Applied Sciences, 2020.
+              </span>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .profile-grid {
+      gap: 0.3rem;
+    }
+
+    .profile-grid p {
+      margin: 0;
+    }
+
+    .cv-timeline {
+      gap: 1.45rem;
+    }
+
+    .cv-item-meta {
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      margin: 0.25rem 0 0.45rem;
+      text-transform: uppercase;
+    }
+
+    .cv-item-bullets {
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+
+    .cv-item-bullets li {
+      margin: 0.1rem 0;
+    }
+  </style>
+</BaseLayout>
