@@ -1,32 +1,34 @@
 ---
-title: From Scores to Decisions
-description: A short note on turning anomaly scores into calibrated evidence and keeping the decision layer inspectable.
-pubDate: 2026-06-15
-updatedDate: 2026-07-07
+
+title: Positive Regression Dependence on a Subset
+description: An intuitive explanation of the PRDS dependence condition.
+pubDate: 2026-08-07
+updatedDate: 2026-08-07
 tags:
-  - conformal inference
-  - anomaly detection
-  - online FDR
+
+* multiple testing
+* dependence
+* prds
+
 ---
 
-Anomaly detectors often stop at a score. The score may rank observations in a useful way, but it does not say what level of evidence should trigger an action, nor how often that action is expected to be wrong under a stated reference condition.
+The statistical dependence condition *Positive Regression Dependence on a Subset* (PRDS) often appears in the context of multiple hypothesis testing.
 
-Conformal inference is useful here because it gives a way to turn a score into a calibrated quantity. In anomaly detection, that often means converting a raw anomaly score \(s(x)\) into a p-value relative to calibration data:
+The formal definition is abstract and unintuitive:
 
-$$
-p(x) = \frac{1 + \sum_{i=1}^{n} \mathbf{1}\{s_i \ge s(x)\}}{n + 1}.
-$$
+> **Definition (PRDS).**
+> A random vector (X=(X_1,\dots,X_m)) is **positively regression dependent on a subset** (I_0\subseteq{1,\dots,m}) if, for every (i\in I_0) and every increasing measurable set (D\subseteq\mathbb{R}^m),
+> [
+> x\mapsto \Pr(X\in D\mid X_i=x)
+> ]
+> is nondecreasing.
+>
+> Here, (D) is **increasing** if (x\in D) and (y\ge x) coordinatewise imply (y\in D).
 
-The resulting value is not magic, and it still depends on the assumptions behind the calibration set, but it gives the downstream decision a statistical meaning.
+Intuitively, assuming larger test statistics mean stronger evidence against the null, conditioning on one test statistic being larger makes significance-favoring joint outcomes no less likely.
 
-## The Software Boundary
+In other words, PRDS describes a form of positive dependence in the joint *hypothesis-testing space*: significance tends to cluster with significance.
 
-For research software, I like the boundary where a library accepts the model's scores and returns calibrated evidence. That keeps the anomaly detector flexible: it can be a classical method, a neural model, or a domain-specific scoring rule. The calibration layer handles the part that ad hoc thresholds leave implicit.
+If one imagines the joint space of possible outcomes from many tests as a *hypothesis lake*:
 
-This is the design direction behind `nonconform`: keep the scoring model separate, expose the calibration assumptions clearly, and make the final decision rule inspectable.
-
-## Sequential Settings
-
-The same issue appears when tests arrive over time. A single threshold can look reasonable in isolation and still behave poorly when repeated decisions accumulate. Online FDR procedures address that by controlling the error rate across a stream of hypotheses, adapting the available testing budget as evidence arrives.
-
-The common thread is simple: scores are useful, but decisions need accounting. Good APIs should make that accounting visible.
+> When you “fish” in a region where one test gives stronger evidence against its null, the positively dependent tests tend to give stronger evidence against their own nulls as well.
