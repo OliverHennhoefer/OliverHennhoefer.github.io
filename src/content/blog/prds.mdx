@@ -5,9 +5,10 @@ description: An intuitive explanation of the PRDS dependence condition.
 pubDate: 2026-08-07
 updatedDate: 2026-08-07
 tags:
-    - multiple testing
-    - dependence
-    - prds
+
+* multiple testing
+* dependence
+* prds
 
 ---
 
@@ -16,13 +17,16 @@ The statistical dependence condition *Positive Regression Dependence on a Subset
 The formal definition is abstract and unintuitive:
 
 > **Definition (PRDS).**
-> A random vector (X=(X_1,\dots,X_m)) is **positively regression dependent on a subset** (I_0\subseteq{1,\dots,m}) if, for every (i\in I_0) and every increasing measurable set (D\subseteq\mathbb{R}^m),
-> [
+>
+> A random vector $X=(X_1,\dots,X_m)$ is **positively regression dependent on a subset** $I_0\subseteq{1,\dots,m}$ if, for every $i\in I_0$ and every increasing measurable set $D\subseteq\mathbb{R}^m$,
+>
+> $$
 > x\mapsto \Pr(X\in D\mid X_i=x)
-> ]
+> $$
+>
 > is nondecreasing.
 >
-> Here, (D) is **increasing** if (x\in D) and (y\ge x) coordinatewise imply (y\in D).
+> Here, $D$ is **increasing** if $x\in D$ and $y\ge x$ coordinatewise imply $y\in D$.
 
 Intuitively, assuming larger test statistics mean stronger evidence against the null, conditioning on one test statistic being larger makes significance-favoring joint outcomes no less likely.
 
@@ -42,9 +46,9 @@ The reason is that in multiple testing, dependence between tests can change the 
 
 Take the Benjamini–Hochberg procedure: Its decision for one hypothesis does not depend only on that hypothesis's p-value. It depends on the whole collection of p-values because they are ranked together. So whether a true-null hypothesis gets falsely rejected partly depends on what all the other tests are doing.
 
-Under independence the problem does not exist. Under dependece, one test looking significant can change the distribution of all the others.
+Under independence the problem does not exist. Under dependence, one test looking significant can change the distribution of all the others.
 
-For example, one true null statistics could become more extreme, making the rejection threshold harmfully permissive and undermining error-control validity.
+For example, one true-null statistic could become more extreme, making the rejection threshold harmfully permissive and undermining error-control validity.
 
 PRDS prevents this.
 
@@ -54,8 +58,8 @@ If some other tests become more significant, BH will generally keep the same num
 
 PRDS says: If one true-null test happens to look more significant, the other tests do not suddenly become systematically less significant.
 
-Stronger evidence does lead to fewer rejections via the Benjamini–Hochberg procedure and due to PRDS it means no shift towards weaker evidence elsewhere.
+Stronger evidence generally leads to the same number or more rejections via the Benjamini–Hochberg procedure, and PRDS ensures that dependence does not systematically shift the remaining evidence in the opposite direction.
 
-Both work towards the same monotone direction. PRDS is the condition that prevents dependence among tests from interacting with BH in the wrong direction.
+Both work in the same monotone direction. PRDS is the condition that prevents dependence among tests from interacting with BH in the wrong direction.
 
 PRDS is the antidote to dependence breaking BH’s FDR control.
