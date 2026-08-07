@@ -29,6 +29,34 @@ Intuitively, assuming larger test statistics mean stronger evidence against the 
 
 In other words, PRDS describes a form of positive dependence in the joint *hypothesis-testing space*: significance tends to cluster with significance.
 
-If one imagines the joint space of possible outcomes from many tests as a *hypothesis lake*:
+In simpler terms:
 
-> When you “fish” in a region where one test gives stronger evidence against its null, the positively dependent tests tend to give stronger evidence against their own nulls as well.
+> Picture the test statistics as gauges on a control panel, one for each hypothesis. Higher readings mean stronger evidence against the respective null hypothesis.
+>
+> PRDS says that, for the gauges corresponding to true null hypotheses, a higher reading never makes jointly high readings elsewhere on the panel less likely.
+>
+> In other words, if a true-null test statistic is higher, the other test statistics are, if anything, more likely to be higher too.
+
+Why would anyone need to name this property at all?
+
+The reason is that in multiple testing, dependence between tests can change the probability of getting many small p-values together, and that directly affects false discovery rate control.
+
+Take the Benjamini–Hochberg procedure: Its decision for one hypothesis does not depend only on that hypothesis's p-value. It depends on the whole collection of p-values because they are ranked together. So whether a true-null hypothesis gets falsely rejected partly depends on what all the other tests are doing.
+
+Under independence the problem does not exist. Under dependece, one test looking significant can change the distribution of all the others.
+
+For example, one true null statistics could become more extreme, making the rejection threshold harmfully permissive and undermining error-control validity.
+
+PRDS prevents this.
+
+In general, the Benjamini–Hochberg procedure says: the more convincing p-values you have, the more hypotheses you may reject.
+
+If some other tests become more significant, BH will generally keep the same number of rejections or reject more. It will not suddenly become more conservative.
+
+PRDS says: If one true-null test happens to look more significant, the other tests do not suddenly become systematically less significant.
+
+Stronger evidence does lead to fewer rejections via the Benjamini–Hochberg procedure and due to PRDS it means no shift towards weaker evidence elsewhere.
+
+Both work towards the same monotone direction. PRDS is the condition that prevents dependence among tests from interacting with BH in the wrong direction.
+
+PRDS is the antidote to dependence breaking BH’s FDR control.
