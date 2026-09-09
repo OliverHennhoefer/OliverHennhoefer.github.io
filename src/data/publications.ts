@@ -1,4 +1,4 @@
-export type Publication = { title: string; url: string; authors: string; venue: string; year: number; selected?: boolean };
+export type Publication = { title: string; url: string; authors: string; venue: string; year: number };
 
 export const publications: Publication[] = [
   {
@@ -6,7 +6,6 @@ export const publications: Publication[] = [
     "url": "https://arxiv.org/abs/2603.23205",
     "authors": "O Hennhöfer, C Preisach",
     "venue": "arXiv preprint arXiv:2603.23205",
-    "selected": true,
     "year": 2026
   },
   {
@@ -21,7 +20,6 @@ export const publications: Publication[] = [
     "url": "https://proceedings.mlr.press/v329/hennhofer26a.html",
     "authors": "O Hennhöfer, M Kirsch, C Preisach",
     "venue": "Fifteenth Symposium on Conformal and Probabilistic Prediction with Applications (COPA), PMLR 329, 613–632",
-    "selected": true,
     "year": 2026
   },
   {

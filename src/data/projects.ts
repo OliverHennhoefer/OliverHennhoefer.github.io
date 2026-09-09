@@ -1,7 +1,6 @@
 export type Project = {
   name: string;
   description: string;
-  selected: boolean;
   links: { label: string; href: string }[];
 };
 
@@ -9,7 +8,6 @@ export const projects: Project[] = [
   {
     name: "off-key",
     description: "A platform for online anomaly detection, connecting sensor data, conformal inference, and monitoring interfaces. Developed within BiFlex-Industrie for charging infrastructure, with broader applications in mind.",
-    selected: false,
     links: [
       { label: "Code", href: "https://github.com/DataDrivenSustainabilitySolutions/off-key" },
       { label: "Documentation", href: "https://datadrivensustainabilitysolutions.github.io/off-key/" },
@@ -19,7 +17,6 @@ export const projects: Project[] = [
   {
     name: "nonconform",
     description: "Conformal anomaly detection in Python: score calibration, false discovery rate control, and sequential change monitoring. Integrates with scikit-learn, PyOD, and custom detectors.",
-    selected: true,
     links: [
       { label: "Code", href: "https://github.com/OliverHennhoefer/nonconform" },
       { label: "Documentation", href: "https://oliverhennhoefer.github.io/nonconform/" },
@@ -30,7 +27,6 @@ export const projects: Project[] = [
   {
     name: "online-fdr",
     description: "Sequential hypothesis testing with p-values and e-values. Python implementations of online false discovery rate control.",
-    selected: true,
     links: [
       { label: "Code", href: "https://github.com/OliverHennhoefer/online-fdr" },
       { label: "Documentation", href: "https://oliverhennhoefer.github.io/online-fdr/" },
@@ -40,7 +36,6 @@ export const projects: Project[] = [
   {
     name: "aberrant",
     description: "Online anomaly detection for streaming data. Python methods and tooling for identifying unusual observations as a stream unfolds.",
-    selected: true,
     links: [
       { label: "Code", href: "https://github.com/OliverHennhoefer/aberrant" },
       { label: "Documentation", href: "https://oliverhennhoefer.github.io/aberrant/" },
@@ -50,7 +45,6 @@ export const projects: Project[] = [
   {
     name: "talk-tag",
     description: "LLM-based annotation of morphosyntactic errors in speech transcripts, developed for language research with limited training data.",
-    selected: false,
     links: [
       { label: "Code", href: "https://github.com/OliverHennhoefer/talk-tag" },
       { label: "PyPI", href: "https://pypi.org/project/talk-tag/" },

@@ -1,21 +1,17 @@
 ---
-import { getWriting } from "../utils/writing";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ProjectList from "../components/ProjectList.astro";
 import PublicationList from "../components/PublicationList.astro";
-import WritingList from "../components/WritingList.astro";
 import { projects } from "../data/projects";
 import { publications } from "../data/publications";
 import { site } from "../site";
-const entries = (await getWriting()).slice(0, 3);
-const selectedPapers = publications.filter((paper) => paper.selected);
 ---
 <BaseLayout>
   <section class="intro" aria-labelledby="intro-heading">
     <p class="eyebrow">Machine learning &amp; statistical inference</p>
     <h1 id="intro-heading">Oliver Hennhöfer</h1>
-    <p class="lede">I study how machine learning systems can make uncertainty explicit—and what that means for the decisions we make with them.</p>
-    <p class="intro-context">Research staff at {site.affiliation}. My work focuses on conformal inference, anomaly detection, and error control in sequential testing.</p>
+    <p class="lede">I research uncertainty in machine learning and develop software that puts statistical methods into practice.</p>
+    <p class="intro-context">I’m a research associate and lecturer at {site.affiliation}, working on conformal inference, anomaly detection, and sequential testing. My background spans geospatial analysis, machine learning in public transport, and research software development.</p>
     <ul class="profile-links" aria-label="Profile links">
       <li><a href={`mailto:${site.email}`}>Email</a></li>
       <li><a href={site.socials.scholar}>Google Scholar</a></li>
@@ -25,15 +21,11 @@ const selectedPapers = publications.filter((paper) => paper.selected);
     </ul>
   </section>
   <section class="home-section" aria-labelledby="work-heading">
-    <div class="section-heading"><h2 id="work-heading">Research in practice</h2></div>
-    <ProjectList projects={projects.filter((project) => project.selected)} />
+    <div class="section-heading"><h2 id="work-heading">Research software</h2></div>
+    <ProjectList projects={projects} />
   </section>
   <section class="home-section" aria-labelledby="papers-heading">
-    <div class="section-heading"><h2 id="papers-heading">Selected publications</h2><a href="/cv/#publications">Full record ↗</a></div>
-    <PublicationList publications={selectedPapers} />
+    <div class="section-heading"><h2 id="papers-heading">Publications</h2></div>
+    <PublicationList publications={publications} />
   </section>
-  {entries.length > 0 && <section class="home-section" aria-labelledby="writing-heading">
-    <div class="section-heading"><h2 id="writing-heading">Writing</h2><a href="/blog/">All writing ↗</a></div>
-    <WritingList entries={entries} headingLevel="h3" />
-  </section>}
 </BaseLayout>
