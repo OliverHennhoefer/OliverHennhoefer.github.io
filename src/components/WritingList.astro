@@ -1,0 +1,22 @@
+---
+import type { WritingEntry } from "../utils/writing";
+import { formatDate } from "../utils/dates";
+type Props = { entries: WritingEntry[]; headingLevel?: "h2" | "h3" };
+const { entries, headingLevel: Heading = "h2" } = Astro.props;
+---
+<div class="post-list">
+  {entries.map((entry) => (
+    <article class="post-card">
+      <div class="entry-meta">
+        <time datetime={entry.pubDate.toISOString()}>{formatDate(entry.pubDate)}</time>
+        <span class="entry-label">{entry.label}{entry.format === "PDF" && <span> · PDF</span>}</span>
+      </div>
+      <Heading><a href={entry.href}>{entry.title}</a></Heading>
+      <p>{entry.description}</p>
+    </article>
+  ))}
+</div>
+<style>
+  .entry-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem 1rem; font-size: .8rem; }
+  .entry-label { color: var(--accent); }
+</style>

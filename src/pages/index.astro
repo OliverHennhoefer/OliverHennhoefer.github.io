@@ -1,14 +1,13 @@
 ---
-import { getCollection } from "astro:content";
+import { getWriting } from "../utils/writing";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ProjectList from "../components/ProjectList.astro";
 import PublicationList from "../components/PublicationList.astro";
-import PostList from "../components/PostList.astro";
+import WritingList from "../components/WritingList.astro";
 import { projects } from "../data/projects";
 import { publications } from "../data/publications";
 import { site } from "../site";
-const posts = (await getCollection("blog", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3);
+const entries = (await getWriting()).slice(0, 3);
 const selectedPapers = publications.filter((paper) => paper.url.includes("arxiv.org"));
 ---
 <BaseLayout>
@@ -33,8 +32,8 @@ const selectedPapers = publications.filter((paper) => paper.url.includes("arxiv.
     <div class="section-heading"><h2 id="papers-heading">Selected publications</h2><a href="/cv/#publications">Full record ↗</a></div>
     <PublicationList publications={selectedPapers} />
   </section>
-  {posts.length > 0 && <section class="home-section" aria-labelledby="writing-heading">
-    <div class="section-heading"><h2 id="writing-heading">Writing</h2><a href="/blog/">All notes ↗</a></div>
-    <PostList posts={posts} headingLevel="h3" />
+  {entries.length > 0 && <section class="home-section" aria-labelledby="writing-heading">
+    <div class="section-heading"><h2 id="writing-heading">Writing</h2><a href="/blog/">All writing ↗</a></div>
+    <WritingList entries={entries} headingLevel="h3" />
   </section>}
 </BaseLayout>

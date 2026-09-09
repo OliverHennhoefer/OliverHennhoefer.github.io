@@ -13,6 +13,8 @@ const reportSchema = z.object({
   draft: z.boolean().default(false),
 });
 
+export type Report = z.infer<typeof reportSchema>;
+
 export const reports = z.array(reportSchema).refine(
   (items) => new Set(items.map((item) => item.id)).size === items.length,
   "Report IDs must be unique",

@@ -24,21 +24,33 @@ async function destination(pathname) {
 
 for (const [file, html] of documents) {
   const route = `/${relative(root, file).replace(/index\.html$/, '')}`;
+  const refresh = html.match(/<meta http-equiv="refresh" content="0;url=([^"]+)"/);
+  if (refresh) {
+    await destination(new URL(refresh[1], origin).pathname);
+    assert.match(html, /name="robots" content="noindex"/);
+    continue;
+  }
   assert.equal([...html.matchAll(/<h1(?:\s|>)/g)].length, 1, `${route}: expected one main heading`);
   assert(!/pacakge|\[Replace this|to be completed|\[from\]/.test(html), `${route}: unfinished content`);
   const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map(([, id]) => id);
   assert.equal(new Set(ids).size, ids.length, `${route}: duplicate IDs`);
-  const tags = [...html.matchAll(/<(?:a|link|img)\b[^>]*>/g)].map(([tag]) => attributes(tag));
+  const tags = [...html.matchAll(/<(?:a|link|img|object)\b[^>]*>/g)].map(([tag]) => attributes(tag));
   for (const tag of tags) {
-    const href = tag.href ?? tag.src;
+    const href = tag.href ?? tag.src ?? tag.data;
     if (!href) continue;
     const url = new URL(href, `${origin}${route}`);
     if (url.origin !== origin || siblingSites.has(url.pathname)) continue;
     const target = await destination(url.pathname);
-    if (url.hash) {
+    if (url.hash && documents.has(target)) {
       const targetHtml = documents.get(target);
       assert(targetHtml?.includes(`id="${decodeURIComponent(url.hash.slice(1))}"`), `${route}: missing anchor ${href}`);
     }
+  }
+  if (route.startsWith('/reports/')) {
+    const embed = tags.find((tag) => tag.type === 'application/pdf' && tag.data);
+    assert(embed?.['aria-label'], `${route}: PDF viewer needs an accessible name`);
+    assert(tags.some((tag) => tag.href === embed.data.split('#')[0]), `${route}: PDF needs a direct-open fallback`);
+    assert.match(html, /href="\/blog\/" aria-current="page"/);
   }
   const canonical = tags.find((tag) => tag.rel === 'canonical');
   if (route === '/404.html') {

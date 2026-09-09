@@ -89,7 +89,7 @@ Newsreader by Production Type is self-hosted in `public/fonts/newsreader/` under
 
 ## Technical reports
 
-The `/reports/` page lists short PDFs separately from blog posts and formal publications. It starts empty until real reports are added.
+The `/blog/` Writing overview combines Markdown articles and PDF reports in date order with matching entry styles and type labels. The homepage and RSS feed use the same combined list. The old `/reports/` overview redirects to Writing.
 
 1. Add the PDF to `public/reports/`, using a lowercase, hyphenated filename.
 2. Add an entry to the array in `src/data/reports.json`:
@@ -107,6 +107,6 @@ The `/reports/` page lists short PDFs separately from blog posts and formal publ
 }
 ```
 
-Kinds: `Technical report`, `White paper`, `Experiment`, or `Negative result`. `pages` and `code` (an absolute URL to supporting materials) are optional. Dates use UTC; entries appear newest first. Keep IDs and PDF URLs stable so links remain useful.
+Kinds: `Technical report`, `White paper`, `Experiment`, or `Negative result`. `pages` and `code` (an absolute URL to supporting materials) are optional. Dates use UTC; entries appear newest first. Each report gets a reading page at `/reports/<id>/` with an embedded PDF, direct-open and download links, and optional supporting materials. PDF viewer controls depend on the browser; direct links remain available when embedding is unsupported. Keep IDs and PDF URLs stable so links remain useful.
 
-`draft: true` hides the listing only. Files in `public/` are always included in deployment; keep unpublished PDFs outside that directory. A missing PDF or incorrect PDF file header fails the build for published entries. Run `npm run build` and `npm run verify` before publishing.
+`draft: true` excludes the report from the overview, homepage, RSS, and generated reading pages. Files in `public/` are always included in deployment; keep unpublished PDFs outside that directory. A missing PDF or incorrect PDF file header fails the build for published entries. Run `npm run build` and `npm run verify` before publishing.

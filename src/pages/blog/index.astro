@@ -1,17 +1,17 @@
 ---
-import { getCollection } from "astro:content";
+import { getWriting } from "../../utils/writing";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import PostList from "../../components/PostList.astro";
-const posts = (await getCollection("blog", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+import WritingList from "../../components/WritingList.astro";
+const entries = await getWriting();
 ---
-<BaseLayout title="Writing" description="Notes on machine learning, statistical inference, and uncertainty by Oliver Hennhöfer." canonical="/blog/">
+<BaseLayout title="Writing" description="Research notes, short technical reports, experiments, and negative results by Oliver Hennhöfer." canonical="/blog/">
   <section class="writing-intro">
-    <p class="eyebrow">Notes &amp; explanations</p>
+    <p class="eyebrow">Notes, reports &amp; experiments</p>
     <h1>Writing</h1>
     <p class="lede">Working through the ideas behind machine learning, statistical inference, and uncertainty.</p>
+    <p class="intro-context">Explanations, short experiments, and negative results. Some take the form of an article; others are a brief technical report.</p>
   </section>
-  <section aria-label="Research notes">
-    {posts.length > 0 ? <PostList posts={posts} /> : <p>New notes will appear here.</p>}
+  <section aria-label="Writing and research reports">
+    {entries.length > 0 ? <WritingList entries={entries} /> : <p>New writing will appear here.</p>}
   </section>
 </BaseLayout>

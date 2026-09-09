@@ -1,23 +1,21 @@
 import type { APIContext } from "astro";
 import rss from "@astrojs/rss";
-import { getCollection } from "astro:content";
+import { getWriting } from "../utils/writing";
 import { site } from "../site";
 
 export async function GET(context: APIContext) {
-  const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-  );
+  const entries = await getWriting();
 
   return rss({
     title: site.title,
     description: site.description,
     site: context.site ?? site.url,
-    items: posts.map((post) => ({
-      title: post.data.title,
-      description: post.data.description,
-      pubDate: post.data.pubDate,
-      link: `/blog/${post.id}/`,
-      categories: post.data.tags,
+    items: entries.map((entry) => ({
+      title: entry.title,
+      description: entry.description,
+      pubDate: entry.pubDate,
+      link: entry.href,
+      categories: entry.tags,
     })),
   });
 }

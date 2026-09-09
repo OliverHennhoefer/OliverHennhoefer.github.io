@@ -40,7 +40,8 @@ li + li { margin-top: .35rem; }
 nav { display: flex; flex-wrap: wrap; gap: 1.7rem; font-size: .85rem; }
 nav a { padding-block: .5rem; color: var(--muted); text-decoration: none; }
 nav a[aria-current] { color: var(--ink); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: .5em; }
-main { width: min(100% - 3rem, 46rem); margin: 0 auto; padding: 4.8rem 0 5rem; min-height: 75vh; }
+main { width: min(100% - 3rem, var(--content-width, 46rem)); margin: 0 auto; padding: 4.8rem 0 5rem; min-height: 75vh; }
+main.reader-wide { --content-width: 60rem; }
 .site-footer { border-top: 1px solid var(--line); padding-block: 1.5rem 2rem; color: var(--muted); font-size: .8rem; flex-wrap: wrap; }
 .site-footer div { display: flex; gap: 1.3rem; flex-wrap: wrap; }
 .skip-link { position: absolute; top: -5rem; left: 1rem; background: var(--paper); padding: .65rem; z-index: 10; }
