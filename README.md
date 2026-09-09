@@ -110,3 +110,17 @@ The `/blog/` Writing overview combines Markdown articles and PDF reports in date
 Kinds: `Technical report`, `White paper`, `Experiment`, or `Negative result`. `pages` and `code` (an absolute URL to supporting materials) are optional. Dates use UTC; entries appear newest first. Each report gets a reading page at `/reports/<id>/` with an embedded PDF, direct-open and download links, and optional supporting materials. PDF viewer controls depend on the browser; direct links remain available when embedding is unsupported. Keep IDs and PDF URLs stable so links remain useful.
 
 `draft: true` excludes the report from the overview, homepage, RSS, and generated reading pages. Files in `public/` are always included in deployment; keep unpublished PDFs outside that directory. A missing PDF or incorrect PDF file header fails the build for published entries. Run `npm run build` and `npm run verify` before publishing.
+
+## Travel map
+
+The `/travel/` page uses the Equal Earth projection. Add visited country names to `src/data/visited-countries.json`, for example `["Germany", "France", "Japan"]`. The current list reflects the destinations supplied by Oliver. The map and accessible list both update from this file. The count is places, not a count of sovereign states. Names must match the Natural Earth country names in `world-atlas/countries-50m.json`, except the UK is split into `England`, `Scotland`, `Wales`, and `Northern Ireland`. Unknown or duplicate names fail the build. England and Scotland are marked individually; Ireland, Northern Ireland, and Wales are not marked.
+
+To list the available names:
+
+```sh
+node -e 'const w=require("world-atlas/countries-50m.json"); console.log(w.objects.countries.geometries.map(g=>g.properties.name).sort().join("\n"))'
+```
+
+D3 Geo and TopoJSON run at build time. The browser receives an SVG; there are no map-service requests or API keys. Boundaries use the World Atlas 2.x Natural Earth 1:50m dataset, a simplified map rather than a live boundary service. Dataset/source: https://github.com/topojson/world-atlas (ISC); underlying Natural Earth data: https://www.naturalearthdata.com/ (public domain).
+
+UK constituent-country boundaries are vendored in `src/data/maps/uk-countries.json`; attribution and the pinned source are in `src/data/maps/README.md`. The map is generated using one Equal Earth projection for all geometries.
