@@ -1,11 +1,11 @@
-# Map sources
+# Map source
 
-World map: `world-atlas/countries-50m.json` from the locked npm package. Natural Earth 1:50m country boundaries, public domain; World Atlas distribution under ISC. https://github.com/topojson/world-atlas
+`map-units.json` contains Natural Earth 1:50m Admin 0 map units, version 5.1.2 (public domain).
 
-UK constituent countries: geoBoundaries gbOpen GBR ADM1, boundary ID `GBR-ADM1-14339913`, representing 2021. Source: Eurostat / European Commission, distributed by William & Mary geoLab under CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+Pinned source: https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_admin_0_map_units.geojson
 
-Pinned source: https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/GBR/ADM1/geoBoundaries-GBR-ADM1_simplified.geojson
+Dataset documentation: https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-details/
 
-Metadata: https://www.geoboundaries.org/api/current/gbOpen/GBR/ADM1/
+The 265 source features and their coordinates are preserved. Only metadata and whitespace are reduced: `GU_A3` becomes the feature `id`, and `GEOUNIT` becomes `properties.name`; other properties are omitted. No polygon cutting or winding corrections are applied.
 
-The vendored file has compacted JSON whitespace; coordinates are preserved. At build time, polygon winding is normalized for D3 and all geometries are projected using Equal Earth. These four features replace the World Atlas United Kingdom feature so England and Scotland can be highlighted without marking Wales or Northern Ireland.
+Map units distinguish overseas territories (including French Guiana, Svalbard, and Jan Mayen) and the four UK constituent countries. All geometries use the same Equal Earth projection at build time.

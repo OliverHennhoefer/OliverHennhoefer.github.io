@@ -35,7 +35,7 @@ const structuredData = {
     } : canonical === "/" || canonical === "/cv/" ? { mainEntity: { "@id": person["@id"] } } : {}),
   }],
 };
-const navigation = [{ href: "/", label: "Home" }, { href: "/blog/", label: "Writing" }, { href: "/cv/", label: "CV" }, { href: "/travel/", label: "Travel" }];
+const navigation = [{ href: "/", label: "Home" }, { href: "/blog/", label: "Writing" }, { href: "/cv/", label: "CV" }, { href: "/travel/", label: "Elsewhere" }];
 const isCurrent = (href: string) => href === "/" ? Astro.url.pathname === "/" : (Astro.url.pathname.startsWith(href) || (href === "/blog/" && Astro.url.pathname.startsWith("/reports/")));
 ---
 <!doctype html>

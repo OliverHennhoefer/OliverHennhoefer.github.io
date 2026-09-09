@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { resolve, join, extname, relative } from 'node:path';
+import { geoContains } from 'd3-geo';
 
 const root = resolve('dist');
 const origin = 'https://oliverhennhoefer.github.io';
@@ -99,6 +100,16 @@ assert(mapRegions.every((region) => region.d && !/NaN|Infinity/.test(region.d)),
 assert(!mapRegions.some((region) => region['data-country'] === 'United Kingdom'), 'UK must use constituent-country boundaries');
 for (const name of ['England', 'Scotland', 'Wales', 'Northern Ireland']) {
   assert(mapRegions.some((region) => region['data-country'] === name), `Missing UK boundary: ${name}`);
+}
+const mapData = JSON.parse(await readFile('src/data/maps/map-units.json', 'utf8'));
+for (const [mainland, territory, point] of [
+  ['France', 'French Guiana', [-52.33, 4.94]],
+  ['Norway', 'Svalbard', [15.63, 78.22]],
+  ['Norway', 'Jan Mayen', [-8.4, 71]],
+]) {
+  assert(mapRegions.some((region) => region['data-country'] === territory), `Missing territory: ${territory}`);
+  assert(geoContains(mapData.features.find((region) => region.properties.name === territory), point), `${territory} must contain its own territory`);
+  assert(!geoContains(mapData.features.find((region) => region.properties.name === mainland), point), `${mainland} must not include ${territory}`);
 }
 
 console.log(`Verified ${htmlFiles.length} pages: headings, internal links, anchors, metadata, RSS, sitemap, and math CSS isolation.`);

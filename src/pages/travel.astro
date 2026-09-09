@@ -2,11 +2,9 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { countryPaths, graticule, mapHeight, mapWidth, visitedCountries, worldOutline } from "../utils/travel";
 ---
-<BaseLayout title="Travel" description="A map of the places Oliver Hennhöfer has visited, in the Equal Earth projection." canonical="/travel/" wide>
+<BaseLayout title="Elsewhere" description="A map of the places Oliver Hennhöfer has visited, in the Equal Earth projection." canonical="/travel/" wide>
   <header class="travel-intro">
-    <p class="eyebrow">Away from the desk</p>
-    <h1>Travel</h1>
-    <p class="lede">Places I’ve been.</p>
+    <h1>Elsewhere</h1>
   </header>
   <figure class="travel-map">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${mapWidth} ${mapHeight}`} role="img" aria-labelledby="map-title map-description">
@@ -35,7 +33,7 @@ import { countryPaths, graticule, mapHeight, mapWidth, visitedCountries, worldOu
     </div>
     {visitedCountries.length > 0 ? <ul>{visitedCountries.map((name) => <li>{name}</li>)}</ul> : <p class="empty-map">Destinations will appear here as I add them.</p>}
   </section>
-  <p class="map-source">Map data: <a href="https://www.naturalearthdata.com/">Natural Earth</a>, via <a href="https://github.com/topojson/world-atlas">World Atlas</a>. UK countries: <a href="https://www.geoboundaries.org/">geoBoundaries</a> / Eurostat, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p>
+  <p class="map-source">Map data: <a href="https://www.naturalearthdata.com/">Natural Earth</a> (public domain).</p>
 </BaseLayout>
 <style>
   .travel-intro { max-width: 46rem; margin-inline: auto; }

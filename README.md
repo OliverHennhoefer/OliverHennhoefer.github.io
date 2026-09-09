@@ -111,16 +111,16 @@ Kinds: `Technical report`, `White paper`, `Experiment`, or `Negative result`. `p
 
 `draft: true` excludes the report from the overview, homepage, RSS, and generated reading pages. Files in `public/` are always included in deployment; keep unpublished PDFs outside that directory. A missing PDF or incorrect PDF file header fails the build for published entries. Run `npm run build` and `npm run verify` before publishing.
 
-## Travel map
+## Elsewhere map
 
-The `/travel/` page uses the Equal Earth projection. Add visited country names to `src/data/visited-countries.json`, for example `["Germany", "France", "Japan"]`. The current list reflects the destinations supplied by Oliver. The map and accessible list both update from this file. The count is places, not a count of sovereign states. Names must match the Natural Earth country names in `world-atlas/countries-50m.json`, except the UK is split into `England`, `Scotland`, `Wales`, and `Northern Ireland`. Unknown or duplicate names fail the build. England and Scotland are marked individually; Ireland, Northern Ireland, and Wales are not marked.
+The `/travel/` page uses the Equal Earth projection. Add visited place names to `src/data/visited-countries.json`, for example `["Germany", "France", "Japan"]`. The map and accessible list both update from this file. The count is places, not sovereign states. Names must match `properties.name` in `src/data/maps/map-units.json`. Unknown or duplicate names fail the build.
+
+Natural Earth map units separate overseas territories and UK constituent countries. Visiting France does not mark French Guiana; visiting Norway does not mark Svalbard or Jan Mayen. England and Scotland are marked individually, leaving Wales and Northern Ireland unmarked. Territories can be added to the visited list independently.
 
 To list the available names:
 
 ```sh
-node -e 'const w=require("world-atlas/countries-50m.json"); console.log(w.objects.countries.geometries.map(g=>g.properties.name).sort().join("\n"))'
+node -e 'const w=require("./src/data/maps/map-units.json"); console.log(w.features.map(f=>f.properties.name).sort().join("\n"))'
 ```
 
-D3 Geo and TopoJSON run at build time. The browser receives an SVG; there are no map-service requests or API keys. Boundaries use the World Atlas 2.x Natural Earth 1:50m dataset, a simplified map rather than a live boundary service. Dataset/source: https://github.com/topojson/world-atlas (ISC); underlying Natural Earth data: https://www.naturalearthdata.com/ (public domain).
-
-UK constituent-country boundaries are vendored in `src/data/maps/uk-countries.json`; attribution and the pinned source are in `src/data/maps/README.md`. The map is generated using one Equal Earth projection for all geometries.
+D3 Geo runs at build time. The browser receives an SVG; there are no map-service requests or API keys. The vendored Natural Earth 1:50m boundaries are a generalized map, not a live boundary service. The pinned source and data preparation are documented in `src/data/maps/README.md`.
