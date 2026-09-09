@@ -7,19 +7,29 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    name: "off-key",
+    description: "A platform for online anomaly detection, connecting sensor data, conformal inference, and monitoring interfaces. Developed within BiFlex-Industrie for charging infrastructure, with broader applications in mind.",
+    selected: false,
+    links: [
+      { label: "Code", href: "https://github.com/DataDrivenSustainabilitySolutions/off-key" },
+      { label: "Documentation", href: "https://datadrivensustainabilitysolutions.github.io/off-key/" },
+      { label: "BiFlex-Industrie", href: "https://www.biflexindustrie.de/" },
+    ],
+  },
+  {
     name: "nonconform",
-    description: "Conformal anomaly and change-point detection in Python. Moving beyond heuristic thresholds to make uncertainty explicit.",
+    description: "Conformal anomaly detection in Python: score calibration, false discovery rate control, and sequential change monitoring. Integrates with scikit-learn, PyOD, and custom detectors.",
     selected: true,
     links: [
       { label: "Code", href: "https://github.com/OliverHennhoefer/nonconform" },
       { label: "Documentation", href: "https://oliverhennhoefer.github.io/nonconform/" },
       { label: "PyPI", href: "https://pypi.org/project/nonconform/" },
-      { label: "Paper", href: "https://arxiv.org/abs/2605.13642" },
+      { label: "Paper", href: "https://proceedings.mlr.press/v329/hennhofer26a.html" },
     ],
   },
   {
     name: "online-fdr",
-    description: "False discovery rate control for sequential hypothesis testing. Python tools for testing hypotheses as they arrive.",
+    description: "Sequential hypothesis testing with p-values and e-values. Python implementations of online false discovery rate control.",
     selected: true,
     links: [
       { label: "Code", href: "https://github.com/OliverHennhoefer/online-fdr" },
@@ -39,7 +49,7 @@ export const projects: Project[] = [
   },
   {
     name: "talk-tag",
-    description: "Resources and tooling for fine-grained morphosyntactic error annotation in transcribed speech.",
+    description: "LLM-based annotation of morphosyntactic errors in speech transcripts, developed for language research with limited training data.",
     selected: false,
     links: [
       { label: "Code", href: "https://github.com/OliverHennhoefer/talk-tag" },
