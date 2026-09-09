@@ -1,268 +1,40 @@
-﻿---
+---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ProjectList from "../components/ProjectList.astro";
+import PublicationList from "../components/PublicationList.astro";
+import PostList from "../components/PostList.astro";
+import { projects } from "../data/projects";
+import { publications } from "../data/publications";
 import { site } from "../site";
-import { faLinkedinIn } from "@fortawesome/free-brands-svg-icons";
-import {
-  siGithub,
-  siGmail,
-  siGooglescholar,
-  siX,
-} from "simple-icons";
-
-type IconData = {
-  path: string;
-  viewBox: string;
-  transform?: string;
-};
-
-const simpleIcon = (icon: { path: string }, viewBox = "0 0 24 24"): IconData => ({
-  path: icon.path,
-  viewBox,
-});
-const faIcon = (icon: { icon: [number, number, string[], string, string] }): IconData => ({
-  path: icon.icon[4],
-  viewBox: "0 0 24 24",
-  transform: `scale(${24 / icon.icon[0]} ${24 / icon.icon[1]})`,
-});
-const iconSet = {
-  github: simpleIcon(siGithub),
-  linkedin: faIcon(faLinkedinIn),
-  x: {
-    ...simpleIcon(siX),
-    transform: "translate(1.2 1.2) scale(0.9)",
-  },
-  dblp: simpleIcon(siGooglescholar),
-  gmail: simpleIcon(siGmail),
-};
-
-const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
-const latestPosts = posts.slice(0, 3);
-const formatDate = new Intl.DateTimeFormat("en", {
-  day: "2-digit",
-  month: "short",
-  year: "numeric",
-});
+const posts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3);
+const selectedPapers = publications.filter((paper) => paper.url.includes("arxiv.org"));
 ---
-
 <BaseLayout>
-  <section aria-labelledby="intro-heading">
-    <p class="eyebrow">Research staff / Machine learning / Uncertainty</p>
+  <section class="intro" aria-labelledby="intro-heading">
+    <p class="eyebrow">Machine learning &amp; statistical inference</p>
     <h1 id="intro-heading">Oliver Hennhöfer</h1>
-    <p class="lede">
-      I focus on ML systems that make uncertainty explicit, especially through conformal inference.
-    </p>
-    <ul class="link-row" aria-label="Profile links">
-      <li>
-        <a class="icon-link" href={site.socials.github} aria-label="GitHub">
-          <svg viewBox={iconSet.github.viewBox} aria-hidden="true">
-            <path d={iconSet.github.path} />
-          </svg>
-        </a>
-      </li>
-      <li>
-        <a class="icon-link" href={site.socials.linkedin} aria-label="LinkedIn">
-          <svg viewBox={iconSet.linkedin.viewBox} aria-hidden="true">
-            <path d={iconSet.linkedin.path} transform={iconSet.linkedin.transform} />
-          </svg>
-        </a>
-      </li>
-      <li>
-        <a class="icon-link" href={site.socials.x} aria-label="X">
-          <svg viewBox={iconSet.x.viewBox} aria-hidden="true">
-            <path d={iconSet.x.path} transform={iconSet.x.transform} />
-          </svg>
-        </a>
-      </li>
-      <li>
-        <a class="icon-link" href={site.socials.dblp} aria-label="Google Scholar">
-          <svg viewBox={iconSet.dblp.viewBox} aria-hidden="true">
-            <path d={iconSet.dblp.path} />
-          </svg>
-        </a>
-      </li>
-      <li>
-        <a class="icon-link" href={`mailto:${site.email}`} aria-label="Email">
-          <svg viewBox={iconSet.gmail.viewBox} aria-hidden="true">
-            <path d={iconSet.gmail.path} />
-          </svg>
-        </a>
-      </li>
+    <p class="lede">I study how machine learning systems can make uncertainty explicit—and what that means for the decisions we make with them.</p>
+    <p class="intro-context">Research staff at {site.affiliation}. My work focuses on conformal inference, anomaly detection, and error control in sequential testing.</p>
+    <ul class="profile-links" aria-label="Profile links">
+      <li><a href={`mailto:${site.email}`}>Email</a></li>
+      <li><a href={site.socials.scholar}>Google Scholar</a></li>
+      <li><a href={site.socials.github}>GitHub</a></li>
+      <li><a href={site.socials.linkedin}>LinkedIn</a></li>
+      <li><a href={site.socials.x}>X</a></li>
     </ul>
   </section>
-
-  <section aria-labelledby="latest-heading">
-    <div class="split">
-      <div>
-        <h2 id="latest-heading">Blog</h2>
-        <div class="post-list">
-          {
-            latestPosts.map((post) => (
-              <article class="post-card">
-                <time datetime={post.data.pubDate.toISOString()}>
-                  {formatDate.format(post.data.pubDate)}
-                </time>
-                <div>
-                  <h3><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3>
-                  <p>{post.data.description}</p>
-                  <ul class="tag-row" aria-label="Tags">
-                    {post.data.tags.map((tag) => <li>{tag}</li>)}
-                  </ul>
-                </div>
-              </article>
-            ))
-          }
-        </div>
-        <p><a href="/blog/">All posts</a></p>
-      </div>
-    </div>
+  <section class="home-section" aria-labelledby="work-heading">
+    <div class="section-heading"><h2 id="work-heading">Research in practice</h2></div>
+    <ProjectList projects={projects.filter((project) => project.selected)} />
   </section>
-
-  <section aria-labelledby="work-heading">
-    <div class="split">
-      <div class="section-grid">
-        <h2 id="work-heading">Research Focus</h2>
-        <p>
-          My work sits at the intersection of inferential statistics and applied machine learning.
-        </p>
-        <ul>
-          <li><strong>Uncertainty Quantification.</strong> Conformal inference methods for trustworthy decision-making.</li>
-          <li><strong>Anomaly Detection.</strong> Unsupervised methods for identifying rare patterns in ill-posed settings.</li>
-        </ul>
-      </div>
-    </div>
+  <section class="home-section" aria-labelledby="papers-heading">
+    <div class="section-heading"><h2 id="papers-heading">Selected publications</h2><a href="/cv/#publications">Full record ↗</a></div>
+    <PublicationList publications={selectedPapers} />
   </section>
-
-  <section aria-labelledby="projects-heading">
-    <div class="split">
-      <div class="section-grid">
-        <h2 id="projects-heading">Projects</h2>
-        <article>
-          <h3>nonconform</h3>
-          <p>Python pacakge for Conformal Anomaly Detection &amp; Change-Point Detection.</p>
-          <p class="project-links">
-            <a href="https://github.com/OliverHennhoefer/nonconform">GitHub</a> /
-            <a href="https://oliverhennhoefer.github.io/nonconform/">Docs</a> /
-            <a href="https://pypi.org/project/nonconform/">PyPI</a> /
-            <a href="https://arxiv.org/pdf/2605.13642">Paper</a>
-          </p>
-        </article>
-        <article>
-          <h3>online-fdr</h3>
-          <p>Python pacakge for false discovery rate control in sequential hypotheses testing.</p>
-          <p class="project-links">
-            <a href="https://github.com/OliverHennhoefer/online-fdr">GitHub</a> /
-            <a href="https://oliverhennhoefer.github.io/online-fdr/">Docs</a>
-            /
-            <a href="https://pypi.org/project/online-fdr/">PyPI</a>
-          </p>
-        </article>
-        <article>
-          <h3>aberrant</h3>
-          <p>Python package for online anomaly detection in streaming data and related tooling.</p>
-          <p class="project-links">
-            <a href="https://github.com/OliverHennhoefer/aberrant">GitHub</a> /
-            <a href="https://oliverhennhoefer.github.io/aberrant/">Docs</a>
-            /
-            <a href="https://pypi.org/project/aberrant/">PyPI</a>
-          </p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section aria-labelledby="publications-heading">
-    <div class="split">
-      <div>
-        <h2 id="publications-heading">Publications</h2>
-        <div class="publication-group">
-          <p class="publication-year"><span>2026</span></p>
-          <ol class="publication-list">
-            <li>
-              <a href="https://scholar.google.com/citations?view_op=view_citation&hl=de&user=Q6W4KREAAAAJ&citation_for_view=Q6W4KREAAAAJ:qjMakFHDy7sC">
-                <strong>Between Resolution Collapse and Variance Inflation: Weighted Conformal Anomaly Detection in Low-Data Regimes</strong>
-              </a><br />
-              <span class="publication-meta">
-                <span class="author-self">O Hennhöfer</span>, C Preisach, <em>arXiv preprint arXiv:2603.23205</em> (2026).
-              </span>
-            </li>
-            <li>
-              <a href="https://aclanthology.org/2026.law-main.20/">
-                <strong>TalkTag: Fine-Grained Morphosyntactic Error Annotation for Transcribed Speech</strong>
-              </a><br />
-              <span class="publication-meta">
-                S Venturini, <span class="author-self">O Hennhöfer</span>, S Kinkel, J Strötgen, <em>Proceedings of the 20th Linguistic Annotation Workshop (LAW XX)</em> (2026).
-              </span>
-            </li>
-            <li>
-              <a href="https://scholar.google.com/citations?view_op=view_citation&hl=de&user=Q6W4KREAAAAJ&citation_for_view=Q6W4KREAAAAJ:UeHWp8X0CEIC">
-                <strong>Conformal Anomaly Detection in Python: Moving Beyond Heuristic Thresholds with 'nonconform'</strong>
-              </a><br />
-              <span class="publication-meta">
-                <span class="author-self">O Hennhöfer</span>, M Kirsch, C Preisach, <em>arXiv preprint arXiv:2605.13642</em> (2026).
-              </span>
-            </li>
-          </ol>
-        </div>
-
-        <div class="publication-group">
-          <p class="publication-year"><span>2025</span></p>
-          <ol class="publication-list">
-            <li>
-              <a href="https://scholar.google.com/citations?view_op=view_citation&hl=de&user=Q6W4KREAAAAJ&citation_for_view=Q6W4KREAAAAJ:2osOgNQ5qMEC">
-                <strong>Interdisciplinary Harmonies: A Story-Driven Course on AI and Music to Increase Interest in Computer Science</strong>
-              </a><br />
-              <span class="publication-meta">
-                K Marquardt, Q Shang, <span class="author-self">O Hennhöfer</span>, L Happe, <em>Proceedings of the 6th European Conference on Software Engineering Education</em> (2025).
-              </span>
-            </li>
-          </ol>
-        </div>
-
-        <div class="publication-group">
-          <p class="publication-year"><span>2024</span></p>
-          <ol class="publication-list">
-            <li>
-              <a href="https://scholar.google.com/citations?view_op=view_citation&hl=de&user=Q6W4KREAAAAJ&citation_for_view=Q6W4KREAAAAJ:d1gkVwhDpl0C">
-                <strong>Leave-One-Out-, Bootstrap- and Cross-Conformal Anomaly Detectors</strong>
-              </a><br />
-              <span class="publication-meta">
-                <span class="author-self">O Hennhöfer</span>, C Preisach, <em>IEEE International Conference on Knowledge Graph (ICKG) 15 (1), 110 - 119</em> (2024).
-              </span>
-            </li>
-          </ol>
-        </div>
-
-        <div class="publication-group">
-          <p class="publication-year"><span>2021</span></p>
-          <ol class="publication-list">
-            <li>
-              <a href="https://scholar.google.com/citations?view_op=view_citation&hl=de&user=Q6W4KREAAAAJ&citation_for_view=Q6W4KREAAAAJ:9yKSN-GCB0IC">
-                <strong>Multidimensional Exploratory Spatial Data Analysis</strong>
-              </a><br />
-              <span class="publication-meta">
-                <span class="author-self">O Hennhöfer</span>, J Bruns, P Ullrich, A Heiß, G Sharipov, D Paraforos, <em>GI_Forum 2021, 9, 136-151</em> (2021).
-              </span>
-            </li>
-          </ol>
-        </div>
-
-        <div class="publication-group">
-          <p class="publication-year"><span>2020</span></p>
-          <ol class="publication-list">
-            <li>
-              <a href="https://scholar.google.com/citations?view_op=view_citation&hl=de&user=Q6W4KREAAAAJ&citation_for_view=Q6W4KREAAAAJ:u-x6o8ySG0sC">
-                <strong>Anomaly Detection in Precision Agriculture with R</strong>
-              </a><br />
-              <span class="publication-meta">
-                <span class="author-self">O Hennhöfer</span>, Karlsruhe University of Applied Sciences, 2020.
-              </span>
-            </li>
-          </ol>
-        </div>
-      </div>
-    </div>
-  </section>
+  {posts.length > 0 && <section class="home-section" aria-labelledby="writing-heading">
+    <div class="section-heading"><h2 id="writing-heading">Writing</h2><a href="/blog/">All notes ↗</a></div>
+    <PostList posts={posts} headingLevel="h3" />
+  </section>}
 </BaseLayout>

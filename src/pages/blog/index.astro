@@ -1,46 +1,17 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-
-const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
-const formatDate = new Intl.DateTimeFormat("en", {
-  day: "2-digit",
-  month: "short",
-  year: "numeric",
-});
+import PostList from "../../components/PostList.astro";
+const posts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
-
-<BaseLayout
-  title="Blog"
-  description="Research notes on conformal inference, anomaly detection, uncertainty quantification, and online error control."
-  canonical="/blog/"
->
-  <section>
-    <p class="eyebrow">Technical Writing</p>
-    <h1>Blog</h1>
-    <p class="lede">
-      Technical notes on machine learning, uncertainty quantification, and decision-making.
-    </p>
+<BaseLayout title="Writing" description="Notes on machine learning, statistical inference, and uncertainty by Oliver Hennhöfer." canonical="/blog/">
+  <section class="writing-intro">
+    <p class="eyebrow">Notes &amp; explanations</p>
+    <h1>Writing</h1>
+    <p class="lede">Working through the ideas behind machine learning, statistical inference, and uncertainty.</p>
   </section>
-
-  <section class="post-list" aria-label="Blog posts">
-    {
-      posts.map((post) => (
-        <article class="post-card">
-          <time datetime={post.data.pubDate.toISOString()}>
-            {formatDate.format(post.data.pubDate)}
-          </time>
-          <div>
-            <h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>
-            <p>{post.data.description}</p>
-            <ul class="tag-row" aria-label="Tags">
-              {post.data.tags.map((tag) => <li>{tag}</li>)}
-            </ul>
-          </div>
-        </article>
-      ))
-    }
+  <section aria-label="Research notes">
+    {posts.length > 0 ? <PostList posts={posts} /> : <p>New notes will appear here.</p>}
   </section>
 </BaseLayout>

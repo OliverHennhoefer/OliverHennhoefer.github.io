@@ -1,0 +1,13 @@
+---
+import type { Publication } from "../data/publications";
+type Props = { publications: Publication[] };
+const { publications } = Astro.props;
+---
+<ol class="publication-list">
+  {publications.map((publication) => (
+    <li>
+      <a class="publication-title" href={publication.url}>{publication.title}</a>
+      <p class="publication-meta">{publication.authors}<br /><em>{publication.venue}</em> · <span class="publication-year">{publication.year}</span></p>
+    </li>
+  ))}
+</ol>

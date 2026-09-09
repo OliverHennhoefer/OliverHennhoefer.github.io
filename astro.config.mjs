@@ -7,7 +7,7 @@ import remarkMath from "remark-math";
 
 export default defineConfig({
   site: "https://oliverhennhoefer.github.io",
-  integrations: [mdx(), sitemap()],
+  integrations: [mdx(), sitemap({ filter: (page) => !new URL(page).pathname.startsWith("/404") })],
   markdown: {
     processor: unified({
       remarkPlugins: [remarkMath],

@@ -1,0 +1,18 @@
+---
+import type { Project } from "../data/projects";
+type Props = { projects: Project[] };
+const { projects } = Astro.props;
+---
+<div class="project-list">
+  {projects.map((project) => (
+    <article class="project">
+      <h3>{project.name}</h3>
+      <div>
+        <p>{project.description}</p>
+        <ul class="project-links" aria-label={`${project.name} resources`}>
+          {project.links.map(({ href, label }) => <li><a href={href} aria-label={`${project.name}: ${label}`}>{label}</a></li>)}
+        </ul>
+      </div>
+    </article>
+  ))}
+</div>

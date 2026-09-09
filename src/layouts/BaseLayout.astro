@@ -1,5 +1,5 @@
 ---
-import "katex/dist/katex.min.css";
+import "../styles/global.css";
 import { site } from "../site";
 
 type Props = {
@@ -9,40 +9,33 @@ type Props = {
   type?: "website" | "article";
   publishDate?: Date;
   updatedDate?: Date;
+  noindex?: boolean;
 };
-
-const {
-  title = site.title,
-  description = site.description,
-  canonical = Astro.url.pathname,
-  type = "website",
-  publishDate,
-  updatedDate,
-} = Astro.props;
-
-const pageTitle = title === site.title ? title : `${title} - ${site.title}`;
+const { title = site.title, description = site.description, canonical = Astro.url.pathname,
+  type = "website", publishDate, updatedDate, noindex = false } = Astro.props;
+const pageTitle = title === site.title ? title : `${title} — ${site.title}`;
 const canonicalUrl = new URL(canonical, site.url).toString();
 const imageUrl = new URL("/frontispiece.png", site.url).toString();
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": type === "article" ? "BlogPosting" : "Person",
-  name: site.author,
-  headline: title,
-  description,
-  url: canonicalUrl,
-  image: imageUrl,
-  author: {
-    "@type": "Person",
-    name: site.author,
-    affiliation: site.affiliation,
-    url: site.url,
-  },
-  datePublished: publishDate?.toISOString(),
-  dateModified: updatedDate?.toISOString() ?? publishDate?.toISOString(),
+const person = {
+  "@type": "Person", "@id": `${site.url}/#person`, name: site.author, url: site.url,
+  affiliation: { "@type": "Organization", name: site.affiliation },
   sameAs: Object.values(site.socials),
 };
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [person, {
+    "@type": type === "article" ? "BlogPosting" : canonical === "/" || canonical === "/cv/" ? "ProfilePage" : "WebPage",
+    "@id": canonicalUrl, url: canonicalUrl, name: pageTitle, description,
+    ...(type === "article" ? {
+      headline: title, image: imageUrl, author: { "@id": person["@id"] },
+      datePublished: publishDate?.toISOString(),
+      dateModified: (updatedDate ?? publishDate)?.toISOString(),
+    } : canonical === "/" || canonical === "/cv/" ? { mainEntity: { "@id": person["@id"] } } : {}),
+  }],
+};
+const navigation = [{ href: "/", label: "Home" }, { href: "/blog/", label: "Writing" }, { href: "/reports/", label: "Reports" }, { href: "/cv/", label: "CV" }];
+const isCurrent = (href: string) => href === "/" ? Astro.url.pathname === "/" : Astro.url.pathname.startsWith(href);
 ---
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -50,9 +43,11 @@ const structuredData = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalUrl} />
+    {!noindex && <link rel="canonical" href={canonicalUrl} />}
+    <link rel="preload" href="/fonts/newsreader/newsreader-latin-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" title={`${site.title} RSS`} href="/rss.xml" />
-    <meta name="robots" content="index,follow" />
+    <meta name="robots" content={noindex ? "noindex,follow" : "index,follow"} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={type} />
@@ -61,605 +56,21 @@ const structuredData = {
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
-    <meta name="theme-color" content="#ffffff" />
-    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    <meta name="theme-color" content="#faf9f6" />
+    {!noindex && <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, "\\u003c")} />}
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <div class="site-shell">
-      <header class="site-rail">
-        <a class="mark" href="/" aria-label="Oliver Hennhoefer home">OH</a>
-        <nav aria-label="Main navigation">
-          <a href="/">Home</a>
-          <a href="/blog/">Blog</a>
-          <a href="/cv/">CV</a>
-          <a href="/rss.xml">RSS</a>
-        </nav>
-      <p></p>
-      </header>
-      <main id="main">
-        <slot />
-      </main>
-      <aside class="site-index" aria-label="Research index">
-        <p>Index</p>
-        <ul>
-      <li>Machine learning</li>
-      <li>Conformal inference</li>
-      <li>Uncertainty quantification</li>
-    </ul>
-      </aside>
-    </div>
-    <footer class="site-footer" aria-label="Impressum">
-      <a href={site.impressumPath}>Impressum</a>
+    <header class="site-header">
+      <a class="wordmark" href="/" aria-label="Oliver Hennhöfer home">oh<span aria-hidden="true">.</span></a>
+      <nav aria-label="Main navigation">
+        {navigation.map(({ href, label }) => <a href={href} aria-current={isCurrent(href) ? "page" : undefined}>{label}</a>)}
+      </nav>
+    </header>
+    <main id="main" tabindex="-1"><slot /></main>
+    <footer class="site-footer">
+      <span>Oliver Hennhöfer</span>
+      <div><a href={`mailto:${site.email}`}>Email</a><a href="/rss.xml">RSS</a><a href={site.impressumPath}>Impressum</a></div>
     </footer>
-    <script is:inline>
-      (() => {
-        const currentHost = document.location.host;
-        document.querySelectorAll("a[href]").forEach((link) => {
-          const href = link.getAttribute("href");
-          if (!href || link.hasAttribute("target")) return;
-          if (href.startsWith("mailto:") || href.startsWith("tel:") || href.startsWith("#")) return;
-          if (href.startsWith("/")) return;
-          try {
-            const url = new URL(href);
-            if (url.host !== currentHost && (url.protocol === "http:" || url.protocol === "https:")) {
-              link.target = "_blank";
-              link.rel = "noopener noreferrer";
-            }
-          } catch (error) {
-            // Non-standard relative paths already handled by start-with-slash checks.
-          }
-        });
-      })();
-    </script>
   </body>
 </html>
-
-<style is:global>
-  :root {
-    color-scheme: light;
-    --paper: #fff;
-    --ink: #050505;
-    --muted: #5f5f59;
-    --line: #d8d8d0;
-    --soft: #efefea;
-    --reverse: #fff;
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    font-size: 17px;
-    line-height: 1.65;
-    background: var(--paper);
-    color: var(--ink);
-  }
-
-  html {
-    scrollbar-gutter: stable;
-  }
-
-  * {
-    box-sizing: border-box;
-  }
-
-  body {
-    margin: 0;
-    min-height: 100vh;
-    background: var(--paper);
-  }
-
-  a {
-    color: inherit;
-    text-decoration-color: currentColor;
-    text-decoration-thickness: 0.06em;
-    text-underline-offset: 0.18em;
-  }
-
-  a:hover {
-    text-decoration-thickness: 0.12em;
-  }
-
-  a:focus-visible {
-    outline: 2px solid var(--ink);
-    outline-offset: 4px;
-  }
-
-  img {
-    display: block;
-    max-width: 100%;
-  }
-
-  .skip-link {
-    background: var(--paper);
-    border: 1px solid var(--ink);
-    left: 1rem;
-    padding: 0.35rem 0.55rem;
-    position: absolute;
-    top: -4rem;
-    z-index: 20;
-  }
-
-  .skip-link:focus {
-    top: 1rem;
-  }
-
-  .site-footer {
-    border-top: 1px solid var(--line);
-    color: var(--muted);
-    font-size: clamp(0.66rem, 1.2vw, 0.7rem);
-    letter-spacing: 0.08em;
-    margin: 0 auto;
-    max-width: 76rem;
-    padding: 1rem clamp(1rem, 2.5vw, 2rem);
-    text-transform: uppercase;
-  }
-
-  .site-footer a {
-    color: inherit;
-  }
-
-  .site-shell {
-    display: grid;
-    grid-template-columns: minmax(10rem, 0.45fr) minmax(0, 45rem) minmax(7rem, 0.35fr);
-    gap: clamp(1.25rem, 4vw, 4rem);
-    margin: 0 auto;
-    max-width: 76rem;
-    min-height: 100vh;
-    padding: clamp(1rem, 2.5vw, 2rem);
-  }
-
-  .site-rail {
-    border-right: 1px solid var(--ink);
-    display: grid;
-    grid-template-rows: auto auto 1fr;
-    gap: 2rem;
-    min-height: calc(100vh - clamp(2rem, 5vw, 4rem));
-    padding-right: clamp(1rem, 2vw, 1.5rem);
-    position: sticky;
-    top: clamp(1rem, 2.5vw, 2rem);
-  }
-
-  .mark {
-    align-items: center;
-    aspect-ratio: 1;
-    border: 1px solid var(--ink);
-    display: inline-flex;
-    font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
-    font-size: 1.25rem;
-    justify-content: center;
-    letter-spacing: 0;
-    text-decoration: none;
-    width: 3.75rem;
-  }
-
-  .site-rail nav {
-    display: grid;
-    gap: 0.45rem;
-    text-transform: uppercase;
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-  }
-
-  .site-rail p {
-    align-self: end;
-    color: var(--muted);
-    font-size: 0.74rem;
-    line-height: 1.35;
-    margin: 0;
-    max-width: 10rem;
-  }
-
-  .site-index {
-    border-left: 1px solid var(--line);
-    color: var(--muted);
-    font-size: 0.68rem;
-    letter-spacing: 0.08em;
-    line-height: 1.35;
-    padding-left: 1rem;
-    position: sticky;
-    text-transform: uppercase;
-    top: clamp(1rem, 2.5vw, 2rem);
-    height: max-content;
-    margin-top: clamp(2rem, 8vw, 5.5rem);
-  }
-
-  .site-index p {
-    border-bottom: 1px solid var(--line);
-    color: var(--ink);
-    margin-bottom: 0.7rem;
-    padding-bottom: 0.45rem;
-  }
-
-  .site-index ul {
-    display: grid;
-    gap: 0.65rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  main {
-    padding: clamp(2rem, 8vw, 5.5rem) 0 5rem;
-  }
-
-  h1,
-  h2,
-  h3,
-  p,
-  ul,
-  ol {
-    margin-block-start: 0;
-  }
-
-  h1,
-  h2,
-  h3 {
-    line-height: 1.08;
-  }
-
-  h1 {
-    font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
-    font-size: clamp(3.2rem, 9vw, 6.8rem);
-    font-weight: 400;
-    letter-spacing: 0;
-    margin-bottom: 1.25rem;
-  }
-
-  h2 {
-    border-top: 1px solid var(--ink);
-    font-size: clamp(1.55rem, 3vw, 2.35rem);
-    font-weight: 520;
-    margin: 2.75rem 0 1rem;
-    padding-top: 0.6rem;
-  }
-
-  h3 {
-    font-size: 1rem;
-    letter-spacing: 0.02em;
-    margin-bottom: 0.35rem;
-    text-transform: uppercase;
-  }
-
-  p,
-  li {
-    max-width: 41.5rem;
-  }
-
-  code,
-  pre {
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-  }
-
-  code {
-    background: var(--soft);
-    padding: 0.05rem 0.25rem;
-  }
-
-  pre {
-    border: 1px solid var(--line);
-    overflow-x: auto;
-    padding: 1rem;
-  }
-
-  .eyebrow {
-    border-bottom: 1px solid var(--ink);
-    display: inline-block;
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    margin-bottom: 1.25rem;
-    padding-bottom: 0.22rem;
-    text-transform: uppercase;
-  }
-
-  .lede {
-    font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
-    font-size: clamp(1.25rem, 2.4vw, 1.9rem);
-    line-height: 1.18;
-    text-align: left;
-    max-width: none;
-    width: 100%;
-  }
-
-  .frontispiece {
-    border-bottom: 1px solid var(--ink);
-    border-top: 1px solid var(--ink);
-    margin: clamp(2rem, 5vw, 3.5rem) 0 0;
-    padding: 0.45rem 0;
-  }
-
-  .frontispiece img {
-    aspect-ratio: 1983 / 793;
-    filter: grayscale(1) contrast(1.08);
-    mix-blend-mode: multiply;
-    object-fit: cover;
-    width: 100%;
-  }
-
-  .muted {
-    color: var(--muted);
-  }
-
-  .section-grid {
-    display: grid;
-    gap: 1rem;
-  }
-
-  .split {
-    display: grid;
-    gap: 0.7rem;
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .split > p:first-child {
-    color: var(--muted);
-    font-size: 0.78rem;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-  }
-
-  .link-row,
-  .tag-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.45rem 0.8rem;
-    list-style: none;
-    padding: 0;
-  }
-
-  .link-row li,
-  .tag-row li {
-    margin: 0;
-  }
-
-  .project-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.65rem;
-    margin: 0.45rem 0 0;
-    padding: 0;
-  }
-
-  .publication-list {
-    display: grid;
-    gap: 1rem;
-    margin: 0;
-    padding-left: 1.25rem;
-  }
-
-  .publication-group {
-    margin-top: 0;
-  }
-
-  .publication-group + .publication-group {
-    margin-top: 1.35rem;
-  }
-
-  .publication-year {
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-    color: var(--ink);
-    font-size: 0.94rem;
-    letter-spacing: 0.09em;
-    white-space: nowrap;
-    margin: 0;
-    max-width: 100%;
-    line-height: 1.05;
-    text-transform: uppercase;
-  }
-
-  .publication-year span {
-    border: 1px solid var(--line);
-    border-radius: 0.22rem;
-    line-height: 1;
-    max-width: max-content;
-    padding: 0.12rem 0.48rem;
-  }
-
-  .publication-year::after {
-    content: "";
-    border-top: 1px solid var(--line);
-    display: block;
-    flex: 1 1 auto;
-  }
-
-  .publication-list li {
-    margin: 0;
-  }
-
-  .publication-meta {
-    color: var(--ink);
-    display: inline-block;
-    margin: 0.2rem 0 0.1rem;
-  }
-
-  .author-self {
-    font-weight: 650;
-  }
-
-  .publication-meta em {
-    font-style: italic;
-  }
-
-  .icon-link {
-    align-items: center;
-    display: inline-flex;
-    height: 1.55rem;
-    width: 1.55rem;
-    color: var(--ink);
-    background: transparent;
-    border: 0;
-    justify-content: center;
-    padding: 0.05rem;
-  }
-
-  .icon-link svg {
-    display: block;
-    fill: currentColor;
-    height: 100%;
-    width: 100%;
-  }
-
-  .tag-row {
-    color: var(--muted);
-    font-size: 0.8rem;
-  }
-
-  .post-list {
-    border-top: 1px solid var(--ink);
-    counter-reset: posts;
-  }
-
-  .post-card {
-    counter-increment: posts;
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: 7rem minmax(0, 1fr);
-    padding: 1.2rem 0;
-    border-bottom: 1px solid var(--line);
-    position: relative;
-  }
-
-  .post-card::after {
-    color: var(--line);
-    content: counter(posts, decimal-leading-zero);
-    font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
-    font-size: 2.4rem;
-    line-height: 1;
-    position: absolute;
-    right: 0;
-    top: 1rem;
-  }
-
-  .post-card time {
-    color: var(--muted);
-    font-size: 0.78rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .post-card h2,
-  .post-card h3 {
-    border: 0;
-    font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
-    font-size: clamp(1.4rem, 2.6vw, 2rem);
-    font-weight: 400;
-    letter-spacing: 0;
-    margin: 0 0 0.35rem;
-    padding: 0;
-    text-transform: none;
-  }
-
-  .post-card p {
-    margin-bottom: 0;
-    padding-right: 3rem;
-  }
-
-  .note {
-    background: var(--ink);
-    color: var(--reverse);
-    display: grid;
-    gap: 0.75rem;
-    margin: 2rem 0;
-    padding: clamp(1rem, 3vw, 1.5rem);
-  }
-
-  .note a {
-    color: var(--reverse);
-  }
-
-  .prose {
-    font-size: 1.02rem;
-  }
-
-  .prose h2,
-  .prose h3 {
-    max-width: 38rem;
-  }
-
-  .prose blockquote {
-    border-left: 2px solid var(--ink);
-    margin: 2rem 0;
-    padding-left: 1rem;
-  }
-
-  .prose .katex-display {
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 0.5rem 0;
-  }
-
-  .post-meta {
-    border-top: 1px solid var(--ink);
-    color: var(--muted);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1rem;
-    margin: 1.5rem 0 2.5rem;
-    padding-top: 0.75rem;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-  }
-
-  @media (max-width: 760px) {
-    :root {
-      font-size: 16px;
-    }
-
-    body {
-      background: var(--paper);
-    }
-
-    .site-shell {
-      display: block;
-      padding: 1rem;
-    }
-
-    .site-rail {
-      align-items: center;
-      border-bottom: 1px solid var(--ink);
-      border-right: 0;
-      display: flex;
-      justify-content: space-between;
-      min-height: 0;
-      padding: 0 0 1rem;
-      position: static;
-    }
-
-    .site-rail nav {
-      display: flex;
-      gap: 0.75rem;
-    }
-
-    .site-rail p {
-      display: none;
-    }
-
-    .site-index {
-      display: none;
-    }
-
-    main {
-      padding-top: 2.75rem;
-    }
-
-    .site-footer {
-      padding-bottom: 1rem;
-    }
-
-    h1 {
-      font-size: clamp(2.6rem, 15vw, 4rem);
-    }
-
-    .lede {
-      font-size: clamp(1rem, 4.2vw, 1.45rem);
-    }
-
-    .split,
-    .post-card {
-      grid-template-columns: 1fr;
-    }
-
-    .post-card::after {
-      font-size: 1.8rem;
-    }
-  }
-</style>
