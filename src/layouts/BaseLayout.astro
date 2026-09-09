@@ -45,7 +45,8 @@ const isCurrent = (href: string) => href === "/" ? Astro.url.pathname === "/" : 
     <meta name="description" content={description} />
     {!noindex && <link rel="canonical" href={canonicalUrl} />}
     <link rel="preload" href="/fonts/newsreader/newsreader-latin-normal.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" title={`${site.title} RSS`} href="/rss.xml" />
     <meta name="robots" content={noindex ? "noindex,follow" : "index,follow"} />
     <meta property="og:title" content={pageTitle} />
