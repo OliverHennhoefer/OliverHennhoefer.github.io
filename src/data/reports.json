@@ -6,7 +6,6 @@
     "pubDate": "2026-09-11",
     "kind": "Technical report",
     "pdf": "/reports/martingale-longevity.pdf",
-    "pages": 1,
-    "code": "https://github.com/OliverHennhoefer/testbed/tree/main/experiments/martingale-longevity"
+    "pages": 1
   }
 ]
