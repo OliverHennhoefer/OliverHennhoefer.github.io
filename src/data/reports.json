@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "id": "martingale-longevity",
+    "title": "How does null history length affect martingale detection of a Gaussian shift?",
+    "description": "A one-page oracle simulation study of how long null histories affect martingale detection of abrupt Gaussian shifts, with restarted Power and Simple Jumper largely avoiding the resulting delay.",
+    "pubDate": "2026-09-11",
+    "kind": "Technical report",
+    "pdf": "/reports/martingale-longevity.pdf",
+    "pages": 1,
+    "code": "https://github.com/OliverHennhoefer/testbed/tree/main/experiments/martingale-longevity"
+  }
+]
