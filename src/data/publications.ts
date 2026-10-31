@@ -1,6 +1,4 @@
-import type { IconName } from "./icons";
-
-export type Publication = { title: string; url: string; authors: string; venue: string; venueShort: string; kind: "Preprint" | "Conference" | "Workshop" | "Journal"; talk?: string; logo?: IconName; year: number };
+export type Publication = { title: string; url: string; authors: string; venue: string; venueShort: string; kind: "Preprint" | "Conference" | "Workshop" | "Journal"; talk?: string; year: number };
 
 export const publications: Publication[] = [
   {
@@ -9,7 +7,6 @@ export const publications: Publication[] = [
     "authors": "O Hennhöfer, C Preisach",
     "venue": "arXiv preprint arXiv:2603.23205",
     "venueShort": "arXiv",
-    "logo": "arxiv",
     "kind": "Preprint",
     "year": 2026
   },
@@ -19,7 +16,6 @@ export const publications: Publication[] = [
     "authors": "S Venturini, O Hennhöfer, S Kinkel, J Strötgen",
     "venue": "Proceedings of the 20th Linguistic Annotation Workshop (LAW XX), 309–322",
     "venueShort": "LAW XX",
-    "logo": "acl",
     "kind": "Workshop",
     "year": 2026
   },
@@ -39,7 +35,6 @@ export const publications: Publication[] = [
     "authors": "K Marquardt, Q Shang, O Hennhöfer, L Happe",
     "venue": "Proceedings of the 6th European Conference on Software Engineering Education (ECSEE), 145–153",
     "venueShort": "ECSEE",
-    "logo": "acm",
     "kind": "Conference",
     "year": 2025
   },
