@@ -93,9 +93,10 @@ main.page-full { --content-width: var(--page-width); padding-block: 0 2rem; }
 .index-intro { padding-block: 4.5rem 3.2rem; }
 .index-intro { --name-size: clamp(2.9rem, 7.4vw, 5.6rem); }
 .index-intro h1 { font-size: var(--name-size); line-height: .98; letter-spacing: -.045em; margin: 0 0 0 -.04em; }
-/* The tagline is set to the width of the name: the grid takes the h1's width, the lede may not widen it. */
+/* The tagline wraps within the width of the name: the grid takes the h1's width, the lede may not widen it. */
 .nameplate { display: inline-grid; max-width: 100%; }
-.nameplate .lede { width: 0; min-width: 100%; margin: .9rem 0 0; font-size: calc(var(--name-size) * .22); line-height: 1.35; text-align: justify; text-align-last: justify; }
+.nameplate .lede { width: 0; min-width: 100%; margin: .9rem 0 0; font-size: calc(var(--name-size) * .22); line-height: 1.35; }
+.index-intro > .portrait { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; margin-top: .45rem; filter: grayscale(1); }
 .more-link { display: inline-block; margin-top: .9rem; font-size: .85rem; color: var(--muted); }
 
 /* Profile links with icons */
@@ -207,8 +208,9 @@ address { font-style: normal; }
   .index-row { grid-template-columns: 1fr; gap: .9rem; padding-block: 1.8rem; }
   .index-intro { padding-block: 3.5rem 2.5rem; }
   .index-intro > .index-label { display: none; }
+  .index-intro > .portrait { width: 6rem; margin-top: 0; }
   .nameplate { display: block; }
-  .nameplate .lede { width: auto; font-size: 1.05rem; text-align: left; text-align-last: auto; }
+  .nameplate .lede { width: auto; font-size: 1.05rem; }
   .project { grid-template-columns: 1fr; gap: .1rem; }
   .software > li, .skills-list > li, .mini-map { grid-template-columns: 1fr; gap: .2rem; }
   .pub-year-group { grid-template-columns: 1fr; gap: .5rem; }

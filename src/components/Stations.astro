@@ -1,5 +1,5 @@
 ---
-import { laneKey, organisations, stations } from "../data/career";
+import { laneKey, organisations, roleId, stations } from "../data/career";
 ---
 <ol class="stations">
   {stations.map((station) => (
@@ -10,7 +10,7 @@ import { laneKey, organisations, stations } from "../data/career";
       </div>
       <ul class="roles">
         {station.roles.map((role) => (
-          <li class:list={["role", `lane-${laneKey[role.lane]}`]}>
+          <li class:list={["role", `lane-${laneKey[role.lane]}`]} id={roleId(station.org, role)}>
             <div class="role-head"><span class="role-title">{role.title}</span>{station.roles.length > 1 && <span class="role-period tnum">{role.period}</span>}</div>
             {role.points && <ul class="points">{role.points.map((point) => <li>{point}</li>)}</ul>}
           </li>
@@ -30,7 +30,10 @@ import { laneKey, organisations, stations } from "../data/career";
   .station-name { font: 400 1.15rem/1.4 var(--serif); }
   .station-period, .role-period { font-size: .78rem; color: var(--muted); white-space: nowrap; }
   .roles { list-style: none; padding: 0; margin: .35rem 0 0; }
-  .role { position: relative; margin: 0; padding: .3rem 0; }
+  .role { position: relative; margin: 0; padding: .3rem 0; scroll-margin-top: 7.5rem; }
+  /* Briefly mark the role a timeline bar jumped to. */
+  .role:target { animation: landed 2.2s ease-out; }
+  @keyframes landed { from { background: color-mix(in srgb, var(--lane) 22%, transparent); } to { background: transparent; } }
   .role::before { content: ""; position: absolute; left: calc(-1.9rem + .42rem - 3.25px); top: .78rem; width: 8px; height: 8px; border-radius: 50%; background: var(--lane); box-shadow: 0 0 0 2px var(--paper); }
   .role-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
   .role-title { font-size: .92rem; font-weight: 500; }
