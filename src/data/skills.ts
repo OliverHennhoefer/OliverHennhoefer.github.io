@@ -6,22 +6,22 @@ export type Skill = { area: string; methods: string[]; tools: Pill[] };
 export const skills: Skill[] = [
   {
     area: "Statistics & uncertainty",
-    methods: ["Uncertainty Quantification", "Conformal Prediction", "Conformal Martingales", "Multiple Testing", "Online FDR Control", "E-values", "Bootstrap", "Density Estimation"],
+    methods: ["Uncertainty Quantification", "Conformal Prediction", "Conformal Martingales", "Multiple Testing", "Distribution-Free Inference"],
     tools: [],
   },
   {
     area: "Machine learning",
-    methods: ["Unsupervised Learning", "Anomaly Detection", "Change-Point Detection", "Concept Drift", "Online Learning", "Clustering"],
+    methods: ["Unsupervised Learning", "Anomaly Detection", "Change-Point Detection", "Continual Learning", "Time Series Analysis"],
     tools: [],
   },
   {
     area: "Deep learning & LLMs",
-    methods: ["LLM Fine-Tuning", "LoRA", "Autoencoders", "MCP Servers"],
+    methods: ["LoRA", "Autoencoders", "MCP Servers"],
     tools: [{ name: "PyTorch", icon: "pytorch" }, { name: "Hugging Face", icon: "huggingface" }],
   },
   {
     area: "Geospatial analysis",
-    methods: ["GIS", "Geostatistics", "Spatial Econometrics", "Hotspot Analysis"],
+    methods: ["GIS", "Geostatistics", "Spatial Econometrics"],
     tools: [{ name: "ArcGIS", icon: "arcgis" }],
   },
   {
@@ -31,17 +31,17 @@ export const skills: Skill[] = [
   },
   {
     area: "Web & data",
-    methods: ["REST APIs"],
+    methods: [],
     tools: [{ name: "FastAPI", icon: "fastapi" }, { name: "React", icon: "react" }, { name: "SvelteKit", icon: "svelte" }, { name: "Astro", icon: "astro" }, { name: "PostgreSQL", icon: "postgresql" }, { name: "TimescaleDB", icon: "timescale" }, { name: "SQLite", icon: "sqlite" }, { name: "MQTT", icon: "mqtt" }],
   },
   {
     area: "Cloud & infrastructure",
-    methods: ["Edge Deployment", "Infrastructure as Code"],
-    tools: [{ name: "Cloudflare", icon: "cloudflare" }, { name: "Docker", icon: "docker" }, { name: "Ansible", icon: "ansible" }, { name: "Traefik", icon: "traefik" }, { name: "Linux", icon: "linux" }],
+    methods: ["Infrastructure as Code"],
+    tools: [{ name: "Cloudflare", icon: "cloudflare" }, { name: "Docker", icon: "docker" }, { name: "Ansible", icon: "ansible" }, { name: "Traefik", icon: "traefik" }, { name: "Tailscale", icon: "tailscale" }, { name: "Linux", icon: "linux" }],
   },
   {
     area: "Delivery",
-    methods: ["CI/CD", "Package Development", "Testing"],
+    methods: ["CI/CD", "Package Development"],
     tools: [{ name: "Git", icon: "git" }, { name: "GitHub Actions", icon: "githubactions" }, { name: "pytest", icon: "pytest" }, { name: "Vitest", icon: "vitest" }, { name: "Playwright" }, { name: "uv", icon: "uv" }, { name: "PyPI", icon: "pypi" }],
   },
   {
