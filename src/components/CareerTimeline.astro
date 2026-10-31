@@ -7,7 +7,7 @@ const roles = stations.flatMap((station) => station.roles.map((role) => ({ ...ro
 const start = Math.min(...roles.map((role) => role.start));
 const end = Math.ceil(today + 0.25);
 const pct = (year: number) => `${(((year - start) / (end - start)) * 100).toFixed(2)}%`;
-const lanes: Lane[] = ["Education", "Industry", "Research & teaching"];
+const lanes: Lane[] = ["Education", "Industry", "Research", "Teaching"];
 const ticks = Array.from({ length: Math.floor((end - start) / 2) + 1 }, (_, i) => Math.ceil(start / 2) * 2 + i * 2).filter((year) => year > start && year < end);
 const summary = roles.slice().sort((a, b) => a.start - b.start).map((role) => `${role.period}: ${role.title}, ${organisations[role.org]}`).join("; ");
 ---

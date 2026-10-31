@@ -9,11 +9,11 @@ export const GET: APIRoute = () => {
   const lines = [
     `# ${site.author}`,
     "",
-    `> ${site.author} (also written ${site.alternateNames[0]}) is a PhD candidate, research associate and lecturer at ${site.affiliation} (${site.affiliationShort}) in ${site.location}. Research focus: unsupervised learning and uncertainty quantification, in particular conformal anomaly detection with statistical error control.`,
+    `> ${site.author} (also written ${site.alternateNames[0]}) is a PhD candidate and research associate at ${site.affiliation} (${site.affiliationShort}) in ${site.location}. Research focus: unsupervised learning and uncertainty quantification, in particular conformal anomaly detection with statistical error control.`,
     "",
     `- PhD working title: "${site.thesis}"`,
     `- Research group: ${site.researchGroup}, ${site.affiliation}`,
-    `- Teaching: Unsupervised Learning and Data Science (M.Sc.); Software Engineering and Environmental Monitoring (B.Sc.)`,
+    `- Teaching: lecturer 2023–2026 for Unsupervised Learning and Data Science (M.Sc.) and Software Engineering and Environmental Monitoring (B.Sc.); earlier student research assistant teaching statistics with R (2018–2021)`,
     `- Research topics: ${site.knowsAbout.join(", ")}`,
     `- Previously: machine learning software engineer at INIT Group (passenger demand prediction for public transport)`,
     `- Education: M.Sc. Geomatics and B.Sc. Geoinformation Management, ${site.affiliation}`,

@@ -10,7 +10,7 @@ export const site = {
   familyName: "Hennhöfer",
   /** Spellings people and search engines use for the same name. */
   alternateNames: ["Oliver Hennhoefer", "Oliver Hennhofer", "Oliver Nino Hennhöfer", "O. Hennhöfer"],
-  jobTitles: ["PhD Candidate", "Research Associate", "Lecturer"],
+  jobTitles: ["PhD Candidate", "Research Associate"],
   email: "oliver.hennhoefer@h-ka.de",
   affiliation: "Karlsruhe University of Applied Sciences",
   affiliationShort: "HKA",
