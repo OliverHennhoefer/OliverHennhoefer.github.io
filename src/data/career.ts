@@ -32,7 +32,7 @@ export const stations: Station[] = [
     period: "2023 – now",
     roles: [
       { title: "PhD Candidate", lane: "Education", start: 2023 + 8 / 12, period: "ongoing", hideBar: true,
-        detail: "Doctoral research on conformal anomaly detection and uncertainty quantification." },
+        detail: "Working title: Operationalizing Conformal Anomaly Detection: Scoring, Calibration, Error Control, and Deployment Beyond Idealized Conditions." },
       { title: "Lecturer", lane: "Research & teaching", start: 2023 + 8 / 12, period: "2023 – now", hideBar: true,
         detail: "Courses in master’s and bachelor’s programmes.",
         items: ["Unsupervised Learning · M.Sc.", "Data Science · M.Sc.", "Software Engineering · B.Sc.", "Environmental Monitoring · B.Sc."] },

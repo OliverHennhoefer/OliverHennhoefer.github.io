@@ -40,7 +40,7 @@ export const skills: Skill[] = [
   },
   {
     area: "Languages",
-    summary: "German, English, and basic Chinese.",
+    summary: "German (native), English (C2, proficient), Chinese (basic).",
     tools: [],
   },
 ];
