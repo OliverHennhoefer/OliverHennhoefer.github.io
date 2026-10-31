@@ -146,7 +146,7 @@ main.page-full { --content-width: var(--page-width); padding-block: 0 2rem; }
 .goals .done .goal-title { color: var(--muted); }
 .goal-detail, .goal-year { color: var(--muted); font-size: .85rem; }
 
-/* Elsewhere */
+/* Perspectives */
 .mini-map { margin: 0; display: grid; grid-template-columns: minmax(0, 30rem) minmax(0, 1fr); gap: 1.6rem; align-items: end; }
 .mini-map svg { display: block; width: 100%; height: auto; }
 .mini-map .country { fill: var(--map-land); stroke: var(--paper); stroke-width: .4; stroke-linejoin: round; }
