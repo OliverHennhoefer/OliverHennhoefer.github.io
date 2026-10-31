@@ -1,31 +1,141 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import ProjectList from "../components/ProjectList.astro";
-import PublicationList from "../components/PublicationList.astro";
+import CareerTimeline from "../components/CareerTimeline.astro";
+import Icon from "../components/Icon.astro";
+import Stations from "../components/Stations.astro";
+import { goals } from "../data/goals";
 import { projects } from "../data/projects";
 import { publications } from "../data/publications";
+import { skills } from "../data/skills";
+import { miniCountries, miniHeight, miniWidth } from "../utils/miniMap";
+import { visitedCountries } from "../utils/travel";
 import { site } from "../site";
+
+const surname = "Hennhöfer";
+const authorParts = (authors: string) => authors.split(",").map((name) => name.trim().split(" ").slice(1).join(" "));
+const years = [...new Set(publications.map((publication) => publication.year))].sort((a, b) => b - a);
+const firstAuthor = publications.filter((publication) => authorParts(publication.authors)[0] === surname).length;
+const profiles = [
+  { href: `mailto:${site.email}`, label: "Email", icon: "email" },
+  { href: site.socials.linkedin, label: "LinkedIn", icon: "linkedin" },
+  { href: site.socials.scholar, label: "Google Scholar", icon: "scholar" },
+  { href: site.socials.github, label: "GitHub", icon: "github" },
+  { href: site.socials.x, label: "X", icon: "x" },
+] as const;
 ---
-<BaseLayout>
-  <section class="intro" aria-labelledby="intro-heading">
-    <p class="eyebrow">Machine learning &amp; statistical inference</p>
-    <h1 id="intro-heading">Oliver Hennhöfer</h1>
-    <p class="lede">I research uncertainty in machine learning and develop software that puts statistical methods into practice.</p>
-    <p class="intro-context">I’m a research associate and lecturer at {site.affiliation}, working on conformal inference, anomaly detection, and sequential testing. My background spans geospatial analysis, machine learning in public transport, and research software development.</p>
-    <ul class="profile-links" aria-label="Profile links">
-      <li><a href={`mailto:${site.email}`}>Email</a></li>
-      <li><a href={site.socials.scholar}>Google Scholar</a></li>
-      <li><a href={site.socials.github}>GitHub</a></li>
-      <li><a href={site.socials.linkedin}>LinkedIn</a></li>
-      <li><a href={site.socials.x}>X</a></li>
+<BaseLayout full>
+  <section class="index-row index-intro" aria-labelledby="intro-heading">
+    <span class="index-label"></span>
+    <div>
+      <h1 id="intro-heading">Oliver Hennhöfer</h1>
+      <p class="lede">Unsupervised learning and uncertainty quantification, with guarantees that survive deployment.</p>
+      <p class="role-line">PhD candidate, Research Associate &amp; Lecturer · {site.affiliation}</p>
+      <ul class="profiles" aria-label="Contact and profiles">
+        {profiles.map(({ href, label, icon }) => <li><a href={href}><Icon name={icon} />{label}</a></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="index-row" id="path" aria-labelledby="path-heading">
+    <h2 id="path-heading">Path</h2>
+    <div>
+      <CareerTimeline />
+      <Stations />
+      <a class="more-link" href="/cv/">Full CV →</a>
+    </div>
+  </section>
+
+  <section class="index-row" id="software" aria-labelledby="software-heading">
+    <h2 id="software-heading">Software</h2>
+    <ul class="software">
+      {projects.map((project) => (
+        <li>
+          <h3><a href={project.links[0].href}>{project.name}</a></h3>
+          <div>
+            <p class="tool-role">{project.role}</p>
+            <p>{project.summary}</p>
+            <ul class="tool-links" aria-label={`${project.name} resources`}>
+              {project.links.map(({ href, label }) => <li><a href={href} aria-label={`${project.name}: ${label}`}>{label}</a></li>)}
+            </ul>
+          </div>
+        </li>
+      ))}
     </ul>
   </section>
-  <section class="home-section" aria-labelledby="work-heading">
-    <div class="section-heading"><h2 id="work-heading">Research software</h2></div>
-    <ProjectList projects={projects} />
+
+  <section class="index-row" id="publications" aria-labelledby="publications-heading">
+    <h2 id="publications-heading">Publications</h2>
+    <div>
+      <p class="pub-summary">{publications.length} publications, {firstAuthor} as first author. <a href={site.socials.scholar}>Google Scholar ↗</a></p>
+      {years.map((year) => (
+        <div class="pub-year-group">
+          <span class="pub-year tnum">{year}</span>
+          <ol class="pubs">
+            {publications.filter((publication) => publication.year === year).map((publication) => {
+              const authors = authorParts(publication.authors);
+              const shown = authors.length > 4 ? [authors[0], "et al."] : authors;
+              return (
+                <li>
+                  <a class="pub-title" href={publication.url}>{publication.title}</a>
+                  <p class="pub-meta">
+                    <span class="venue">{publication.venueShort}</span>
+                    <span class="kind">{publication.kind}</span>
+                    {publication.talk && <span class="talk">{publication.talk}</span>}
+                    <span class="authors">{shown.map((name, i) => <>{i > 0 && (name === "et al." ? " " : ", ")}{name === surname ? <span class="me">{name}</span> : name}</>)}</span>
+                  </p>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      ))}
+    </div>
   </section>
-  <section class="home-section" aria-labelledby="papers-heading">
-    <div class="section-heading"><h2 id="papers-heading">Publications</h2></div>
-    <PublicationList publications={publications} />
+
+  <section class="index-row" id="skills" aria-labelledby="skills-heading">
+    <h2 id="skills-heading">Skills</h2>
+    <ul class="skills-list">
+      {skills.map((skill) => (
+        <li>
+          <h3>{skill.area}</h3>
+          <div>
+            <p>{skill.summary}</p>
+            {skill.tools.length > 0 && (
+              <ul class="tools" aria-label={`${skill.area} tools`}>
+                {skill.tools.map((tool) => <li>{tool.icon && <Icon name={tool.icon} size={14} />}{tool.name}</li>)}
+              </ul>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {goals.length > 0 && (
+    <section class="index-row" id="goals" aria-labelledby="goals-heading">
+      <h2 id="goals-heading">Next</h2>
+      <ul class="goals">
+        {goals.map((goal) => (
+          <li class:list={{ done: goal.done }}>
+            <span class="check" aria-hidden="true"></span>
+            <span><span class="goal-title">{goal.title}</span>{goal.detail && <span class="goal-detail"> · {goal.detail}</span>}</span>
+            <span class="goal-year tnum">{goal.done ? `Done${goal.year ? ` ${goal.year}` : ""}` : (goal.year ?? "In progress")}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <section class="index-row" id="elsewhere" aria-labelledby="elsewhere-heading">
+    <h2 id="elsewhere-heading">Elsewhere</h2>
+    <figure class="mini-map">
+      <svg viewBox={`0 0 ${miniWidth} ${miniHeight}`} role="img" aria-labelledby="map-title">
+        <title id="map-title">World map with {visitedCountries.length} visited countries in black</title>
+        {miniCountries.map((country) => (
+          <path class:list={["country", { visited: country.visited }]} d={country.path} data-country={country.name}><title>{country.name}</title></path>
+        ))}
+      </svg>
+      <figcaption><span class="count tnum">{visitedCountries.length} countries.</span> {visitedCountries.join(", ")}.</figcaption>
+    </figure>
   </section>
 </BaseLayout>
