@@ -40,7 +40,7 @@ export const skills: Skill[] = [
     tools: [{ name: "Cloudflare", icon: "cloudflare" }, { name: "Docker", icon: "docker" }, { name: "Ansible", icon: "ansible" }, { name: "Traefik", icon: "traefik" }, { name: "Tailscale", icon: "tailscale" }, { name: "Linux", icon: "linux" }],
   },
   {
-    area: "Delivery",
+    area: "DevOps",
     methods: ["CI/CD", "Package Development"],
     tools: [{ name: "Git", icon: "git" }, { name: "GitHub Actions", icon: "githubactions" }, { name: "pytest", icon: "pytest" }, { name: "Vitest", icon: "vitest" }, { name: "Playwright" }, { name: "uv", icon: "uv" }, { name: "PyPI", icon: "pypi" }],
   },
