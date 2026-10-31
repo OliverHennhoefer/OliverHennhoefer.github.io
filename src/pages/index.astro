@@ -2,20 +2,19 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CareerTimeline from "../components/CareerTimeline.astro";
 import Icon from "../components/Icon.astro";
-import ProjectGlyph from "../components/ProjectGlyph.astro";
-import { career } from "../data/career";
+import Stations from "../components/Stations.astro";
 import { goals } from "../data/goals";
 import { projects } from "../data/projects";
 import { publications } from "../data/publications";
 import { skills } from "../data/skills";
-import { courses } from "../data/teaching";
 import { miniCountries, miniHeight, miniWidth } from "../utils/miniMap";
 import { visitedCountries } from "../utils/travel";
 import { site } from "../site";
 
 const surname = "Hennhöfer";
 const authorParts = (authors: string) => authors.split(",").map((name) => name.trim().split(" ").slice(1).join(" "));
-const teachingPaper = publications.find((publication) => publication.venueShort === "ECSEE");
+const years = [...new Set(publications.map((publication) => publication.year))].sort((a, b) => b - a);
+const firstAuthor = publications.filter((publication) => authorParts(publication.authors)[0] === surname).length;
 const profiles = [
   { href: `mailto:${site.email}`, label: "Email", icon: "email" },
   { href: site.socials.linkedin, label: "LinkedIn", icon: "linkedin" },
@@ -29,26 +28,11 @@ const profiles = [
     <span class="index-label"></span>
     <div>
       <h1 id="intro-heading">Oliver Hennhöfer</h1>
-      <p class="lede">Unsupervised learning and uncertainty quantification, from research to production.</p>
+      <p class="lede">Unsupervised learning and uncertainty quantification, with guarantees that survive deployment.</p>
+      <p class="role-line">Research Associate &amp; Lecturer · {site.affiliation}</p>
       <ul class="profiles" aria-label="Contact and profiles">
         {profiles.map(({ href, label, icon }) => <li><a href={href}><Icon name={icon} />{label}</a></li>)}
       </ul>
-    </div>
-  </section>
-
-  <section class="index-row" id="now" aria-labelledby="now-heading">
-    <h2 id="now-heading">Now</h2>
-    <p class="now">Lecturer and Research Associate in the Intelligent Systems Research Group at {site.affiliation}, Germany. <span>I work on unsupervised learning and uncertainty quantification, chiefly conformal inference, anomaly detection, and sequential testing, and lead development of <a href={projects[0].links[0].href}>off-key</a> within BiFlex-Industrie.</span></p>
-  </section>
-
-  <section class="index-row" id="teaching" aria-labelledby="teaching-heading">
-    <h2 id="teaching-heading">Teaching</h2>
-    <div>
-      <p class="now">Lecturer since 2023 in master’s and bachelor’s programmes.</p>
-      <ul class="courses">
-        {courses.map((course) => <li><span class="course-title">{course.title}</span><span class="course-level">{course.level}</span></li>)}
-      </ul>
-      <p class="note">Before that, I supported <em>Statistics with R</em> as a student research assistant (2018–21).{teachingPaper && <> Co-author of <a href={teachingPaper.url}>a story-driven course on AI and music</a> that aims to raise interest in computer science ({teachingPaper.venueShort} {teachingPaper.year}).</>}</p>
     </div>
   </section>
 
@@ -56,58 +40,74 @@ const profiles = [
     <h2 id="path-heading">Path</h2>
     <div>
       <CareerTimeline />
-      <ul class="career">
-        {career.map((entry) => (
-          <li><span class="when tnum">{entry.label}</span><span>{entry.role} <span class="where">· {entry.organisation}</span></span></li>
-        ))}
-      </ul>
+      <Stations />
       <a class="more-link" href="/cv/">Full CV →</a>
     </div>
   </section>
 
   <section class="index-row" id="software" aria-labelledby="software-heading">
     <h2 id="software-heading">Software</h2>
-    <div class="software">
+    <ul class="software">
       {projects.map((project) => (
-        <article class:list={["tool", { featured: project.featured }]}>
-          <ProjectGlyph kind={project.glyph} width={project.featured ? 640 : 300} />
-          <div class="tool-body">
+        <li>
+          <h3><a href={project.links[0].href}>{project.name}</a></h3>
+          <div>
             <p class="tool-role">{project.role}</p>
-            <h3><a href={project.links[0].href}>{project.name}</a></h3>
             <p>{project.summary}</p>
             <ul class="tool-links" aria-label={`${project.name} resources`}>
               {project.links.map(({ href, label }) => <li><a href={href} aria-label={`${project.name}: ${label}`}>{label}</a></li>)}
             </ul>
           </div>
-        </article>
+        </li>
       ))}
-    </div>
+    </ul>
   </section>
 
   <section class="index-row" id="publications" aria-labelledby="publications-heading">
     <h2 id="publications-heading">Publications</h2>
-    <ol class="pub-list">
-      {publications.map((publication) => {
-        const authors = authorParts(publication.authors);
-        const shown = authors.length > 4 ? [authors[0], "et al."] : authors;
-        return (
-          <li>
-            <span class="year">{publication.year}</span>
-            <div>
-              <a href={publication.url}>{publication.title}</a>
-              <p>{shown.map((name, i) => <>{i > 0 && (name === "et al." ? " " : ", ")}{name === surname ? <span class="me">{name}</span> : name}</>)} · {publication.venueShort}</p>
-            </div>
-          </li>
-        );
-      })}
-    </ol>
+    <div>
+      <p class="pub-summary">{publications.length} publications, {firstAuthor} as first author. <a href={site.socials.scholar}>Google Scholar ↗</a></p>
+      {years.map((year) => (
+        <div class="pub-year-group">
+          <span class="pub-year tnum">{year}</span>
+          <ol class="pubs">
+            {publications.filter((publication) => publication.year === year).map((publication) => {
+              const authors = authorParts(publication.authors);
+              const shown = authors.length > 4 ? [authors[0], "et al."] : authors;
+              return (
+                <li>
+                  <a class="pub-title" href={publication.url}>{publication.title}</a>
+                  <p class="pub-meta">
+                    <span class="venue">{publication.venueShort}</span>
+                    <span class="kind">{publication.kind}</span>
+                    <span class="authors">{shown.map((name, i) => <>{i > 0 && (name === "et al." ? " " : ", ")}{name === surname ? <span class="me">{name}</span> : name}</>)}</span>
+                  </p>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      ))}
+    </div>
   </section>
 
   <section class="index-row" id="skills" aria-labelledby="skills-heading">
     <h2 id="skills-heading">Skills</h2>
-    <dl class="skill-grid">
-      {skills.map((skill) => <div><dt>{skill.area}</dt><dd>{skill.items}</dd></div>)}
-    </dl>
+    <ul class="skills-list">
+      {skills.map((skill) => (
+        <li>
+          <h3>{skill.area}</h3>
+          <div>
+            <p>{skill.summary}</p>
+            {skill.tools.length > 0 && (
+              <ul class="tools" aria-label={`${skill.area} tools`}>
+                {skill.tools.map((tool) => <li>{tool.icon && <Icon name={tool.icon} size={14} />}{tool.name}</li>)}
+              </ul>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
   </section>
 
   {goals.length > 0 && (

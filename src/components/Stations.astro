@@ -1,0 +1,42 @@
+---
+import { organisations, stations } from "../data/career";
+---
+<ol class="stations">
+  {stations.map((station) => (
+    <li class:list={["station", `org-${station.org}`]}>
+      <div class="station-head">
+        <span class="station-name">{organisations[station.org]}</span>
+        <span class="station-period tnum">{station.period}</span>
+      </div>
+      <ul class="roles">
+        {station.roles.map((role) => (
+          <li class="role">
+            <div class="role-head"><span class="role-title">{role.title}</span>{station.roles.length > 1 && <span class="role-period tnum">{role.period}</span>}</div>
+            {role.detail && <p>{role.detail}</p>}
+            {role.items && <ul class="chips">{role.items.map((item) => <li>{item}</li>)}</ul>}
+          </li>
+        ))}
+      </ul>
+    </li>
+  ))}
+</ol>
+<style>
+  .stations { list-style: none; padding: 0; margin: 0; }
+  .station { position: relative; margin: 0; padding: 0 0 1.4rem 1.9rem; }
+  .station::before { content: ""; position: absolute; left: .42rem; top: .9rem; bottom: -.35rem; border-left: 1.5px solid var(--line); }
+  .station:last-child { padding-bottom: 0; }
+  .station:last-child::before { display: none; }
+  .station::after { content: ""; position: absolute; left: 0; top: .32rem; width: .95rem; height: .95rem; border-radius: 50%; background: var(--org); box-shadow: 0 0 0 3px var(--paper); }
+  .station-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .station-name { font: 400 1.15rem/1.4 var(--serif); }
+  .station-period, .role-period { font-size: .78rem; color: var(--muted); white-space: nowrap; }
+  .roles { list-style: none; padding: 0; margin: .35rem 0 0; }
+  .role { position: relative; margin: 0; padding: .3rem 0; }
+  .role::before { content: ""; position: absolute; left: calc(-1.9rem + .42rem - 3.25px); top: .78rem; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--org); background: var(--paper); box-sizing: border-box; }
+  .role-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .role-title { font-size: .92rem; font-weight: 500; }
+  .role p { margin: .1rem 0 0; font-size: .86rem; color: var(--muted); max-width: 40rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: .35rem; list-style: none; padding: 0; margin: .5rem 0 .2rem; }
+  .chips li { margin: 0; font-size: .76rem; padding: .18rem .6rem; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--org) 55%, var(--line)); background: color-mix(in srgb, var(--org) 9%, var(--paper)); }
+  @media print { .station::after, .role::before { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
+</style>

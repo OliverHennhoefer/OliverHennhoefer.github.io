@@ -1,4 +1,4 @@
-export type Publication = { title: string; url: string; authors: string; venue: string; venueShort: string; year: number };
+export type Publication = { title: string; url: string; authors: string; venue: string; venueShort: string; kind: "Preprint" | "Conference" | "Workshop" | "Journal"; year: number };
 
 export const publications: Publication[] = [
   {
@@ -7,6 +7,7 @@ export const publications: Publication[] = [
     "authors": "O Hennhöfer, C Preisach",
     "venue": "arXiv preprint arXiv:2603.23205",
     "venueShort": "arXiv",
+    "kind": "Preprint",
     "year": 2026
   },
   {
@@ -15,6 +16,7 @@ export const publications: Publication[] = [
     "authors": "S Venturini, O Hennhöfer, S Kinkel, J Strötgen",
     "venue": "Proceedings of the 20th Linguistic Annotation Workshop (LAW XX), 309–322",
     "venueShort": "LAW XX",
+    "kind": "Workshop",
     "year": 2026
   },
   {
@@ -23,6 +25,7 @@ export const publications: Publication[] = [
     "authors": "O Hennhöfer, M Kirsch, C Preisach",
     "venue": "Fifteenth Symposium on Conformal and Probabilistic Prediction with Applications (COPA), PMLR 329, 613–632",
     "venueShort": "COPA, PMLR 329",
+    "kind": "Conference",
     "year": 2026
   },
   {
@@ -31,6 +34,7 @@ export const publications: Publication[] = [
     "authors": "K Marquardt, Q Shang, O Hennhöfer, L Happe",
     "venue": "Proceedings of the 6th European Conference on Software Engineering Education (ECSEE), 145–153",
     "venueShort": "ECSEE",
+    "kind": "Conference",
     "year": 2025
   },
   {
@@ -39,6 +43,7 @@ export const publications: Publication[] = [
     "authors": "O Hennhöfer, C Preisach",
     "venue": "IEEE International Conference on Knowledge Graph (ICKG), 110–119",
     "venueShort": "IEEE ICKG",
+    "kind": "Conference",
     "year": 2024
   },
   {
@@ -47,6 +52,7 @@ export const publications: Publication[] = [
     "authors": "O Hennhöfer, J Bruns, P Ullrich, A Heiß, G Sharipov, D Paraforos",
     "venue": "GI_Forum, 9(2), 136–151",
     "venueShort": "GI_Forum",
+    "kind": "Journal",
     "year": 2021
   }
 ];

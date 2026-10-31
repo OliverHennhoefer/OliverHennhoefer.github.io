@@ -1,6 +1,6 @@
 ---
 import { icons, type IconName } from "../data/icons";
-type Props = { name: IconName };
-const { name } = Astro.props;
+type Props = { name: IconName; size?: number };
+const { name, size = 15 } = Astro.props;
 ---
-<svg class="icon" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule={name === "email" ? "evenodd" : undefined} d={icons[name]} /></svg>
+<svg class="icon" viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule={name === "email" ? "evenodd" : undefined} d={icons[name]} /></svg>
