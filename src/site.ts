@@ -1,7 +1,7 @@
 export const site = {
   title: "Oliver Hennhöfer",
-  /** Home page <title>: name first, then the research area people search for. */
-  homeTitle: "Oliver Hennhöfer · Conformal Anomaly Detection Research",
+  /** Home page <title> (browser tab and search result headline). */
+  homeTitle: "Oliver Nino Hennhöfer",
   description:
     "Oliver Hennhöfer (Hennhoefer) is a PhD candidate at HKA Karlsruhe working on conformal anomaly detection, unsupervised learning and uncertainty quantification.",
   url: "https://oliverhennhoefer.github.io",
