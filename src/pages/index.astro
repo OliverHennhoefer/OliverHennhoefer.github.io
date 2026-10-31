@@ -78,7 +78,7 @@ const profiles = [
                 <li>
                   <a class="pub-title" href={publication.url}>{publication.title}</a>
                   <p class="pub-meta">
-                    <span class="venue">{publication.venueShort}</span>
+                    <span class="venue">{publication.logo && <Icon name={publication.logo} size={16} />}{publication.venueShort}</span>
                     <span class="kind">{publication.kind}</span>
                     {publication.talk && <span class="talk">{publication.talk}</span>}
                     <span class="authors">{shown.map((name, i) => <>{i > 0 && (name === "et al." ? " " : ", ")}{name === surname ? <span class="me">{name}</span> : name}</>)}</span>

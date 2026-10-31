@@ -1,6 +1,11 @@
 ---
-import { icons, type IconName } from "../data/icons";
+import { icons, marks, type IconName } from "../data/icons";
 type Props = { name: IconName; size?: number };
 const { name, size = 15 } = Astro.props;
+const mark = name in marks ? marks[name as keyof typeof marks] : undefined;
+const viewBox = mark?.viewBox ?? "0 0 24 24";
+const [, , w, h] = viewBox.split(" ").map(Number);
+const d = mark?.d ?? icons[name as keyof typeof icons];
+const evenodd = mark?.evenodd || name === "email";
 ---
-<svg class="icon" viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule={name === "email" ? "evenodd" : undefined} d={icons[name]} /></svg>
+<svg class="icon" viewBox={viewBox} width={Math.round((size * w) / h)} height={size} aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule={evenodd ? "evenodd" : undefined} d={d} /></svg>
