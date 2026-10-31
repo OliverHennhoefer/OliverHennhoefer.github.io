@@ -34,6 +34,13 @@ export const person = {
   url: homeUrl,
   email: `mailto:${site.email}`,
   description: site.description,
+  image: {
+    "@type": "ImageObject",
+    url: new URL(site.portrait.path, site.url).toString(),
+    width: site.portrait.width,
+    height: site.portrait.height,
+    caption: site.author,
+  },
   jobTitle: site.jobTitles,
   worksFor: { "@id": ids.university },
   affiliation: [{ "@id": ids.university }, { "@type": "ResearchOrganization", name: `${site.researchGroup}, ${site.affiliation}` }],

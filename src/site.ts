@@ -33,6 +33,8 @@ export const site = {
     "Statistics",
   ],
   twitter: "@OHennhoefer",
+  /** Square black-and-white portrait, used for search results and link previews. */
+  portrait: { path: "/portrait.jpg", width: 800, height: 800 },
   impressum: {
     legalName: "Oliver Nino Hennhöfer",
     addressLine1: "Lachnerstraße 18",

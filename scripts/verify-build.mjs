@@ -72,6 +72,7 @@ for (const [file, html] of documents) {
     assert(person, `${route}: missing Person`);
     assert(person.alternateName.includes('Oliver Hennhoefer'), `${route}: Person needs the ASCII spelling`);
     assert(person.sameAs.length >= 3, `${route}: Person needs profile links`);
+    await destination(new URL(person.image.url).pathname);
     if (route === '/' || route === '/cv/') {
       assert(graph.some((item) => item['@type'] === 'ProfilePage' && item.mainEntity?.['@id'] === person['@id']), `${route}: ProfilePage must point to Person`);
       assert(graph.some((item) => item['@type'] === 'ScholarlyArticle'), `${route}: publications missing from structured data`);
