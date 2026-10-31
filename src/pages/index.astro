@@ -1,44 +1,63 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CareerTimeline from "../components/CareerTimeline.astro";
+import Icon from "../components/Icon.astro";
+import ProjectGlyph from "../components/ProjectGlyph.astro";
 import { career } from "../data/career";
+import { goals } from "../data/goals";
 import { projects } from "../data/projects";
 import { publications } from "../data/publications";
-import visited from "../data/visited-countries.json";
+import { skills } from "../data/skills";
+import { courses } from "../data/teaching";
+import { miniCountries, miniHeight, miniWidth } from "../utils/miniMap";
+import { visitedCountries } from "../utils/travel";
 import { site } from "../site";
 
 const surname = "Hennhöfer";
 const authorParts = (authors: string) => authors.split(",").map((name) => name.trim().split(" ").slice(1).join(" "));
-const highlights = career.filter((entry) => entry.highlight);
+const teachingPaper = publications.find((publication) => publication.venueShort === "ECSEE");
+const profiles = [
+  { href: `mailto:${site.email}`, label: "Email", icon: "email" },
+  { href: site.socials.linkedin, label: "LinkedIn", icon: "linkedin" },
+  { href: site.socials.scholar, label: "Google Scholar", icon: "scholar" },
+  { href: site.socials.github, label: "GitHub", icon: "github" },
+  { href: site.socials.x, label: "X", icon: "x" },
+] as const;
 ---
 <BaseLayout full>
   <section class="index-row index-intro" aria-labelledby="intro-heading">
     <span class="index-label"></span>
     <div>
       <h1 id="intro-heading">Oliver Hennhöfer</h1>
-      <p class="lede">Machine learning with statistical guarantees, from research to production.</p>
-      <ul class="contact-line" aria-label="Contact and profiles">
-        <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-        <li>Karlsruhe, Germany</li>
-        <li><a href={site.socials.linkedin}>LinkedIn</a></li>
-        <li><a href={site.socials.scholar}>Google Scholar</a></li>
-        <li><a href={site.socials.github}>GitHub</a></li>
-        <li><a href={site.socials.x}>X</a></li>
+      <p class="lede">Unsupervised learning and uncertainty quantification, from research to production.</p>
+      <ul class="profiles" aria-label="Contact and profiles">
+        {profiles.map(({ href, label, icon }) => <li><a href={href}><Icon name={icon} />{label}</a></li>)}
       </ul>
     </div>
   </section>
 
-  <section class="index-row" aria-labelledby="now-heading">
+  <section class="index-row" id="now" aria-labelledby="now-heading">
     <h2 id="now-heading">Now</h2>
-    <p class="now">Research Associate and Lecturer in the Intelligent Systems Research Group at {site.affiliation}. <span>I research conformal inference, anomaly detection, and sequential testing, lead development of <a href={projects[0].links[0].href}>off-key</a> within BiFlex-Industrie, and teach Unsupervised Learning and Data Science at master’s level.</span></p>
+    <p class="now">Lecturer and Research Associate in the Intelligent Systems Research Group at {site.affiliation}, Germany. <span>I work on unsupervised learning and uncertainty quantification, chiefly conformal inference, anomaly detection, and sequential testing, and lead development of <a href={projects[0].links[0].href}>off-key</a> within BiFlex-Industrie.</span></p>
   </section>
 
-  <section class="index-row" aria-labelledby="path-heading">
+  <section class="index-row" id="teaching" aria-labelledby="teaching-heading">
+    <h2 id="teaching-heading">Teaching</h2>
+    <div>
+      <p class="now">Lecturer since 2023 in master’s and bachelor’s programmes.</p>
+      <ul class="courses">
+        {courses.map((course) => <li><span class="course-title">{course.title}</span><span class="course-level">{course.level}</span></li>)}
+      </ul>
+      <p class="note">Before that, I supported <em>Statistics with R</em> as a student research assistant (2018–21).{teachingPaper && <> Co-author of <a href={teachingPaper.url}>a story-driven course on AI and music</a> that aims to raise interest in computer science ({teachingPaper.venueShort} {teachingPaper.year}).</>}</p>
+    </div>
+  </section>
+
+  <section class="index-row" id="path" aria-labelledby="path-heading">
     <h2 id="path-heading">Path</h2>
     <div>
       <CareerTimeline />
       <ul class="career">
-        {highlights.map((entry) => (
+        {career.map((entry) => (
           <li><span class="when tnum">{entry.label}</span><span>{entry.role} <span class="where">· {entry.organisation}</span></span></li>
         ))}
       </ul>
@@ -46,16 +65,26 @@ const highlights = career.filter((entry) => entry.highlight);
     </div>
   </section>
 
-  <section class="index-row" aria-labelledby="software-heading">
+  <section class="index-row" id="software" aria-labelledby="software-heading">
     <h2 id="software-heading">Software</h2>
-    <ul class="compact-list">
+    <div class="software">
       {projects.map((project) => (
-        <li><a class="name" href={project.links[0].href}>{project.name}</a><p>{project.summary}</p></li>
+        <article class:list={["tool", { featured: project.featured }]}>
+          <ProjectGlyph kind={project.glyph} width={project.featured ? 640 : 300} />
+          <div class="tool-body">
+            <p class="tool-role">{project.role}</p>
+            <h3><a href={project.links[0].href}>{project.name}</a></h3>
+            <p>{project.summary}</p>
+            <ul class="tool-links" aria-label={`${project.name} resources`}>
+              {project.links.map(({ href, label }) => <li><a href={href} aria-label={`${project.name}: ${label}`}>{label}</a></li>)}
+            </ul>
+          </div>
+        </article>
       ))}
-    </ul>
+    </div>
   </section>
 
-  <section class="index-row" aria-labelledby="publications-heading">
+  <section class="index-row" id="publications" aria-labelledby="publications-heading">
     <h2 id="publications-heading">Publications</h2>
     <ol class="pub-list">
       {publications.map((publication) => {
@@ -74,8 +103,38 @@ const highlights = career.filter((entry) => entry.highlight);
     </ol>
   </section>
 
-  <section class="index-row" aria-labelledby="elsewhere-heading">
+  <section class="index-row" id="skills" aria-labelledby="skills-heading">
+    <h2 id="skills-heading">Skills</h2>
+    <dl class="skill-grid">
+      {skills.map((skill) => <div><dt>{skill.area}</dt><dd>{skill.items}</dd></div>)}
+    </dl>
+  </section>
+
+  {goals.length > 0 && (
+    <section class="index-row" id="goals" aria-labelledby="goals-heading">
+      <h2 id="goals-heading">Goals</h2>
+      <ul class="goals">
+        {goals.map((goal) => (
+          <li class:list={{ done: goal.done }}>
+            <span class="check" aria-hidden="true"></span>
+            <span><span class="goal-title">{goal.title}</span>{goal.detail && <span class="goal-detail"> · {goal.detail}</span>}</span>
+            <span class="goal-year tnum">{goal.done ? `Done ${goal.year}` : goal.year}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <section class="index-row" id="elsewhere" aria-labelledby="elsewhere-heading">
     <h2 id="elsewhere-heading">Elsewhere</h2>
-    <p class="now">{visited.length} countries and counting. <a href="/travel/">See the map</a></p>
+    <figure class="mini-map">
+      <svg viewBox={`0 0 ${miniWidth} ${miniHeight}`} role="img" aria-labelledby="map-title">
+        <title id="map-title">World map with {visitedCountries.length} visited countries in black</title>
+        {miniCountries.map((country) => (
+          <path class:list={["country", { visited: country.visited }]} d={country.path} data-country={country.name}><title>{country.name}</title></path>
+        ))}
+      </svg>
+      <figcaption><span class="count tnum">{visitedCountries.length} countries.</span> {visitedCountries.join(", ")}.</figcaption>
+    </figure>
   </section>
 </BaseLayout>

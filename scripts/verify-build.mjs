@@ -74,12 +74,6 @@ for (const [, href] of home.matchAll(/<link[^>]*href="([^"]+\.css)"[^>]*>/g)) {
   const css = await readFile(await destination(new URL(href, origin).pathname), 'utf8');
   assert(!css.includes('KaTeX_Main'), 'Math CSS should not be loaded by the homepage');
 }
-const rss = await readFile(join(root, 'rss.xml'), 'utf8');
-for (const [, item] of rss.matchAll(/<item>(.*?)<\/item>/gs)) {
-  const href = item.match(/<link>(.*?)<\/link>/)?.[1];
-  assert(href, 'RSS item needs a link');
-  await destination(new URL(href).pathname);
-}
 for (const sitemap of files.filter((file) => /sitemap.*\.xml$/.test(file))) {
   const xml = await readFile(sitemap, 'utf8');
   for (const [, href] of xml.matchAll(/<loc>(.*?)<\/loc>/g)) {
@@ -87,8 +81,8 @@ for (const sitemap of files.filter((file) => /sitemap.*\.xml$/.test(file))) {
     await destination(new URL(href).pathname);
   }
 }
-const travel = documents.get(join(root, 'travel/index.html'));
-assert(travel, 'Travel page must be generated');
+const travel = documents.get(join(root, 'index.html'));
+assert(travel, 'Home page with the travel map must be generated');
 const expectedPlaces = JSON.parse(await readFile('src/data/visited-countries.json', 'utf8')).sort();
 const mapRegions = [...travel.matchAll(/<path\b[^>]*data-country="[^"]+"[^>]*>/g)]
   .map(([tag]) => attributes(tag));
@@ -96,6 +90,7 @@ const markedPlaces = mapRegions.filter((region) => region.class.split(' ').inclu
   .map((region) => region['data-country']).sort();
 assert.deepEqual(markedPlaces, expectedPlaces, 'Map highlights must match the supplied destinations');
 assert(mapRegions.length > 200, 'World map must include the country boundaries');
+assert(travel.length < 400_000, 'Home page map must stay light');
 assert(mapRegions.every((region) => region.d && !/NaN|Infinity/.test(region.d)), 'Map paths must be valid');
 assert(!mapRegions.some((region) => region['data-country'] === 'United Kingdom'), 'UK must use constituent-country boundaries');
 for (const name of ['England', 'Scotland', 'Wales', 'Northern Ireland']) {
@@ -112,4 +107,4 @@ for (const [mainland, territory, point] of [
   assert(!geoContains(mapData.features.find((region) => region.properties.name === mainland), point), `${mainland} must not include ${territory}`);
 }
 
-console.log(`Verified ${htmlFiles.length} pages: headings, internal links, anchors, metadata, RSS, sitemap, and math CSS isolation.`);
+console.log(`Verified ${htmlFiles.length} pages: headings, internal links, anchors, metadata, sitemap, travel map, and math CSS isolation.`);
