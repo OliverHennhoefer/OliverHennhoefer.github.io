@@ -1,5 +1,5 @@
 ---
-import { organisations, stations, type Lane } from "../data/career";
+import { laneKey, organisations, stations, type Lane } from "../data/career";
 
 const now = new Date();
 const today = now.getUTCFullYear() + now.getUTCMonth() / 12;
@@ -13,12 +13,12 @@ const summary = roles.slice().sort((a, b) => a.start - b.start).map((role) => `$
 ---
 <figure class="timeline" aria-label={`Career timeline. ${summary}.`}>
   {lanes.map((lane) => (
-    <div class="lane" aria-hidden="true">
-      <span class="lane-label">{lane}</span>
+    <div class:list={["lane", `lane-${laneKey[lane]}`]} aria-hidden="true">
+      <span class="lane-label"><i></i>{lane}</span>
       <div class="track">
         {roles.filter((role) => role.lane === lane && !role.hideBar).map((role) => (
           <span
-            class:list={["bar", `org-${role.org}`, { hollow: lane === "Education", ongoing: role.end === undefined }]}
+            class:list={["bar", { ongoing: role.end === undefined }]}
             style={`left:${pct(role.start)};width:calc(${pct(role.end ?? today)} - ${pct(role.start)} - 2px)`}
             title={`${role.title} · ${organisations[role.org]} · ${role.period}`}
           ></span>
@@ -35,13 +35,13 @@ const summary = roles.slice().sort((a, b) => a.start - b.start).map((role) => `$
 </figure>
 <style>
   .timeline { margin: 0 0 2rem; }
-  .lane { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); align-items: center; height: 1.7rem; }
-  .lane-label { font-size: .72rem; color: var(--muted); }
+  .lane { display: grid; grid-template-columns: 9.2rem minmax(0, 1fr); align-items: center; height: 1.7rem; }
+  .lane-label { display: flex; align-items: center; gap: .4rem; font-size: .72rem; color: var(--muted); }
+  .lane-label i { width: .5rem; height: .5rem; border-radius: 50%; background: var(--lane); flex: none; }
   .track { position: relative; height: 100%; }
   .track::before { content: ""; position: absolute; inset: 50% 0 auto; border-top: 1px dotted var(--faint); }
-  .bar { position: absolute; top: 50%; height: 10px; margin-top: -5px; border-radius: 3px; background: var(--org); }
-  .bar.hollow { background: color-mix(in srgb, var(--org) 18%, var(--paper)); border: 1.5px solid var(--org); }
-  .bar.ongoing::after { content: ""; position: absolute; right: -10px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--org); animation: pulse 2.4s ease-in-out infinite; }
+  .bar { position: absolute; top: 50%; height: 10px; margin-top: -5px; border-radius: 3px; background: var(--lane); }
+  .bar.ongoing::after { content: ""; position: absolute; right: -10px; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--lane); animation: pulse 2.4s ease-in-out infinite; }
   @keyframes pulse { 50% { opacity: .2; } }
   .axis { height: 1.4rem; margin-top: .3rem; }
   .ticks { position: relative; height: 100%; border-top: 1px solid var(--line); }

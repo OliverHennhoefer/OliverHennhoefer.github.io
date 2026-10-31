@@ -1,46 +1,52 @@
 import type { IconName } from "./icons";
 
-export type Skill = { area: string; summary: string; tools: { name: string; icon?: IconName }[] };
+export type Pill = { name: string; icon?: IconName };
+export type Skill = { area: string; methods: string[]; tools: Pill[] };
 
 export const skills: Skill[] = [
   {
-    area: "Uncertainty quantification & inference",
-    summary: "Conformal inference (split, cross, bootstrap and weighted), conformal martingales, online false discovery rate control (LORD, SAFFRON, ADDIS), e-values and e-BH, resampling, and kernel density estimation.",
+    area: "Statistics & uncertainty",
+    methods: ["Uncertainty Quantification", "Conformal Prediction", "Conformal Martingales", "Multiple Testing", "Distribution-Free Inference"],
     tools: [],
   },
   {
-    area: "Unsupervised learning",
-    summary: "Anomaly and change-point detection on static and streaming data: isolation forests, sketches, matrix profiles, and drift detection, with clustering and prequential evaluation.",
-    tools: [{ name: "scikit-learn", icon: "scikitlearn" }, { name: "PyOD" }, { name: "River" }],
+    area: "Machine learning",
+    methods: ["Unsupervised Learning", "Anomaly Detection", "Change-Point Detection", "Continual Learning", "Time Series Analysis"],
+    tools: [],
   },
   {
-    area: "Deep learning & NLP",
-    summary: "Neural models and language models, including parameter-efficient fine-tuning of quantised LLMs and autoencoders for anomaly detection.",
+    area: "Deep learning & LLMs",
+    methods: ["LoRA", "Autoencoders", "MCP Servers"],
     tools: [{ name: "PyTorch", icon: "pytorch" }, { name: "Hugging Face", icon: "huggingface" }],
   },
   {
     area: "Geospatial analysis",
-    summary: "GIS, geostatistics, spatial econometrics, and hotspot and spatial outlier detection.",
-    tools: [{ name: "ArcGIS", icon: "arcgis" }, { name: "ArcPy" }],
+    methods: ["GIS", "Geostatistics", "Spatial Econometrics"],
+    tools: [{ name: "ArcGIS", icon: "arcgis" }],
   },
   {
     area: "Programming",
-    summary: "Object-oriented design and typed, tested Python and R packages.",
-    tools: [{ name: "Python", icon: "python" }, { name: "R", icon: "r" }, { name: "SQL" }, { name: "Java", icon: "java" }, { name: "TypeScript", icon: "typescript" }],
+    methods: [],
+    tools: [{ name: "Python", icon: "python" }, { name: "R", icon: "r" }, { name: "TypeScript", icon: "typescript" }, { name: "SQL", icon: "database" }, { name: "Swift", icon: "swift" }, { name: "Java", icon: "java" }, { name: "Claude Code", icon: "claude" }, { name: "Codex", icon: "openai" }],
   },
   {
-    area: "Applications & data systems",
-    summary: "REST services, interactive interfaces, time-series storage, and sensor streams.",
-    tools: [{ name: "FastAPI", icon: "fastapi" }, { name: "React", icon: "react" }, { name: "Shiny" }, { name: "PostgreSQL", icon: "postgresql" }, { name: "TimescaleDB", icon: "timescale" }, { name: "MQTT", icon: "mqtt" }],
+    area: "Web & data",
+    methods: [],
+    tools: [{ name: "FastAPI", icon: "fastapi" }, { name: "React", icon: "react" }, { name: "SvelteKit", icon: "svelte" }, { name: "Astro", icon: "astro" }, { name: "PostgreSQL", icon: "postgresql" }, { name: "TimescaleDB", icon: "timescale" }, { name: "SQLite", icon: "sqlite" }, { name: "MQTT", icon: "mqtt" }],
+  },
+  {
+    area: "Cloud & infrastructure",
+    methods: ["Infrastructure as Code"],
+    tools: [{ name: "Cloudflare", icon: "cloudflare" }, { name: "Docker", icon: "docker" }, { name: "Ansible", icon: "ansible" }, { name: "Traefik", icon: "traefik" }, { name: "Tailscale", icon: "tailscale" }, { name: "Linux", icon: "linux" }],
   },
   {
     area: "Delivery",
-    summary: "Reproducible experiments, automated testing, documentation, and containerised deployment.",
-    tools: [{ name: "Git", icon: "git" }, { name: "GitHub Actions", icon: "githubactions" }, { name: "pytest", icon: "pytest" }, { name: "Docker", icon: "docker" }],
+    methods: ["CI/CD", "Package Development"],
+    tools: [{ name: "Git", icon: "git" }, { name: "GitHub Actions", icon: "githubactions" }, { name: "pytest", icon: "pytest" }, { name: "Vitest", icon: "vitest" }, { name: "Playwright" }, { name: "uv", icon: "uv" }, { name: "PyPI", icon: "pypi" }],
   },
   {
     area: "Languages",
-    summary: "German (native), English (C2, proficient), Chinese (basic).",
+    methods: ["German · native", "English · C2", "Chinese · basic"],
     tools: [],
   },
 ];
