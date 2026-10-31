@@ -31,6 +31,8 @@ export const stations: Station[] = [
     org: "hka",
     period: "2023 – now",
     roles: [
+      { title: "PhD Candidate", lane: "Education", start: 2023 + 8 / 12, period: "ongoing", hideBar: true,
+        detail: "Doctoral research on conformal anomaly detection and uncertainty quantification." },
       { title: "Lecturer", lane: "Research & teaching", start: 2023 + 8 / 12, period: "2023 – now", hideBar: true,
         detail: "Courses in master’s and bachelor’s programmes.",
         items: ["Unsupervised Learning · M.Sc.", "Data Science · M.Sc.", "Software Engineering · B.Sc.", "Environmental Monitoring · B.Sc."] },

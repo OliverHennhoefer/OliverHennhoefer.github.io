@@ -38,4 +38,9 @@ export const skills: Skill[] = [
     summary: "Reproducible experiments, automated testing, documentation, and containerised deployment.",
     tools: [{ name: "Git", icon: "git" }, { name: "GitHub Actions", icon: "githubactions" }, { name: "pytest", icon: "pytest" }, { name: "Docker", icon: "docker" }],
   },
+  {
+    area: "Languages",
+    summary: "German, English, and basic Chinese.",
+    tools: [],
+  },
 ];

@@ -1,4 +1,4 @@
-export type Publication = { title: string; url: string; authors: string; venue: string; venueShort: string; kind: "Preprint" | "Conference" | "Workshop" | "Journal"; year: number };
+export type Publication = { title: string; url: string; authors: string; venue: string; venueShort: string; kind: "Preprint" | "Conference" | "Workshop" | "Journal"; talk?: string; year: number };
 
 export const publications: Publication[] = [
   {
@@ -26,6 +26,7 @@ export const publications: Publication[] = [
     "venue": "Fifteenth Symposium on Conformal and Probabilistic Prediction with Applications (COPA), PMLR 329, 613–632",
     "venueShort": "COPA, PMLR 329",
     "kind": "Conference",
+    "talk": "Talk",
     "year": 2026
   },
   {

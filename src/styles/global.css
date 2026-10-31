@@ -170,6 +170,7 @@ main.page-full { --content-width: var(--page-width); padding-block: 0 2rem; }
 .pub-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .6rem; margin: .35rem 0 0; font-size: .78rem; color: var(--muted); }
 .venue { font-weight: 500; color: var(--ink); border: 1px solid var(--ink); border-radius: 4px; padding: .02rem .4rem; font-size: .7rem; letter-spacing: .02em; }
 .kind { font-size: .7rem; text-transform: uppercase; letter-spacing: .07em; }
+.talk { font-size: .7rem; font-weight: 500; color: var(--paper); background: var(--ink); border-radius: 4px; padding: .05rem .4rem; letter-spacing: .02em; }
 .pub-meta .me { color: var(--ink); }
 
 /* Full lists (CV) */
