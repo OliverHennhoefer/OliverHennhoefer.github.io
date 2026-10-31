@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { site } from "../site";
 const { impressum } = site;
 ---
-<BaseLayout title="Impressum" description="Contact and legal information for Oliver Hennhöfer’s personal website." canonical="/impressum/">
+<BaseLayout title="Impressum" description="Contact and legal information for Oliver Hennhöfer’s personal website." canonical="/impressum/" noindex>
   <h1>Impressum</h1>
   <address>
     <p>{impressum.legalName}<br />{impressum.addressLine1}<br />{impressum.postalCode} {impressum.city}<br />{impressum.country}</p>
