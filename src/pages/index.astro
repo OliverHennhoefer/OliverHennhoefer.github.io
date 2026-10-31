@@ -62,6 +62,21 @@ const profiles = [
     </div>
   </section>
 
+  <section class="index-row" id="skills" aria-labelledby="skills-heading">
+    <h2 id="skills-heading">Skills</h2>
+    <ul class="skills-list">
+      {skills.map((skill) => (
+        <li>
+          <h3>{skill.area}</h3>
+          <ul class="tools" aria-label={skill.area}>
+            {skill.methods.map((method) => <li class="method">{method}</li>)}
+            {skill.tools.map((tool) => <li>{tool.icon && <Icon name={tool.icon} size={14} />}{tool.name}</li>)}
+          </ul>
+        </li>
+      ))}
+    </ul>
+  </section>
+
   <section class="index-row" id="software" aria-labelledby="software-heading">
     <h2 id="software-heading">Software</h2>
     <ul class="software">
@@ -107,25 +122,6 @@ const profiles = [
         </div>
       ))}
     </div>
-  </section>
-
-  <section class="index-row" id="skills" aria-labelledby="skills-heading">
-    <h2 id="skills-heading">Skills</h2>
-    <ul class="skills-list">
-      {skills.map((skill) => (
-        <li>
-          <h3>{skill.area}</h3>
-          <div>
-            <p>{skill.summary}</p>
-            {skill.tools.length > 0 && (
-              <ul class="tools" aria-label={`${skill.area} tools`}>
-                {skill.tools.map((tool) => <li>{tool.icon && <Icon name={tool.icon} size={14} />}{tool.name}</li>)}
-              </ul>
-            )}
-          </div>
-        </li>
-      ))}
-    </ul>
   </section>
 
   <section class="index-row" id="elsewhere" aria-labelledby="elsewhere-heading">

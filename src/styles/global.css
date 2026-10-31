@@ -127,13 +127,15 @@ main.page-full { --content-width: var(--page-width); padding-block: 0 2rem; }
 
 /* Skills */
 .skills-list { list-style: none; padding: 0; margin: 0; }
-.skills-list > li { display: grid; grid-template-columns: 14rem minmax(0, 1fr); gap: 1rem; margin: 0; padding-block: .85rem; border-top: 1px solid var(--line); }
+.skills-list > li { display: grid; grid-template-columns: 14rem minmax(0, 1fr); gap: 1rem; align-items: baseline; margin: 0; padding-block: .7rem; border-top: 1px solid var(--line); }
 .skills-list > li:first-child { border-top: 0; padding-top: 0; }
 .skills-list h3 { font-size: .9rem; font-weight: 500; margin: 0; }
 .skills-list p { margin: 0; font-size: .88rem; color: var(--muted); max-width: 42rem; }
-.tools { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: .55rem 0 0; }
+.tools { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: 0; }
+.skills-list .tools { margin-top: -.2rem; }
 .tools li { display: inline-flex; align-items: center; gap: .4rem; margin: 0; font-size: .78rem; padding: .22rem .65rem; border: 1px solid var(--line); border-radius: 999px; }
 .tools .icon { flex: none; }
+.tools .method { background: var(--soft, rgba(127,127,127,.08)); border-color: transparent; }
 
 /* Goals */
 .goals { list-style: none; padding: 0; margin: 0; }
@@ -212,6 +214,7 @@ address { font-style: normal; }
   .pub-year-group { grid-template-columns: 1fr; gap: .5rem; }
   .site-header nav a:not([href="/cv/"]):not([href="/#cv"]) { display: none; }
   .career li { padding-block: .5rem; }
+  .skills-list .tools { margin-top: .35rem; }
 }
 @media (max-width: 600px) {
   :root { font-size: 16px; }
