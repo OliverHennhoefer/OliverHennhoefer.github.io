@@ -26,7 +26,6 @@ export const publications: Publication[] = [
     "venue": "Fifteenth Symposium on Conformal and Probabilistic Prediction with Applications (COPA), PMLR 329, 613–632",
     "venueShort": "COPA, PMLR 329",
     "kind": "Conference",
-    "talk": "Talk",
     "year": 2026
   },
   {
