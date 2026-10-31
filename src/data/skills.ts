@@ -16,7 +16,7 @@ export const skills: Skill[] = [
   },
   {
     area: "Deep learning & LLMs",
-    methods: ["LoRA", "Autoencoders", "MCP Servers"],
+    methods: ["LoRA", "MCP Servers"],
     tools: [{ name: "PyTorch", icon: "pytorch" }, { name: "Hugging Face", icon: "huggingface" }],
   },
   {
