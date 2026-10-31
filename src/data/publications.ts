@@ -1,4 +1,4 @@
-export type Publication = { title: string; url: string; authors: string; venue: string; year: number };
+export type Publication = { title: string; url: string; authors: string; venue: string; venueShort: string; year: number };
 
 export const publications: Publication[] = [
   {
@@ -6,6 +6,7 @@ export const publications: Publication[] = [
     "url": "https://arxiv.org/abs/2603.23205",
     "authors": "O Hennhöfer, C Preisach",
     "venue": "arXiv preprint arXiv:2603.23205",
+    "venueShort": "arXiv",
     "year": 2026
   },
   {
@@ -13,6 +14,7 @@ export const publications: Publication[] = [
     "url": "https://aclanthology.org/2026.law-main.20/",
     "authors": "S Venturini, O Hennhöfer, S Kinkel, J Strötgen",
     "venue": "Proceedings of the 20th Linguistic Annotation Workshop (LAW XX), 309–322",
+    "venueShort": "LAW XX",
     "year": 2026
   },
   {
@@ -20,6 +22,7 @@ export const publications: Publication[] = [
     "url": "https://proceedings.mlr.press/v329/hennhofer26a.html",
     "authors": "O Hennhöfer, M Kirsch, C Preisach",
     "venue": "Fifteenth Symposium on Conformal and Probabilistic Prediction with Applications (COPA), PMLR 329, 613–632",
+    "venueShort": "COPA, PMLR 329",
     "year": 2026
   },
   {
@@ -27,6 +30,7 @@ export const publications: Publication[] = [
     "url": "https://doi.org/10.1145/3723010.3723031",
     "authors": "K Marquardt, Q Shang, O Hennhöfer, L Happe",
     "venue": "Proceedings of the 6th European Conference on Software Engineering Education (ECSEE), 145–153",
+    "venueShort": "ECSEE",
     "year": 2025
   },
   {
@@ -34,6 +38,7 @@ export const publications: Publication[] = [
     "url": "https://doi.org/10.1109/ICKG63256.2024.00022",
     "authors": "O Hennhöfer, C Preisach",
     "venue": "IEEE International Conference on Knowledge Graph (ICKG), 110–119",
+    "venueShort": "IEEE ICKG",
     "year": 2024
   },
   {
@@ -41,6 +46,7 @@ export const publications: Publication[] = [
     "url": "https://doi.org/10.1553/giscience2021_02_s136",
     "authors": "O Hennhöfer, J Bruns, P Ullrich, A Heiß, G Sharipov, D Paraforos",
     "venue": "GI_Forum, 9(2), 136–151",
+    "venueShort": "GI_Forum",
     "year": 2021
   }
 ];

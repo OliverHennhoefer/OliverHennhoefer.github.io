@@ -6,15 +6,21 @@ import { projects } from "../data/projects";
 import { publications } from "../data/publications";
 import { site } from "../site";
 ---
-<BaseLayout title="CV" description="Research experience, software, and publications by Oliver Hennhöfer." canonical="/cv/">
-  <section aria-labelledby="cv-heading">
-    <p class="eyebrow">Curriculum vitae</p>
-    <h1 id="cv-heading">Oliver Hennhöfer</h1>
-    <p class="lede">Research in machine learning and statistical methodology, with a focus on uncertainty, anomaly detection, and conformal inference.</p>
-    <p class="cv-meta">{site.affiliation}<br /><a href={`mailto:${site.email}`}>{site.email}</a></p>
+<BaseLayout title="CV" description="Research experience, software, and publications by Oliver Hennhöfer." canonical="/cv/" full>
+  <section class="index-row index-intro cv-head" aria-labelledby="cv-heading">
+    <span class="index-label">Curriculum vitae</span>
+    <div>
+      <h1 id="cv-heading">Oliver Hennhöfer</h1>
+      <p class="lede">Research in machine learning and statistical methodology, with a focus on uncertainty, anomaly detection, and conformal inference.</p>
+      <div class="cv-actions">
+        <button type="button" class="button no-print" onclick="window.print()">Save as PDF</button>
+        <span>{site.affiliation} · <a href={`mailto:${site.email}`}>{site.email}</a></span>
+      </div>
+    </div>
   </section>
-  <section class="cv-section" aria-labelledby="experience-heading">
+  <section class="index-row" aria-labelledby="experience-heading">
     <h2 id="experience-heading">Experience</h2>
+    <div class="cv-entries">
     <article>
       <h3>Research Associate</h3>
       <p class="cv-meta">Intelligent Systems Research Group, Karlsruhe University of Applied Sciences<br />September 2023 — Present</p>
@@ -49,9 +55,11 @@ import { site } from "../site";
       <h3>Intern · Traffic Statistics</h3>
       <p class="cv-meta">Modus Consult Gericke · October 2015 — March 2016</p>
     </article>
+    </div>
   </section>
-  <section class="cv-section" aria-labelledby="teaching-heading">
+  <section class="index-row" aria-labelledby="teaching-heading">
     <h2 id="teaching-heading">Teaching</h2>
+    <div class="cv-entries">
     <article>
       <h3>Lecturer</h3>
       <p class="cv-meta">Karlsruhe University of Applied Sciences · September 2023 — Present</p>
@@ -60,9 +68,11 @@ import { site } from "../site";
         <li>Bachelor’s courses: Software Engineering; Environmental Monitoring.</li>
       </ul>
     </article>
+    </div>
   </section>
-  <section class="cv-section" aria-labelledby="education-heading">
+  <section class="index-row" aria-labelledby="education-heading">
     <h2 id="education-heading">Education</h2>
+    <div class="cv-entries">
     <article>
       <h3>M.Sc. Geomatics</h3>
       <p class="cv-meta">Karlsruhe University of Applied Sciences · 2018 — 2020</p>
@@ -74,10 +84,12 @@ import { site } from "../site";
       <p class="cv-meta">Karlsruhe University of Applied Sciences · 2013 — 2017</p>
       <p>Thesis: <em lang="de">Statistik und Geoanalyse mit R im hochschulischen Kontext</em>.</p>
     </article>
+    </div>
   </section>
-  <section class="cv-section" aria-labelledby="skills-heading">
+  <section class="index-row" aria-labelledby="skills-heading">
     <h2 id="skills-heading">Technical background</h2>
-    <ul>
+    <div class="cv-entries">
+    <ul class="skills">
       <li><strong>Statistics &amp; inference.</strong> Statistical modelling, econometrics, resampling, density estimation, and uncertainty quantification; conformal inference, sequential testing, and false discovery rate control with p-values and e-values.</li>
       <li><strong>Machine learning.</strong> Anomaly and change-point detection, online learning, model evaluation, and prediction pipelines; deep learning and NLP with language models. Tools include scikit-learn, PyOD, PyTorch, and Hugging Face Transformers.</li>
       <li><strong>Geospatial analysis.</strong> GIS, geostatistics, spatial econometrics, clustering, hotspot and spatial outlier detection, and environmental data analysis; ArcGIS and ArcPy.</li>
@@ -85,13 +97,18 @@ import { site } from "../site";
       <li><strong>Data systems.</strong> Relational data modelling and PostgreSQL, asynchronous services, MQTT sensor streams, telemetry processing, and monitoring dashboards.</li>
       <li><strong>Scientific software &amp; delivery.</strong> Python and R package development, reproducible experiments, automated testing, documentation, and release workflows; Git, GitHub Actions, and Docker, with oversight of containerized deployment.</li>
     </ul>
+    </div>
   </section>
-  <section class="cv-section" aria-labelledby="projects-heading">
+  <section class="index-row" aria-labelledby="projects-heading">
     <h2 id="projects-heading">Research software</h2>
+    <div class="cv-entries">
     <ProjectList projects={projects} />
+    </div>
   </section>
-  <section class="cv-section" aria-labelledby="publications">
+  <section class="index-row" aria-labelledby="publications">
     <h2 id="publications">Publications</h2>
+    <div class="cv-entries">
     <PublicationList publications={publications} />
+    </div>
   </section>
 </BaseLayout>

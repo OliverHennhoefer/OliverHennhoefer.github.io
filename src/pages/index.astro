@@ -1,31 +1,81 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import ProjectList from "../components/ProjectList.astro";
-import PublicationList from "../components/PublicationList.astro";
+import CareerTimeline from "../components/CareerTimeline.astro";
+import { career } from "../data/career";
 import { projects } from "../data/projects";
 import { publications } from "../data/publications";
+import visited from "../data/visited-countries.json";
 import { site } from "../site";
+
+const surname = "Hennhöfer";
+const authorParts = (authors: string) => authors.split(",").map((name) => name.trim().split(" ").slice(1).join(" "));
+const highlights = career.filter((entry) => entry.highlight);
 ---
-<BaseLayout>
-  <section class="intro" aria-labelledby="intro-heading">
-    <p class="eyebrow">Machine learning &amp; statistical inference</p>
-    <h1 id="intro-heading">Oliver Hennhöfer</h1>
-    <p class="lede">I research uncertainty in machine learning and develop software that puts statistical methods into practice.</p>
-    <p class="intro-context">I’m a research associate and lecturer at {site.affiliation}, working on conformal inference, anomaly detection, and sequential testing. My background spans geospatial analysis, machine learning in public transport, and research software development.</p>
-    <ul class="profile-links" aria-label="Profile links">
-      <li><a href={`mailto:${site.email}`}>Email</a></li>
-      <li><a href={site.socials.scholar}>Google Scholar</a></li>
-      <li><a href={site.socials.github}>GitHub</a></li>
-      <li><a href={site.socials.linkedin}>LinkedIn</a></li>
-      <li><a href={site.socials.x}>X</a></li>
+<BaseLayout full>
+  <section class="index-row index-intro" aria-labelledby="intro-heading">
+    <span class="index-label"></span>
+    <div>
+      <h1 id="intro-heading">Oliver Hennhöfer</h1>
+      <p class="lede">Machine learning with statistical guarantees, from research to production.</p>
+      <ul class="contact-line" aria-label="Contact and profiles">
+        <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        <li>Karlsruhe, Germany</li>
+        <li><a href={site.socials.linkedin}>LinkedIn</a></li>
+        <li><a href={site.socials.scholar}>Google Scholar</a></li>
+        <li><a href={site.socials.github}>GitHub</a></li>
+        <li><a href={site.socials.x}>X</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="index-row" aria-labelledby="now-heading">
+    <h2 id="now-heading">Now</h2>
+    <p class="now">Research Associate and Lecturer in the Intelligent Systems Research Group at {site.affiliation}. <span>I research conformal inference, anomaly detection, and sequential testing, lead development of <a href={projects[0].links[0].href}>off-key</a> within BiFlex-Industrie, and teach Unsupervised Learning and Data Science at master’s level.</span></p>
+  </section>
+
+  <section class="index-row" aria-labelledby="path-heading">
+    <h2 id="path-heading">Path</h2>
+    <div>
+      <CareerTimeline />
+      <ul class="career">
+        {highlights.map((entry) => (
+          <li><span class="when tnum">{entry.label}</span><span>{entry.role} <span class="where">· {entry.organisation}</span></span></li>
+        ))}
+      </ul>
+      <a class="more-link" href="/cv/">Full CV →</a>
+    </div>
+  </section>
+
+  <section class="index-row" aria-labelledby="software-heading">
+    <h2 id="software-heading">Software</h2>
+    <ul class="compact-list">
+      {projects.map((project) => (
+        <li><a class="name" href={project.links[0].href}>{project.name}</a><p>{project.summary}</p></li>
+      ))}
     </ul>
   </section>
-  <section class="home-section" aria-labelledby="work-heading">
-    <div class="section-heading"><h2 id="work-heading">Research software</h2></div>
-    <ProjectList projects={projects} />
+
+  <section class="index-row" aria-labelledby="publications-heading">
+    <h2 id="publications-heading">Publications</h2>
+    <ol class="pub-list">
+      {publications.map((publication) => {
+        const authors = authorParts(publication.authors);
+        const shown = authors.length > 4 ? [authors[0], "et al."] : authors;
+        return (
+          <li>
+            <span class="year">{publication.year}</span>
+            <div>
+              <a href={publication.url}>{publication.title}</a>
+              <p>{shown.map((name, i) => <>{i > 0 && (name === "et al." ? " " : ", ")}{name === surname ? <span class="me">{name}</span> : name}</>)} · {publication.venueShort}</p>
+            </div>
+          </li>
+        );
+      })}
+    </ol>
   </section>
-  <section class="home-section" aria-labelledby="papers-heading">
-    <div class="section-heading"><h2 id="papers-heading">Publications</h2></div>
-    <PublicationList publications={publications} />
+
+  <section class="index-row" aria-labelledby="elsewhere-heading">
+    <h2 id="elsewhere-heading">Elsewhere</h2>
+    <p class="now">{visited.length} countries and counting. <a href="/travel/">See the map</a></p>
   </section>
 </BaseLayout>

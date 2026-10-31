@@ -11,9 +11,10 @@ type Props = {
   updatedDate?: Date;
   noindex?: boolean;
   wide?: boolean;
+  full?: boolean;
 };
 const { title = site.title, description = site.description, canonical = Astro.url.pathname,
-  type = "website", publishDate, updatedDate, noindex = false, wide = false } = Astro.props;
+  type = "website", publishDate, updatedDate, noindex = false, wide = false, full = false } = Astro.props;
 const pageTitle = title === site.title ? title : `${title} — ${site.title}`;
 const canonicalUrl = new URL(canonical, site.url).toString();
 const imageUrl = new URL("/frontispiece.png", site.url).toString();
@@ -35,7 +36,7 @@ const structuredData = {
     } : canonical === "/" || canonical === "/cv/" ? { mainEntity: { "@id": person["@id"] } } : {}),
   }],
 };
-const navigation = [{ href: "/", label: "Home" }, { href: "/blog/", label: "Writing" }, { href: "/cv/", label: "CV" }, { href: "/travel/", label: "Elsewhere" }];
+const navigation = [{ href: "/cv/", label: "CV" }, { href: "/blog/", label: "Writing" }];
 const isCurrent = (href: string) => href === "/" ? Astro.url.pathname === "/" : (Astro.url.pathname.startsWith(href) || (href === "/blog/" && Astro.url.pathname.startsWith("/reports/")));
 ---
 <!doctype html>
@@ -59,7 +60,8 @@ const isCurrent = (href: string) => href === "/" ? Astro.url.pathname === "/" : 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
-    <meta name="theme-color" content="#faf9f6" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
     {!noindex && <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, "\\u003c")} />}
   </head>
   <body>
@@ -70,10 +72,10 @@ const isCurrent = (href: string) => href === "/" ? Astro.url.pathname === "/" : 
         {navigation.map(({ href, label }) => <a href={href} aria-current={isCurrent(href) ? "page" : undefined}>{label}</a>)}
       </nav>
     </header>
-    <main id="main" class:list={{ "reader-wide": wide }} tabindex="-1"><slot /></main>
+    <main id="main" class:list={{ "reader-wide": wide, "page-full": full }} tabindex="-1"><slot /></main>
     <footer class="site-footer">
       <span>Oliver Hennhöfer</span>
-      <div><a href={`mailto:${site.email}`}>Email</a><a href="/rss.xml">RSS</a><a href={site.impressumPath}>Impressum</a></div>
+      <div><a href="/travel/">Elsewhere</a><a href="/rss.xml">RSS</a><a href={site.impressumPath}>Impressum</a></div>
     </footer>
   </body>
 </html>

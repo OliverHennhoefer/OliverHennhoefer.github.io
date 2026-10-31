@@ -1,0 +1,50 @@
+---
+import { career, type CareerLane } from "../data/career";
+
+const now = new Date();
+const today = now.getUTCFullYear() + now.getUTCMonth() / 12;
+const start = Math.min(...career.map((entry) => entry.start));
+const end = Math.ceil(today + 0.25);
+const pct = (year: number) => `${(((year - start) / (end - start)) * 100).toFixed(2)}%`;
+const lanes: CareerLane[] = ["Education", "Industry", "Research"];
+const ticks = Array.from({ length: Math.floor((end - start) / 2) + 1 }, (_, i) => Math.ceil(start / 2) * 2 + i * 2).filter((year) => year > start && year < end);
+const summary = career.slice().sort((a, b) => a.start - b.start).map((entry) => `${entry.label}: ${entry.role}, ${entry.organisation}`).join("; ");
+---
+<figure class="timeline" aria-label={`Career timeline. ${summary}.`}>
+  {lanes.map((lane) => (
+    <div class="lane" aria-hidden="true">
+      <span class="lane-label">{lane}</span>
+      <div class="track">
+        {career.filter((entry) => entry.lane === lane).map((entry) => (
+          <span
+            class:list={["bar", { hollow: lane === "Education", ongoing: entry.end === undefined }]}
+            style={`left:${pct(entry.start)};width:calc(${pct(entry.end ?? today)} - ${pct(entry.start)} - 2px)`}
+            title={`${entry.role} · ${entry.organisation} · ${entry.label}`}
+          ></span>
+        ))}
+      </div>
+    </div>
+  ))}
+  <div class="lane axis" aria-hidden="true">
+    <span></span>
+    <div class="ticks">
+      {ticks.map((year, i) => <span class:list={{ minor: i % 2 === 1 }} style={`left:${pct(year)}`}>{year}</span>)}
+    </div>
+  </div>
+</figure>
+<style>
+  .timeline { margin: 0 0 1.6rem; }
+  .lane { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); align-items: center; height: 1.6rem; }
+  .lane-label { font-size: .72rem; color: var(--muted); }
+  .track { position: relative; height: 100%; }
+  .track::before { content: ""; position: absolute; inset: 50% 0 auto; border-top: 1px dotted var(--faint); }
+  .bar { position: absolute; top: 50%; height: 8px; margin-top: -4px; border-radius: 2px; background: var(--ink); }
+  .bar.hollow { background: var(--paper); border: 1px solid var(--ink); }
+  .bar.ongoing::after { content: ""; position: absolute; right: -9px; top: 50%; width: 5px; height: 5px; margin-top: -2.5px; border-radius: 50%; background: var(--ink); animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .2; } }
+  .axis { height: 1.4rem; margin-top: .3rem; }
+  .ticks { position: relative; height: 100%; border-top: 1px solid var(--line); }
+  .ticks span { position: absolute; top: .3rem; transform: translateX(-50%); font-size: .68rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  @media (max-width: 600px) { .lane { grid-template-columns: 5rem minmax(0, 1fr); } .ticks .minor { display: none; } }
+  @media print { .timeline { display: none; } }
+</style>
