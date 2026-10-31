@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { ids, person, profileLinks, researchGraph, university, website } from "../seo";
 import { site } from "../site";
 
 type Props = {
@@ -15,26 +16,29 @@ type Props = {
 };
 const { title = site.title, description = site.description, canonical = Astro.url.pathname,
   type = "website", publishDate, updatedDate, noindex = false, wide = false, full = false } = Astro.props;
-const pageTitle = title === site.title ? title : `${title} — ${site.title}`;
+const pageTitle = title.startsWith(site.title) ? title : `${title} — ${site.title}`;
 const canonicalUrl = new URL(canonical, site.url).toString();
-const imageUrl = new URL("/frontispiece.png", site.url).toString();
-const person = {
-  "@type": "Person", "@id": `${site.url}/#person`, name: site.author, url: site.url,
-  affiliation: { "@type": "Organization", name: site.affiliation },
-  sameAs: Object.values(site.socials),
-};
+const isProfile = canonical === "/" || canonical === "/cv/";
+// Profile pages preview with the portrait; everything else with the frontispiece drawing.
+const image = isProfile
+  ? { path: site.portrait.path, width: site.portrait.width, height: site.portrait.height, alt: `Portrait of ${site.author}` }
+  : { path: "/frontispiece.png", width: 1983, height: 793, alt: "Pen drawings of scatter plots, step functions and density contours" };
+const imageUrl = new URL(image.path, site.url).toString();
+const imageAlt = image.alt;
+const ogType = type === "article" ? "article" : canonical === "/" ? "profile" : "website";
 const articleSchemaType = canonical.startsWith("/reports/") ? "Report" : "BlogPosting";
 const structuredData = {
   "@context": "https://schema.org",
-  "@graph": [person, {
-    "@type": type === "article" ? articleSchemaType : canonical === "/" || canonical === "/cv/" ? "ProfilePage" : "WebPage",
-    "@id": canonicalUrl, url: canonicalUrl, name: pageTitle, description,
+  "@graph": [person, university, website, {
+    "@type": type === "article" ? articleSchemaType : isProfile ? "ProfilePage" : "WebPage",
+    "@id": canonicalUrl, url: canonicalUrl, name: pageTitle, description, inLanguage: "en",
+    isPartOf: { "@id": ids.website },
     ...(type === "article" ? {
       headline: title, image: imageUrl, author: { "@id": person["@id"] },
       datePublished: publishDate?.toISOString(),
       dateModified: (updatedDate ?? publishDate)?.toISOString(),
-    } : canonical === "/" || canonical === "/cv/" ? { mainEntity: { "@id": person["@id"] } } : {}),
-  }],
+    } : isProfile ? { mainEntity: { "@id": person["@id"] }, about: { "@id": person["@id"] } } : {}),
+  }, ...(isProfile ? researchGraph : [])],
 };
 const navigation = [{ href: "/#cv", label: "CV" }, { href: "/#skills", label: "Skills" }, { href: "/#software", label: "Software" }, { href: "/#publications", label: "Publications" }, { href: "/cv/", label: "PDF" }];
 const isCurrent = (href: string) => !href.includes("#") && Astro.url.pathname.startsWith(href);
@@ -46,20 +50,38 @@ const isCurrent = (href: string) => !href.includes("#") && Astro.url.pathname.st
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <meta name="author" content={site.author} />
     {!noindex && <link rel="canonical" href={canonicalUrl} />}
     <link rel="preload" href="/fonts/newsreader/newsreader-latin-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="robots" content={noindex ? "noindex,follow" : "index,follow"} />
+    <meta name="robots" content={noindex ? "noindex,follow" : "index,follow,max-image-preview:large,max-snippet:-1"} />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+    <link rel="alternate" type="text/plain" title="Summary for language models" href="/llms.txt" />
+    {profileLinks.map((href) => <link rel="me" href={href} />)}
+    <meta property="og:site_name" content={site.title} />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content={type} />
+    <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={imageUrl} />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image:width" content={String(image.width)} />
+    <meta property="og:image:height" content={String(image.height)} />
+    <meta property="og:image:alt" content={imageAlt} />
+    {ogType === "profile" && <>
+      <meta property="profile:first_name" content={site.givenName} />
+      <meta property="profile:last_name" content={site.familyName} />
+      <meta property="profile:username" content="OliverHennhoefer" />
+    </>}
+    <meta name="twitter:card" content={image.width > image.height ? "summary_large_image" : "summary"} />
+    <meta name="twitter:site" content={site.twitter} />
+    <meta name="twitter:creator" content={site.twitter} />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={imageAlt} />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
     {!noindex && <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, "\\u003c")} />}

@@ -7,7 +7,11 @@ import remarkMath from "remark-math";
 
 export default defineConfig({
   site: "https://oliverhennhoefer.github.io",
-  integrations: [mdx(), sitemap({ filter: (page) => !new URL(page).pathname.startsWith("/404") && new URL(page).pathname !== "/reports/" })],
+  integrations: [mdx(), sitemap({
+    // noindex pages (404, Impressum) and empty index routes stay out of the sitemap.
+    filter: (page) => !["/404", "/impressum"].some((path) => new URL(page).pathname.startsWith(path)) && new URL(page).pathname !== "/reports/",
+    serialize: (item) => ({ ...item, lastmod: new Date().toISOString() }),
+  })],
   markdown: {
     processor: unified({
       remarkPlugins: [remarkMath],

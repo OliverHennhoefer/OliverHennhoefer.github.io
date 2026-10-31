@@ -7,6 +7,8 @@ const root = resolve('dist');
 const origin = 'https://oliverhennhoefer.github.io';
 // These documentation sites are deployed by their own repositories.
 const siblingSites = new Set(['/nonconform/', '/online-fdr/', '/aberrant/']);
+// Pages kept out of search results: no canonical, not in the sitemap.
+const noindexRoutes = new Set(['/404.html', '/impressum/']);
 const walk = async (directory) => (await Promise.all((await readdir(directory, { withFileTypes: true }))
   .map((entry) => entry.isDirectory() ? walk(join(directory, entry.name)) : join(directory, entry.name)))).flat();
 const files = await walk(root);
@@ -54,15 +56,27 @@ for (const [file, html] of documents) {
     assert.match(html, /href="\/blog\/" aria-current="page"/);
   }
   const canonical = tags.find((tag) => tag.rel === 'canonical');
-  if (route === '/404.html') {
+  if (noindexRoutes.has(route)) {
     assert.match(html, /name="robots" content="noindex,follow"/);
-    assert.equal(canonical, undefined, '404 must not have a canonical URL');
+    assert.equal(canonical, undefined, `${route}: noindex pages must not have a canonical URL`);
     continue;
   }
   assert.equal(canonical?.href, `${origin}${route}`, `${route}: incorrect canonical`);
+  assert.match(html, /<meta name="description" content="[^"]*Hennh/, `${route}: description should name the author`);
+  for (const property of ['og:title', 'og:description', 'og:url', 'og:image', 'og:site_name']) {
+    assert.match(html, new RegExp(`property="${property}" content="[^"]+"`), `${route}: missing ${property}`);
+  }
   for (const [, json] of html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>(.*?)<\/script>/gs)) {
     const graph = JSON.parse(json)['@graph'];
-    assert(graph.some((item) => item['@type'] === 'Person'));
+    const person = graph.find((item) => item['@type'] === 'Person');
+    assert(person, `${route}: missing Person`);
+    assert(person.alternateName.includes('Oliver Hennhoefer'), `${route}: Person needs the ASCII spelling`);
+    assert(person.sameAs.length >= 3, `${route}: Person needs profile links`);
+    await destination(new URL(person.image.url).pathname);
+    if (route === '/' || route === '/cv/') {
+      assert(graph.some((item) => item['@type'] === 'ProfilePage' && item.mainEntity?.['@id'] === person['@id']), `${route}: ProfilePage must point to Person`);
+      assert(graph.some((item) => item['@type'] === 'ScholarlyArticle'), `${route}: publications missing from structured data`);
+    }
     if (route.startsWith('/blog/') && route !== '/blog/') {
       assert(graph.some((item) => item['@type'] === 'BlogPosting' && item.author?.['@id'] && item.datePublished));
     }
@@ -74,13 +88,23 @@ for (const [, href] of home.matchAll(/<link[^>]*href="([^"]+\.css)"[^>]*>/g)) {
   const css = await readFile(await destination(new URL(href, origin).pathname), 'utf8');
   assert(!css.includes('KaTeX_Main'), 'Math CSS should not be loaded by the homepage');
 }
+const sitemapUrls = [];
 for (const sitemap of files.filter((file) => /sitemap.*\.xml$/.test(file))) {
   const xml = await readFile(sitemap, 'utf8');
   for (const [, href] of xml.matchAll(/<loc>(.*?)<\/loc>/g)) {
-    assert(!new URL(href).pathname.startsWith('/404'), '404 must not be in sitemap');
-    await destination(new URL(href).pathname);
+    const { pathname } = new URL(href);
+    assert(![...noindexRoutes].some((route) => pathname.startsWith(route.replace('.html', ''))), `${pathname}: noindex page must not be in sitemap`);
+    await destination(pathname);
+    sitemapUrls.push(pathname);
   }
 }
+assert(sitemapUrls.includes('/') && sitemapUrls.includes('/cv/'), 'Sitemap must list home and CV');
+const robots = await readFile(join(root, 'robots.txt'), 'utf8');
+assert.match(robots, /^Sitemap: https:\/\/oliverhennhoefer\.github\.io\/sitemap-index\.xml$/m, 'robots.txt must point to the sitemap');
+assert(!/^Disallow: \/\s*$/m.test(robots), 'robots.txt must not block the site');
+const llms = await readFile(join(root, 'llms.txt'), 'utf8');
+assert.match(llms, /^# Oliver Hennhöfer\n\n> /, 'llms.txt must start with a title and summary');
+assert(llms.includes('Hennhoefer') && llms.includes(`${origin}/cv/`), 'llms.txt must give the ASCII spelling and link the CV');
 const travel = documents.get(join(root, 'index.html'));
 assert(travel, 'Home page with the travel map must be generated');
 const expectedPlaces = JSON.parse(await readFile('src/data/visited-countries.json', 'utf8')).sort();
@@ -107,4 +131,4 @@ for (const [mainland, territory, point] of [
   assert(!geoContains(mapData.features.find((region) => region.properties.name === mainland), point), `${mainland} must not include ${territory}`);
 }
 
-console.log(`Verified ${htmlFiles.length} pages: headings, internal links, anchors, metadata, sitemap, travel map, and math CSS isolation.`);
+console.log(`Verified ${htmlFiles.length} pages: headings, internal links, anchors, metadata, structured data, sitemap, robots, llms.txt, travel map, and math CSS isolation.`);
