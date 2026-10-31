@@ -26,6 +26,10 @@ export type Role = {
 
 export type Station = { org: OrgKey; period: string; roles: Role[] };
 
+/** Anchor id of a role in the stations list, so timeline bars can link to it. */
+export const roleId = (org: OrgKey, role: Pick<Role, "title">) =>
+  `role-${org}-${role.title.normalize("NFKD").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+
 // Newest first.
 export const stations: Station[] = [
   {
