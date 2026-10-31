@@ -25,16 +25,19 @@ const profiles = [
 ---
 <BaseLayout title={site.homeTitle} canonical="/" full>
   <section class="index-row index-intro" aria-labelledby="intro-heading">
-    <img class="portrait" src="/portrait-480.jpg" srcset="/portrait-480.jpg 480w, /portrait.jpg 1200w" sizes="(max-width: 760px) 6rem, 11rem" width="480" height="480" alt={`Portrait of ${site.author}`} fetchpriority="high" />
-    <div>
-      <div class="nameplate">
-        <h1 id="intro-heading">Oliver Hennhöfer</h1>
-        <p class="lede">Unsupervised Learning &amp; Uncertainty Quantification</p>
+    <span class="index-label"></span>
+    <div class="intro-body">
+      <div>
+        <div class="nameplate">
+          <h1 id="intro-heading">Oliver Hennhöfer</h1>
+          <p class="lede">Unsupervised Learning &amp; Uncertainty Quantification</p>
+        </div>
+        <p class="role-line">PhD candidate, Research Associate &amp; Lecturer · {site.affiliation}</p>
+        <ul class="profiles" aria-label="Contact and profiles">
+          {profiles.map(({ href, label, icon }) => <li><a href={href}><Icon name={icon} />{label}</a></li>)}
+        </ul>
       </div>
-      <p class="role-line">PhD candidate, Research Associate &amp; Lecturer · {site.affiliation}</p>
-      <ul class="profiles" aria-label="Contact and profiles">
-        {profiles.map(({ href, label, icon }) => <li><a href={href}><Icon name={icon} />{label}</a></li>)}
-      </ul>
+      <img class="portrait" src="/portrait-480.jpg" srcset="/portrait-480.jpg 480w, /portrait.jpg 1200w" sizes="(max-width: 760px) 5.5rem, 12rem" width="480" height="480" alt={`Portrait of ${site.author}`} fetchpriority="high" />
     </div>
   </section>
 
