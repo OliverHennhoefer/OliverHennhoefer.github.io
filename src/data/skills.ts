@@ -27,7 +27,7 @@ export const skills: Skill[] = [
   {
     area: "Programming",
     methods: [],
-    tools: [{ name: "Python", icon: "python" }, { name: "R", icon: "r" }, { name: "TypeScript", icon: "typescript" }, { name: "SQL", icon: "database" }, { name: "Swift", icon: "swift" }, { name: "Java", icon: "java" }],
+    tools: [{ name: "Python", icon: "python" }, { name: "R", icon: "r" }, { name: "TypeScript", icon: "typescript" }, { name: "SQL", icon: "database" }, { name: "Swift", icon: "swift" }, { name: "Java", icon: "java" }, { name: "Claude Code", icon: "claude" }, { name: "Codex", icon: "openai" }],
   },
   {
     area: "Web & data",
