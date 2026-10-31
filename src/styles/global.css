@@ -15,6 +15,7 @@
   --c-edu: #5d7b98;
   --c-ind: #bf9757;
   --c-res: #6c9077;
+  --c-tea: #8f7299;
   --serif: "Newsreader", Georgia, serif;
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
@@ -42,6 +43,7 @@
     --c-edu: #86a3c0;
     --c-ind: #d5b27a;
     --c-res: #93b49c;
+    --c-tea: #b49cbc;
   }
 }
 * { box-sizing: border-box; }
@@ -112,6 +114,7 @@ main.page-full { --content-width: var(--page-width); padding-block: 0 2rem; }
 .lane-edu { --lane: var(--c-edu); }
 .lane-ind { --lane: var(--c-ind); }
 .lane-res { --lane: var(--c-res); }
+.lane-tea { --lane: var(--c-tea); }
 .role-line { margin: .7rem 0 0; font-size: .85rem; color: var(--muted); }
 
 /* Software list */

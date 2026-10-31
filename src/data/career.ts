@@ -1,8 +1,8 @@
 // Dates are decimal years (month / 12). `end` omitted means ongoing.
 export type OrgKey = "hka" | "init" | "disy" | "ionos" | "modus";
-export type Lane = "Education" | "Industry" | "Research & teaching";
+export type Lane = "Education" | "Industry" | "Research" | "Teaching";
 /** CSS class suffix for each lane's colour. */
-export const laneKey: Record<Lane, "edu" | "ind" | "res"> = { Education: "edu", Industry: "ind", "Research & teaching": "res" };
+export const laneKey: Record<Lane, "edu" | "ind" | "res" | "tea"> = { Education: "edu", Industry: "ind", Research: "res", Teaching: "tea" };
 
 export const organisations: Record<OrgKey, string> = {
   hka: "Karlsruhe University of Applied Sciences",
@@ -38,9 +38,9 @@ export const stations: Station[] = [
     roles: [
       { title: "PhD Candidate", lane: "Education", start: 2023 + 8 / 12, period: "ongoing", hideBar: true,
         points: ["Working title: Operationalizing Conformal Anomaly Detection: Scoring, Calibration, Error Control, and Deployment Beyond Idealized Conditions."] },
-      { title: "Lecturer", lane: "Research & teaching", start: 2023 + 8 / 12, period: "2023 – now", hideBar: true,
+      { title: "Lecturer", lane: "Teaching", start: 2023 + 8 / 12, end: 2026 + 7 / 12, period: "2023 – 26",
         points: ["Unsupervised Learning (M.Sc.)", "Data Science (M.Sc.)", "Software Engineering (B.Sc.)", "Environmental Monitoring (B.Sc.)"] },
-      { title: "Research Associate, Intelligent Systems Research Group", lane: "Research & teaching", start: 2023 + 8 / 12, period: "2023 – now",
+      { title: "Research Associate, Intelligent Systems Research Group", lane: "Research", start: 2023 + 8 / 12, period: "2023 – now",
         points: [
           "Research on uncertainty quantification for anomaly detection in data streams, with a focus on conformal inference and statistical error control.",
           "Lead developer of off-key within BiFlex-Industrie: set technical direction and priorities, write most of the code, and supervise student contributors.",
@@ -64,7 +64,7 @@ export const stations: Station[] = [
     org: "disy",
     period: "2020",
     roles: [
-      { title: "Master’s Thesis Research", lane: "Industry", start: 2020 + 2 / 12, end: 2020 + 8 / 12, period: "2020",
+      { title: "Master’s Thesis Research", lane: "Research", start: 2020 + 2 / 12, end: 2020 + 8 / 12, period: "2020",
         points: [
           "Applied geostatistics and spatial econometrics to anomaly detection in environmental data.",
           "Deployed the methods through an API and improved the project’s data preprocessing.",
@@ -83,7 +83,7 @@ export const stations: Station[] = [
     org: "hka",
     period: "2018 – 2021",
     roles: [
-      { title: "Student Research Assistant, Statistics with R", lane: "Research & teaching", start: 2018 + 9 / 12, end: 2021, period: "2018 – 21" },
+      { title: "Student Research Assistant, Statistics with R", lane: "Teaching", start: 2018 + 9 / 12, end: 2021, period: "2018 – 21" },
       { title: "M.Sc. Geomatics", lane: "Education", start: 2018, end: 2020 + 8 / 12, period: "2018 – 20",
         points: [
           "Thesis: Anomaly Detection in Precision Farming with R.",
