@@ -12,11 +12,9 @@
   --map-land: #e4e4e7;
   --map-ocean: #f7f7f8;
   --map-grid: #ececef;
-  --c-hka: #5d7b98;
-  --c-init: #6c9077;
-  --c-disy: #b3756c;
-  --c-ionos: #bf9757;
-  --c-modus: #8a7aa6;
+  --c-edu: #5d7b98;
+  --c-ind: #bf9757;
+  --c-res: #6c9077;
   --serif: "Newsreader", Georgia, serif;
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
@@ -41,11 +39,9 @@
     --map-land: #2c2c30;
     --map-ocean: #0b0b0c;
     --map-grid: #18181b;
-    --c-hka: #86a3c0;
-    --c-init: #93b49c;
-    --c-disy: #cc958c;
-    --c-ionos: #d5b27a;
-    --c-modus: #aa9cc6;
+    --c-edu: #86a3c0;
+    --c-ind: #d5b27a;
+    --c-res: #93b49c;
   }
 }
 * { box-sizing: border-box; }
@@ -95,8 +91,11 @@ main.page-full { --content-width: var(--page-width); padding-block: 0 2rem; }
 .index-row > * { min-width: 0; }
 .index-row > h2, .index-label { font: 500 .78rem/1.9 var(--sans); letter-spacing: 0; color: var(--muted); margin: 0; }
 .index-intro { padding-block: 4.5rem 3.2rem; }
-.index-intro h1 { font-size: clamp(2.9rem, 7.4vw, 5.6rem); line-height: .98; letter-spacing: -.045em; margin: 0 0 0 -.04em; }
-.index-intro .lede { margin: 1.4rem 0 0; max-width: 30rem; }
+.index-intro { --name-size: clamp(2.9rem, 7.4vw, 5.6rem); }
+.index-intro h1 { font-size: var(--name-size); line-height: .98; letter-spacing: -.045em; margin: 0 0 0 -.04em; }
+/* The tagline is set to the width of the name: the grid takes the h1's width, the lede may not widen it. */
+.nameplate { display: inline-grid; max-width: 100%; }
+.nameplate .lede { width: 0; min-width: 100%; margin: .9rem 0 0; font-size: calc(var(--name-size) * .22); line-height: 1.35; text-align: justify; text-align-last: justify; }
 .more-link { display: inline-block; margin-top: .9rem; font-size: .85rem; color: var(--muted); }
 
 /* Profile links with icons */
@@ -106,12 +105,10 @@ main.page-full { --content-width: var(--page-width); padding-block: 0 2rem; }
 .profiles a:hover { color: var(--ink); }
 .profiles .icon { color: var(--ink); flex: none; }
 
-/* Organisation colours (timeline and stations) */
-.org-hka { --org: var(--c-hka); }
-.org-init { --org: var(--c-init); }
-.org-disy { --org: var(--c-disy); }
-.org-ionos { --org: var(--c-ionos); }
-.org-modus { --org: var(--c-modus); }
+/* Lane colours (timeline and stations) */
+.lane-edu { --lane: var(--c-edu); }
+.lane-ind { --lane: var(--c-ind); }
+.lane-res { --lane: var(--c-res); }
 .role-line { margin: .7rem 0 0; font-size: .85rem; color: var(--muted); }
 
 /* Software list */
@@ -208,10 +205,12 @@ address { font-style: normal; }
   .index-row { grid-template-columns: 1fr; gap: .9rem; padding-block: 1.8rem; }
   .index-intro { padding-block: 3.5rem 2.5rem; }
   .index-intro > .index-label { display: none; }
+  .nameplate { display: block; }
+  .nameplate .lede { width: auto; font-size: 1.05rem; text-align: left; text-align-last: auto; }
   .project { grid-template-columns: 1fr; gap: .1rem; }
   .software > li, .skills-list > li, .mini-map { grid-template-columns: 1fr; gap: .2rem; }
   .pub-year-group { grid-template-columns: 1fr; gap: .5rem; }
-  .site-header nav a:not([href="/cv/"]) { display: none; }
+  .site-header nav a:not([href="/cv/"]):not([href="/#cv"]) { display: none; }
   .career li { padding-block: .5rem; }
 }
 @media (max-width: 600px) {

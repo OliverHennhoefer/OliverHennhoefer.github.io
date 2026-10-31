@@ -27,8 +27,10 @@ const profiles = [
   <section class="index-row index-intro" aria-labelledby="intro-heading">
     <span class="index-label"></span>
     <div>
-      <h1 id="intro-heading">Oliver Hennhöfer</h1>
-      <p class="lede">Unsupervised learning and uncertainty quantification, with guarantees that survive deployment.</p>
+      <div class="nameplate">
+        <h1 id="intro-heading">Oliver Hennhöfer</h1>
+        <p class="lede">Uncertainty-aware unsupervised learning, built for deployment.</p>
+      </div>
       <p class="role-line">PhD candidate, Research Associate &amp; Lecturer · {site.affiliation}</p>
       <ul class="profiles" aria-label="Contact and profiles">
         {profiles.map(({ href, label, icon }) => <li><a href={href}><Icon name={icon} />{label}</a></li>)}
@@ -36,12 +38,27 @@ const profiles = [
     </div>
   </section>
 
-  <section class="index-row" id="path" aria-labelledby="path-heading">
-    <h2 id="path-heading">Path</h2>
+  {goals.length > 0 && (
+    <section class="index-row" id="goals" aria-labelledby="goals-heading">
+      <h2 id="goals-heading">Next</h2>
+      <ul class="goals">
+        {goals.map((goal) => (
+          <li class:list={{ done: goal.done }}>
+            <span class="check" aria-hidden="true"></span>
+            <span><span class="goal-title">{goal.title}</span>{goal.detail && <span class="goal-detail"> · {goal.detail}</span>}</span>
+            <span class="goal-year tnum">{goal.done ? `Done${goal.year ? ` ${goal.year}` : ""}` : (goal.year ?? "In progress")}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <section class="index-row" id="cv" aria-labelledby="cv-heading">
+    <h2 id="cv-heading">CV</h2>
     <div>
       <CareerTimeline />
       <Stations />
-      <a class="more-link" href="/cv/">Full CV →</a>
+      <a class="more-link" href="/cv/">Printable CV with skills and teaching details →</a>
     </div>
   </section>
 
@@ -110,21 +127,6 @@ const profiles = [
       ))}
     </ul>
   </section>
-
-  {goals.length > 0 && (
-    <section class="index-row" id="goals" aria-labelledby="goals-heading">
-      <h2 id="goals-heading">Next</h2>
-      <ul class="goals">
-        {goals.map((goal) => (
-          <li class:list={{ done: goal.done }}>
-            <span class="check" aria-hidden="true"></span>
-            <span><span class="goal-title">{goal.title}</span>{goal.detail && <span class="goal-detail"> · {goal.detail}</span>}</span>
-            <span class="goal-year tnum">{goal.done ? `Done${goal.year ? ` ${goal.year}` : ""}` : (goal.year ?? "In progress")}</span>
-          </li>
-        ))}
-      </ul>
-    </section>
-  )}
 
   <section class="index-row" id="elsewhere" aria-labelledby="elsewhere-heading">
     <h2 id="elsewhere-heading">Elsewhere</h2>
