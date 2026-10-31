@@ -25,7 +25,6 @@ const profiles = [
 ---
 <BaseLayout title={site.homeTitle} canonical="/" full>
   <section class="index-row index-intro" aria-labelledby="intro-heading">
-    <span class="index-label"></span>
     <div class="intro-body">
       <div>
         <div class="nameplate">
@@ -37,7 +36,7 @@ const profiles = [
           {profiles.map(({ href, label, icon }) => <li><a href={href}><Icon name={icon} />{label}</a></li>)}
         </ul>
       </div>
-      <img class="portrait" src="/portrait-480.jpg" srcset="/portrait-480.jpg 480w, /portrait.jpg 1200w" sizes="(max-width: 760px) 5.5rem, 12rem" width="480" height="480" alt={`Portrait of ${site.author}`} fetchpriority="high" />
+      <img class="portrait" src="/portrait-480.jpg" srcset="/portrait-480.jpg 480w, /portrait.jpg 1200w" sizes="(max-width: 760px) 6.5rem, 18rem" width="480" height="480" alt={`Portrait of ${site.author}`} fetchpriority="high" />
     </div>
   </section>
 
