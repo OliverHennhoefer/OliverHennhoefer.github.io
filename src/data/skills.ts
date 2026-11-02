@@ -32,7 +32,7 @@ export const skills: Skill[] = [
   {
     area: "Web & data",
     methods: ["Event-Driven Architecture", "Stream Processing"],
-    tools: [{ name: "FastAPI", icon: "fastapi" }, { name: "React", icon: "react" }, { name: "SvelteKit", icon: "svelte" }, { name: "Astro", icon: "astro" }, { name: "PostgreSQL", icon: "postgresql" }, { name: "TimescaleDB", icon: "timescale" }, { name: "SQLite", icon: "sqlite" }, { name: "MQTT", icon: "mqtt" }, { name: "EMQX" }, { name: "OAuth", icon: "key" }],
+    tools: [{ name: "FastAPI", icon: "fastapi" }, { name: "React", icon: "react" }, { name: "SvelteKit", icon: "svelte" }, { name: "Astro", icon: "astro" }, { name: "PostgreSQL", icon: "postgresql" }, { name: "TimescaleDB", icon: "timescale" }, { name: "SQLite", icon: "sqlite" }, { name: "MQTT", icon: "mqtt" }, { name: "EMQX", icon: "emqx" }, { name: "OAuth", icon: "key" }],
   },
   {
     area: "Cloud & infrastructure",
