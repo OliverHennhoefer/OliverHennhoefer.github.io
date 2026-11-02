@@ -24,7 +24,9 @@ import { laneKey, organisations, roleId, stations } from "../data/career";
   .station { position: relative; margin: 0; padding: 0 0 1.4rem 1.9rem; }
   .station::before { content: ""; position: absolute; left: .42rem; top: .9rem; bottom: -.35rem; border-left: 1.5px solid var(--line); }
   .station:last-child { padding-bottom: 0; }
-  .station:last-child::before { display: none; }
+  /* The oldest station still links its dot to its roles; the line stops at the last role's dot. */
+  .station:last-child::before { bottom: 0; }
+  .station:last-child .role:last-child::after { content: ""; position: absolute; left: calc(-1.9rem + .42rem - 2px); top: calc(.78rem + 8px); bottom: 0; width: 6px; background: var(--paper); }
   .station::after { content: ""; position: absolute; left: 0; top: .32rem; width: .95rem; height: .95rem; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 3px var(--paper); }
   .station-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
   .station-name { font: 400 1.15rem/1.4 var(--serif); }
