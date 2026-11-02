@@ -89,7 +89,7 @@ const isCurrent = (href: string) => !href.includes("#") && Astro.url.pathname.st
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
-      <a class="site-name" href="/">Oliver Hennhöfer</a>
+      <a class="site-name" href="/">Personal Website</a>
       <nav aria-label="Main navigation">
         {navigation.map(({ href, label }) => <a href={href} aria-current={isCurrent(href) ? "page" : undefined}>{label}</a>)}
       </nav>
