@@ -1,7 +1,7 @@
 export const site = {
   title: "Oliver Hennhöfer",
   /** Home page <title> (browser tab and search result headline). */
-  homeTitle: "Oliver Nino Hennhöfer",
+  homeTitle: "Oliver Hennhöfer",
   description:
     "Oliver Hennhöfer (Hennhoefer) is a PhD candidate at HKA Karlsruhe working on conformal anomaly detection, unsupervised learning and uncertainty quantification.",
   url: "https://oliverhennhoefer.github.io",
@@ -9,7 +9,7 @@ export const site = {
   givenName: "Oliver",
   familyName: "Hennhöfer",
   /** Spellings people and search engines use for the same name. */
-  alternateNames: ["Oliver Hennhoefer", "Oliver Hennhofer", "Oliver Nino Hennhöfer", "O. Hennhöfer"],
+  alternateNames: ["Oliver Hennhoefer", "Oliver Hennhofer", "O. Hennhöfer"],
   jobTitles: ["PhD Candidate", "Research Associate"],
   email: "oliver.hennhoefer@h-ka.de",
   affiliation: "Karlsruhe University of Applied Sciences",
@@ -36,7 +36,7 @@ export const site = {
   /** Square black-and-white portrait, used for search results and link previews. */
   portrait: { path: "/portrait.jpg", width: 1200, height: 1200 },
   impressum: {
-    legalName: "Oliver Nino Hennhöfer",
+    legalName: "Oliver Hennhöfer",
     addressLine1: "Lachnerstraße 18",
     postalCode: "76131",
     city: "Karlsruhe",
