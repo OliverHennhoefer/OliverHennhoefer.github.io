@@ -18,6 +18,7 @@
   --c-tea: #8f7299;
   --c-mus: #b0787a;
   --c-spo: #5c9690;
+  --c-dru: #8a5456;
   --c-ai: #8e8e93;
   --c-gpt: #74747a;
   --c-cla: #c2704f;
@@ -51,6 +52,7 @@
     --c-tea: #b49cbc;
     --c-mus: #cf9a9b;
     --c-spo: #8cc0ba;
+    --c-dru: #e6b9ba;
     --c-ai: #8e8e93;
     --c-gpt: #a3a3a8;
     --c-cla: #dc9172;
@@ -134,8 +136,11 @@ main.page-full { --content-width: var(--page-width); padding-block: 0 2rem; }
 .lane-ai { --lane: var(--c-ai); }
 .lane-gpt { --lane: var(--c-gpt); }
 .lane-cla { --lane: var(--c-cla); }
-/* Two assistants at once: diagonal stripes of both colours. */
-.lane-mix { --lane: var(--c-cla); --stripes: repeating-linear-gradient(135deg, var(--c-gpt) 0 3px, var(--c-cla) 3px 6px); }
+.lane-dru { --lane: var(--c-dru); }
+/* Two things at once (two assistants, choir and drums): diagonal stripes of both colours. */
+.lane-mix { --lane: var(--c-cla); --stripe-a: var(--c-gpt); --stripe-b: var(--c-cla); }
+.lane-musmix { --lane: var(--c-mus); --stripe-a: var(--c-mus); --stripe-b: var(--c-dru); }
+.lane-mix, .lane-musmix { --stripes: repeating-linear-gradient(135deg, var(--stripe-a) 0 3px, var(--stripe-b) 3px 6px); }
 .role-line { margin: .7rem 0 0; font-size: .85rem; color: var(--muted); }
 
 /* Software list */
