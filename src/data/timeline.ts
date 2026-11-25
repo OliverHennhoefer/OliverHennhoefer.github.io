@@ -1,4 +1,4 @@
-import { laneKey, organisations, roleId, stations } from "./career";
+import { laneKey, organisations, roleId, stations, type Lane } from "./career";
 import { projects } from "./projects";
 import { publications } from "./publications";
 import releaseData from "./releases.json";
@@ -13,12 +13,29 @@ const decimal = (iso: string) => {
   return year + (month - 1) / 12 + (day - 1) / 365;
 };
 
-export const timelineRoles = stations.flatMap((station) => station.roles.map((role) => ({
+const cvRoles = stations.flatMap((station) => station.roles.map((role) => ({
   ...role,
   orgName: organisations[station.org],
-  id: roleId(station.org, role),
+  id: roleId(station.org, role) as string | null,
   laneClass: `lane-${laneKey[role.lane]}`,
 })));
+
+// School before the CV starts, only on the timeline. Inferred from the usual German path:
+// enrolment the September after turning six, four years of primary school, then eight years
+// of Gymnasium (G8) to the Abitur in summer 2013.
+const school = [
+  { title: "Gymnasium (G8), Abitur", orgName: "Gymnasium", start: 2005 + 8 / 12, end: 2013 + 6 / 12, period: "2005 – 13" },
+  { title: "Primary school", orgName: "Grundschule", start: 2001 + 8 / 12, end: 2005 + 6 / 12, period: "2001 – 05" },
+].map((entry) => ({ ...entry, lane: "Education" as Lane, points: undefined as string[] | undefined, hideBar: false, id: null, laneClass: `lane-${laneKey.Education}` }));
+
+export const timelineRoles = [...cvRoles, ...school];
+
+// Music outside the CV, in ages: choir from 5 to 16, then drums from 16 until 2022.
+const at = (years: number) => (site.birth ? site.birth.year + (site.birth.month - 1) / 12 : 1995) + years;
+export const timelineMusic = [
+  { title: "Choir", start: at(5), end: at(16), period: "2000 – 11" },
+  { title: "Drums", start: at(16), end: 2022 + 6 / 12, period: "2011 – 22" },
+];
 
 const surname = "Hennhöfer";
 const firstAuthor = (authors: string) => authors.split(",")[0].trim().split(" ").slice(1).join(" ") === surname;
@@ -44,7 +61,8 @@ export const timelinePackages = Object.entries(releaseData as Record<string, str
   return { name, role: project?.role ?? "", releases, majors };
 });
 
-export const timelineStart = Math.min(...timelineRoles.map((role) => role.start));
+/** Start of the CV, which the default "Since …" range opens with. */
+export const timelineStart = Math.min(...cvRoles.map((role) => role.start));
 export const birth = site.birth ? site.birth.year + (site.birth.month - 1) / 12 : null;
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

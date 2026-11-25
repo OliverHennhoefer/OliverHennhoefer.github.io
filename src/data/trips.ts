@@ -4,6 +4,13 @@
 export type Trip = { country: string; flag: string; year?: number; month?: number };
 
 export const trips: Trip[] = [
+  { country: "Austria", flag: "at", year: 2003 },
+  { country: "France", flag: "fr", year: 2003 },
+  { country: "Spain", flag: "es", year: 2007 },
+  { country: "Greece (Corfu)", flag: "gr", year: 2008 },
+  { country: "Spain", flag: "es", year: 2009 },
+  { country: "Spain", flag: "es", year: 2010 },
+  { country: "Spain (Mallorca)", flag: "es", year: 2012 },
   { country: "Sri Lanka", flag: "lk", year: 2011 },
   { country: "England", flag: "gb-eng", year: 2013 },
   { country: "Cuba", flag: "cu", year: 2016 },
@@ -26,6 +33,4 @@ export const trips: Trip[] = [
   { country: "Sweden", flag: "se", year: 2026 },
   { country: "Norway", flag: "no", year: 2026 },
   { country: "Czechia", flag: "cz", year: 2026 },
-  // Not dated yet.
-  { country: "Greece", flag: "gr" },
 ];

@@ -1,5 +1,5 @@
 ---
-import { birth, timelinePackages, timelinePublications, timelineRoles, timelineStart, timelineTrips } from "../data/timeline";
+import { birth, timelineMusic, timelinePackages, timelinePublications, timelineRoles, timelineStart, timelineTrips } from "../data/timeline";
 
 // The home page timeline: one chart of every role, paper, release and trip, and below it a
 // "time slice" that lists what was going on at the month under the cursor. The markup is
@@ -37,13 +37,15 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
   </div>
 
   <div class="lc-chart" tabindex="0" role="slider" aria-label="Timeline. Move through time with the arrow keys; the list below follows." aria-valuetext={nowLabel}>
-    <div class="lc-grid" aria-hidden="true">{ticks.map((year) => <i style={`left:${pct(year)}%`}></i>)}</div>
+    <div class="lc-grid" aria-hidden="true">{ticks.filter((year) => year % 5 === 0).map((year) => <i style={`left:${pct(year)}%`}></i>)}</div>
     {lanes.map(([lane, key], i) => (
       <div class={`lc-row lane-${key}`} data-ov={i}>
         <a class="lc-label" href="/career/"><i></i>{lane}</a>
         <div class="lc-track">
           {timelineRoles.filter((role) => role.lane === lane && !role.hideBar).map((role) => (
-            <a class="lc-bar" href={`/career/#${role.id}`} data-s={role.start} data-e={role.end} style={span(role.start, role.end)} title={`${role.title} · ${role.orgName} · ${role.period}`} aria-label={`${role.title}, ${role.orgName}, ${role.period}`}></a>
+            role.id
+              ? <a class="lc-bar" href={`/career/#${role.id}`} data-s={role.start} data-e={role.end} style={span(role.start, role.end)} title={`${role.title} · ${role.orgName} · ${role.period}`} aria-label={`${role.title}, ${role.orgName}, ${role.period}`}></a>
+              : <span class="lc-bar" data-s={role.start} data-e={role.end} style={span(role.start, role.end)} title={`${role.title} · ${role.period}`}></span>
           ))}
         </div>
       </div>
@@ -65,10 +67,16 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
         </div>
       </div>
     )}
+    <div class="lc-row lane-mus" data-ov="6">
+      <span class="lc-label"><i></i>Music</span>
+      <div class="lc-track">
+        {timelineMusic.map((entry) => <span class="lc-bar lc-named" data-s={entry.start} data-e={entry.end} style={span(entry.start, entry.end)} title={`${entry.title} · ${entry.period}`}><b>{entry.title}</b></span>)}
+      </div>
+    </div>
     <div class="lc-gap"></div>
     <div class="lc-row lc-row-head"><a class="lc-label" href="/software/"><i></i>Software</a><div></div></div>
     {timelinePackages.map((pkg) => (
-      <div class="lc-row lc-row-pkg" data-ov="6">
+      <div class="lc-row lc-row-pkg" data-ov="7">
         <a class="lc-label lc-sub" href={`/software/#${pkg.name}`}>{pkg.name}</a>
         <div class="lc-track">
           {pkg.majors.map((major) => (
@@ -79,7 +87,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
     ))}
     <div class="lc-row lc-axis" aria-hidden="true">
       <div></div>
-      <div class="lc-track lc-ticks">{ticks.filter((year) => year % 2 === 0).map((year) => <span class="tnum" style={`left:${pct(year)}%`}>{year}</span>)}</div>
+      <div class="lc-track lc-ticks">{ticks.filter((year) => year % 5 === 0).map((year) => <span class="tnum" style={`left:${pct(year)}%`}>{year}</span>)}</div>
     </div>
     <div class="lc-scrub" aria-hidden="true"><div class="lc-scrub-line" style={`left:${pct(today)}%`}></div><div class="lc-scrub-tag" style={`left:${pct(today)}%`}>Now</div></div>
   </div>
@@ -111,12 +119,18 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
       <ul>
         {timelineRoles.map((role) => (
           <li class={role.laneClass} data-s={role.start} data-e={role.end} hidden={!active(role.start, role.end)}>
-            <div class="lc-item-title"><i></i><a href={`/career/#${role.id}`}>{role.title}</a></div>
+            <div class="lc-item-title"><i></i>{role.id ? <a href={`/career/#${role.id}`}>{role.title}</a> : <span>{role.title}</span>}</div>
             <p class="lc-item-meta">{role.orgName} · {role.period}</p>
             {role.points && <ul class="lc-points">{role.points.map((point) => <li>{point}</li>)}</ul>}
           </li>
         ))}
-        <li class="lc-empty" data-empty hidden={timelineRoles.some((role) => active(role.start, role.end))}>Between stations.</li>
+        {timelineMusic.map((entry) => (
+          <li class="lane-mus" data-s={entry.start} data-e={entry.end} hidden={!active(entry.start, entry.end)}>
+            <div class="lc-item-title"><i></i><span>{entry.title}</span></div>
+            <p class="lc-item-meta">Music · {entry.period}</p>
+          </li>
+        ))}
+        <li class="lc-empty" data-empty hidden={[...timelineRoles, ...timelineMusic].some((role) => active(role.start, role.end))}>Between stations.</li>
       </ul>
     </div>
     <div class="lc-col">
@@ -176,8 +190,9 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
     /* Layout for the visible window */
     function ticks() {
       const span = V1 - V0, width = firstTrack().getBoundingClientRect().width || 600, out: { t: number; text: string; sub?: string }[] = [];
-      // The finest step that still leaves about 56px per label.
-      const step = [1 / 12, 0.25, 1, 2, 5, 10].find((s) => (s / span) * width >= 56) ?? 10;
+      // Long views are labelled every 5 years (10 if that is too tight), short ones as finely as fits.
+      const steps = span > 8 ? [5, 10] : [1 / 12, 0.25, 1, 2, 5];
+      const step = steps.find((s) => (s / span) * width >= 48) ?? steps[steps.length - 1];
       for (let t = Math.ceil(V0 / step - 1e-9) * step; t < Math.min(V1, NOW); t += step) {
         const y = Math.floor(t + 1e-6), m = Math.round((t - y) * 12) % 12;
         const a = age(t + 0.99);
@@ -399,7 +414,8 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
   a.lc-bar:hover { filter: brightness(.88); }
   .lc-ver { --lane: var(--muted); height: 13px; margin-top: -6.5px; display: flex; align-items: center; overflow: hidden; }
   .lc-ver.pre { background: transparent; box-shadow: inset 0 0 0 1.5px var(--muted); }
-  .lc-ver b { font: 500 .56rem/1 var(--mono); color: var(--paper); padding-left: 4px; white-space: nowrap; }
+  .lc-ver b, .lc-named b { font: 500 .56rem/1 var(--mono); color: var(--paper); padding-left: 4px; white-space: nowrap; }
+  .lc-named { display: flex; align-items: center; overflow: hidden; }
   .lc-ver.pre b { color: var(--muted); }
   .lc-pub { position: absolute; top: 50%; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%; background: var(--ink); transition: opacity .2s; }
   .lc-pub.co { background: var(--paper); box-shadow: inset 0 0 0 1.5px var(--ink); }
@@ -418,7 +434,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
 
   .lc-ov { display: grid; grid-template-columns: var(--lc-gutter) minmax(0, 1fr); align-items: start; margin-top: .9rem; }
   .lc-ov-label { font-size: .72rem; color: var(--muted); padding-top: .5rem; }
-  .lc-ov-track { position: relative; height: 3.6rem; touch-action: none; cursor: crosshair; user-select: none; -webkit-user-select: none; }
+  .lc-ov-track { position: relative; height: 3.9rem; touch-action: none; cursor: crosshair; user-select: none; -webkit-user-select: none; }
   .lc-ov-plot { position: absolute; inset: 0 0 1.25rem; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); overflow: hidden; }
   .lc-ov-mark { position: absolute; height: 3px; border-radius: 1px; background: var(--lane, var(--muted)); }
   .lc-ov-mark.dot { width: 3px; margin-left: -1.5px; background: var(--ink); }
