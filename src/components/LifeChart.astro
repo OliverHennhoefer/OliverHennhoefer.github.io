@@ -59,7 +59,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
     </div>
     {datedTrips.length > 0 && (
       <div class="lc-row" data-ov="5">
-        <span class="lc-label"><i></i>Travel</span>
+        <span class="lc-label"><i></i>Perspectives</span>
         <div class="lc-track">
           {datedTrips.map((trip) => <img class="lc-flag" src={`/flags/${trip.flag}.svg`} alt={`${trip.country}, ${trip.label}`} title={`${trip.country} · ${trip.label}`} data-s={trip.at} style={`left:${pct(trip.at)}%`} width="13" height="13" loading="lazy" />)}
         </div>
@@ -102,7 +102,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
     <div class="lc-when">
       <p class="lc-when-title">Now</p>
       <p class="lc-when-sub">{nowLabel}</p>
-      <p class="lc-when-trips" aria-label="Travel that year">
+      <p class="lc-when-trips" aria-label="Perspectives: countries visited that year">
         {datedTrips.map((trip) => <img src={`/flags/${trip.flag}.svg`} alt={trip.country} title={`${trip.country} · ${trip.label}`} data-year={trip.year} hidden={trip.year !== now.getUTCFullYear()} width="16" height="16" loading="lazy" />)}
       </p>
     </div>

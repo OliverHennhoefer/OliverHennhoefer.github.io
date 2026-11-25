@@ -1,4 +1,4 @@
-// Visits for the Travel row of the home page timeline, one entry per visit. Each is drawn as
+// Visits for the Perspectives row of the home page timeline, one entry per visit. Each is drawn as
 // its round flag (public/flags, from circle-flags, MIT). Without a month, visits of the same
 // year are spread evenly across it; an entry without a year is not plotted.
 export type Trip = { country: string; flag: string; year?: number; month?: number };
