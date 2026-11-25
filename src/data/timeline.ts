@@ -30,11 +30,20 @@ const school = [
 
 export const timelineRoles = [...cvRoles, ...school];
 
-// Music outside the CV, in ages: choir from 5 to 16, then drums from 16 until 2022.
+// Music and sport outside the CV, mostly given as ages. An entry without an end is ongoing.
 const at = (years: number) => (site.birth ? site.birth.year + (site.birth.month - 1) / 12 : 1995) + years;
-export const timelineMusic = [
-  { title: "Choir", start: at(5), end: at(16), period: "2000 – 11" },
-  { title: "Drums", start: at(16), end: 2022 + 6 / 12, period: "2011 – 22" },
+type Hobby = { title: string; start: number; end?: number; period: string };
+export const timelineHobbies: { row: string; lane: string; entries: Hobby[] }[] = [
+  { row: "Music", lane: "mus", entries: [
+    { title: "Choir", start: at(5), end: at(16), period: "2000 – 11" },
+    { title: "Drums", start: at(16), end: 2022 + 6 / 12, period: "2011 – 22" },
+  ] },
+  // Athletics from school start (assumed) to 9, table tennis from 9 to 14, strength training since 2015.
+  { row: "Sport", lane: "spo", entries: [
+    { title: "Athletics", start: 2001 + 8 / 12, end: at(9), period: "2001 – 04" },
+    { title: "Table tennis", start: at(9), end: at(14), period: "2004 – 09" },
+    { title: "Strength training", start: 2015, period: "2015 – now" },
+  ] },
 ];
 
 const surname = "Hennhöfer";

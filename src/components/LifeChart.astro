@@ -1,5 +1,5 @@
 ---
-import { birth, timelineMusic, timelinePackages, timelinePublications, timelineRoles, timelineStart, timelineTrips } from "../data/timeline";
+import { birth, timelineHobbies, timelinePackages, timelinePublications, timelineRoles, timelineStart, timelineTrips } from "../data/timeline";
 
 // The home page timeline: one chart of every role, paper, release and trip, and below it a
 // "time slice" that lists what was going on at the month under the cursor. The markup is
@@ -67,16 +67,18 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
         </div>
       </div>
     )}
-    <div class="lc-row lane-mus" data-ov="6">
-      <span class="lc-label"><i></i>Music</span>
-      <div class="lc-track">
-        {timelineMusic.map((entry) => <span class="lc-bar lc-named" data-s={entry.start} data-e={entry.end} style={span(entry.start, entry.end)} title={`${entry.title} · ${entry.period}`}><b>{entry.title}</b></span>)}
+    {timelineHobbies.map((hobby, i) => (
+      <div class={`lc-row lane-${hobby.lane}`} data-ov={6 + i}>
+        <span class="lc-label"><i></i>{hobby.row}</span>
+        <div class="lc-track">
+          {hobby.entries.map((entry) => <span class="lc-bar lc-named" data-s={entry.start} data-e={entry.end} style={span(entry.start, entry.end)} title={`${entry.title} · ${entry.period}`}><b>{entry.title}</b></span>)}
+        </div>
       </div>
-    </div>
+    ))}
     <div class="lc-gap"></div>
     <div class="lc-row lc-row-head"><a class="lc-label" href="/software/"><i></i>Software</a><div></div></div>
     {timelinePackages.map((pkg) => (
-      <div class="lc-row lc-row-pkg" data-ov="7">
+      <div class="lc-row lc-row-pkg" data-ov={6 + timelineHobbies.length}>
         <a class="lc-label lc-sub" href={`/software/#${pkg.name}`}>{pkg.name}</a>
         <div class="lc-track">
           {pkg.majors.map((major) => (
@@ -124,13 +126,13 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
             {role.points && <ul class="lc-points">{role.points.map((point) => <li>{point}</li>)}</ul>}
           </li>
         ))}
-        {timelineMusic.map((entry) => (
-          <li class="lane-mus" data-s={entry.start} data-e={entry.end} hidden={!active(entry.start, entry.end)}>
+        {timelineHobbies.flatMap((hobby) => hobby.entries.map((entry) => (
+          <li class={`lane-${hobby.lane}`} data-s={entry.start} data-e={entry.end} hidden={!active(entry.start, entry.end)}>
             <div class="lc-item-title"><i></i><span>{entry.title}</span></div>
-            <p class="lc-item-meta">Music · {entry.period}</p>
+            <p class="lc-item-meta">{hobby.row} · {entry.period}</p>
           </li>
-        ))}
-        <li class="lc-empty" data-empty hidden={[...timelineRoles, ...timelineMusic].some((role) => active(role.start, role.end))}>Between stations.</li>
+        )))}
+        <li class="lc-empty" data-empty hidden={[...timelineRoles, ...timelineHobbies.flatMap((hobby) => hobby.entries)].some((role) => active(role.start, role.end))}>Between stations.</li>
       </ul>
     </div>
     <div class="lc-col">
@@ -434,7 +436,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
 
   .lc-ov { display: grid; grid-template-columns: var(--lc-gutter) minmax(0, 1fr); align-items: start; margin-top: .9rem; }
   .lc-ov-label { font-size: .72rem; color: var(--muted); padding-top: .5rem; }
-  .lc-ov-track { position: relative; height: 3.9rem; touch-action: none; cursor: crosshair; user-select: none; -webkit-user-select: none; }
+  .lc-ov-track { position: relative; height: 4.2rem; touch-action: none; cursor: crosshair; user-select: none; -webkit-user-select: none; }
   .lc-ov-plot { position: absolute; inset: 0 0 1.25rem; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); overflow: hidden; }
   .lc-ov-mark { position: absolute; height: 3px; border-radius: 1px; background: var(--lane, var(--muted)); }
   .lc-ov-mark.dot { width: 3px; margin-left: -1.5px; background: var(--ink); }
