@@ -184,7 +184,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
     const grid = root.querySelector<HTMLElement>(".lc-grid")!, ticksEl = root.querySelector<HTMLElement>(".lc-ticks")!;
     const marks = [...chart.querySelectorAll<HTMLElement>("[data-s]")].map((el) => ({
       el, s: Number(el.dataset.s), e: el.dataset.e ? Number(el.dataset.e) : el.classList.contains("lc-bar") ? NOW : null, label: el.querySelector("b"),
-    }));
+    })).map((m) => ({ ...m, labelWidth: m.label?.offsetWidth ?? 0 }));
     const pct = (t: number) => ((t - V0) / (V1 - V0)) * 100;
     const fmt = (t: number) => { const y = Math.floor(t + 1e-6), m = Math.min(11, Math.floor((t - y) * 12 + 1e-6)); return { y, label: `${months[m]} ${y}`, short: `${months[m].slice(0, 3)} ${y}` }; };
     const age = (t: number) => (birth === null ? null : Math.floor(t - birth + 1e-6));
@@ -209,7 +209,14 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
         m.el.style.left = `${pct(m.s)}%`;
         if (m.e !== null) {
           m.el.style.width = `max(0px, calc(${pct(m.e) - pct(m.s)}% - 2px))`;
-          if (m.label) m.label.hidden = ((m.e - m.s) / (V1 - V0)) * width < 26;
+          // A label shows only when it fits inside its bar with room to spare.
+          // Labels stick to the left edge when a bar starts before the view, and only show when they fit.
+          if (m.label) {
+            const px = (t: number) => ((t - V0) / (V1 - V0)) * width;
+            const shift = Math.max(0, -px(m.s)), room = Math.min(px(m.e), width) - Math.max(px(m.s), 0) - 2;
+            m.label.style.marginLeft = `${shift}px`;
+            m.label.hidden = room < m.labelWidth + 6;
+          }
         }
       }
       const tk = ticks();
@@ -414,10 +421,13 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
   .lc-track::before { content: ""; position: absolute; inset: 50% 0 auto; border-top: 1px dotted var(--faint); }
   .lc-bar { position: absolute; top: 50%; height: 10px; margin-top: -5px; border-radius: 3px; background: var(--lane); transform-origin: left center; transition: opacity .2s, filter .15s; text-decoration: none; }
   a.lc-bar:hover { filter: brightness(.88); }
-  .lc-ver { --lane: var(--muted); height: 13px; margin-top: -6.5px; display: flex; align-items: center; overflow: hidden; }
+  .lc-ver, .lc-named { height: 16px; margin-top: -8px; border-radius: 4px; display: flex; align-items: center; overflow: hidden; }
+  .lc-ver { --lane: var(--muted); }
   .lc-ver.pre { background: transparent; box-shadow: inset 0 0 0 1.5px var(--muted); }
-  .lc-ver b, .lc-named b { font: 500 .56rem/1 var(--mono); color: var(--paper); padding-left: 4px; white-space: nowrap; }
-  .lc-named { display: flex; align-items: center; overflow: hidden; }
+  .lc-ver b, .lc-named b { font: 500 .62rem/1 var(--sans); letter-spacing: .01em; color: var(--paper); padding: 0 6px; white-space: nowrap; }
+  /* Past-the-cursor named bars fade their fill, not their text, so the label stays legible. */
+  .lc-chart .lc-named.dim { opacity: 1; background: color-mix(in srgb, var(--lane) 22%, var(--paper)); }
+  .lc-chart .lc-named.dim b { color: color-mix(in srgb, var(--lane) 70%, var(--ink)); }
   .lc-ver.pre b { color: var(--muted); }
   .lc-pub { position: absolute; top: 50%; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%; background: var(--ink); transition: opacity .2s; }
   .lc-pub.co { background: var(--paper); box-shadow: inset 0 0 0 1.5px var(--ink); }
@@ -497,7 +507,6 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
     .lc-head { grid-template-columns: 1fr; gap: .9rem; margin-bottom: 1.8rem; }
     .lc-label { font-size: .64rem; }
     .lc-sub { padding-left: 0; font-size: .6rem; }
-    .lc-ver b { display: none; }
     .lc-slice { grid-template-columns: 1fr; gap: 1.5rem; }
   }
   @media (prefers-reduced-motion: reduce) { .lc-bar, .lc-pub, .lc-flag { transition: none; } }
