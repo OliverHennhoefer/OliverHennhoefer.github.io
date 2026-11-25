@@ -1,9 +1,15 @@
 ---
 import { laneKey, organisations, roleId, stations } from "../data/career";
+import { orgLogos } from "../data/logos";
 ---
 <ol class="stations">
-  {stations.map((station) => (
+  {stations.map((station) => {
+    const logo = orgLogos[station.org];
+    return (
     <li class="station">
+      {"svg" in logo
+        ? <svg class="mark" viewBox={logo.viewBox} style={[logo.fill && `--mark-bg:${logo.fill};--mark-pad:0px`, logo.pad && `--mark-pad:${logo.pad}`].filter(Boolean).join(";") || undefined} aria-hidden="true" set:html={logo.svg} />
+        : <span class="mark dot" style={`--dot:${logo.color}`} aria-hidden="true"></span>}
       <div class="station-head">
         <span class="station-name">{organisations[station.org]}</span>
         <span class="station-period tnum">{station.period}</span>
@@ -17,17 +23,22 @@ import { laneKey, organisations, roleId, stations } from "../data/career";
         ))}
       </ul>
     </li>
-  ))}
+    );
+  })}
 </ol>
 <style>
-  .stations { list-style: none; padding: 0; margin: 0; }
-  .station { position: relative; margin: 0; padding: 0 0 1.4rem 1.9rem; }
-  .station::before { content: ""; position: absolute; left: .42rem; top: .9rem; bottom: -.35rem; border-left: 1.5px solid var(--line); }
+  /* --mark: organisation badge size; --axis: x of the connecting line (the badge centre). */
+  .stations { --mark: 1.6rem; --gutter: 2.4rem; --axis: calc(var(--mark) / 2); list-style: none; padding: 0; margin: 0; }
+  .station { position: relative; margin: 0; padding: 0 0 1.4rem var(--gutter); }
+  .station::before { content: ""; position: absolute; left: calc(var(--axis) - .75px); top: var(--axis); bottom: -.35rem; border-left: 1.5px solid var(--line); }
   .station:last-child { padding-bottom: 0; }
-  /* The oldest station still links its dot to its roles; the line stops at the last role's dot. */
+  /* The oldest station still links its badge to its roles; the line stops at the last role's dot. */
   .station:last-child::before { bottom: 0; }
-  .station:last-child .role:last-child::after { content: ""; position: absolute; left: calc(-1.9rem + .42rem - 2px); top: calc(.78rem + 8px); bottom: 0; width: 6px; background: var(--paper); }
-  .station::after { content: ""; position: absolute; left: 0; top: .32rem; width: .95rem; height: .95rem; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 3px var(--paper); }
+  .station:last-child .role:last-child::after { content: ""; position: absolute; left: calc(-1 * var(--gutter) + var(--axis) - 3px); top: calc(.78rem + 8px); bottom: 0; width: 6px; background: var(--paper); }
+  /* Organisation logo in a round badge, all at one size; a plain brand-colour dot where no logo is used. */
+  .mark { position: absolute; left: 0; top: 0; box-sizing: border-box; width: var(--mark); height: var(--mark); padding: var(--mark-pad, .24rem); border-radius: 50%; background: var(--mark-bg, var(--paper)); box-shadow: inset 0 0 0 1px var(--line), 0 0 0 3px var(--paper); overflow: hidden; }
+  .mark[style*="--mark-bg"] { box-shadow: 0 0 0 3px var(--paper); }
+  .mark.dot { padding: .34rem; background: var(--dot); background-clip: content-box; }
   .station-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
   .station-name { font: 400 1.15rem/1.4 var(--serif); }
   .station-period, .role-period { font-size: .78rem; color: var(--muted); white-space: nowrap; }
@@ -36,11 +47,11 @@ import { laneKey, organisations, roleId, stations } from "../data/career";
   /* Briefly mark the role a timeline bar jumped to. */
   .role:target { animation: landed 2.2s ease-out; }
   @keyframes landed { from { background: color-mix(in srgb, var(--lane) 22%, transparent); } to { background: transparent; } }
-  .role::before { content: ""; position: absolute; left: calc(-1.9rem + .42rem - 3.25px); top: .78rem; width: 8px; height: 8px; border-radius: 50%; background: var(--lane); box-shadow: 0 0 0 2px var(--paper); }
+  .role::before { content: ""; position: absolute; left: calc(-1 * var(--gutter) + var(--axis) - 4px); top: .78rem; width: 8px; height: 8px; border-radius: 50%; background: var(--lane); box-shadow: 0 0 0 2px var(--paper); }
   .role-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
   .role-title { font-size: .92rem; font-weight: 500; }
   .points { list-style: none; padding: 0; margin: .2rem 0 0; max-width: 42rem; }
   .points li { position: relative; margin: .15rem 0 0; padding-left: .9rem; font-size: .86rem; line-height: 1.5; color: var(--muted); }
   .points li::before { content: ""; position: absolute; left: 0; top: .66em; width: .35rem; border-top: 1px solid var(--faint); }
-  @media print { .station::after, .role::before { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
+  @media print { .mark, .role::before { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
 </style>
