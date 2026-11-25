@@ -68,9 +68,9 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
     )}
     {timelineHobbies.map((hobby, i) => (
       <div class={`lc-row lane-${hobby.lane}`} data-ov={6 + i}>
-        <span class="lc-label"><i></i>{hobby.row}</span>
+        <span class="lc-label"><i></i>{hobby.short ? <><span class="lc-full">{hobby.row}</span><span class="lc-short">{hobby.short}</span></> : hobby.row}</span>
         <div class="lc-track">
-          {hobby.entries.map((entry) => <span class="lc-bar lc-named" data-s={entry.start} data-e={entry.end} style={span(entry.start, entry.end)} title={`${entry.title} · ${entry.period}`}><b>{entry.title}</b></span>)}
+          {hobby.entries.map((entry) => <span class={`lc-bar lc-named lane-${entry.lane ?? hobby.lane}`} data-s={entry.start} data-e={entry.end} style={span(entry.start, entry.end)} title={`${entry.title} · ${entry.period}`}><b>{entry.title}</b></span>)}
         </div>
       </div>
     ))}
@@ -126,7 +126,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
           </li>
         ))}
         {timelineHobbies.flatMap((hobby) => hobby.entries.map((entry) => (
-          <li class={`lane-${hobby.lane}`} data-s={entry.start} data-e={entry.end} hidden={!active(entry.start, entry.end)}>
+          <li class={`lane-${entry.lane ?? hobby.lane}`} data-s={entry.start} data-e={entry.end} hidden={!active(entry.start, entry.end)}>
             <div class="lc-item-title"><i></i><span>{entry.title}</span></div>
             <p class="lc-item-meta">{hobby.row} · {entry.period}</p>
           </li>
@@ -285,7 +285,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
     for (const row of chart.querySelectorAll<HTMLElement>(".lc-row[data-ov]")) {
       const i = Number(row.dataset.ov);
       for (const el of row.querySelectorAll<HTMLElement>("[data-s]")) {
-        const lane = [...row.classList].find((c) => c.startsWith("lane-"));
+        const lane = [...el.classList, ...row.classList].find((c) => c.startsWith("lane-"));
         const s = Number(el.dataset.s), e = el.dataset.e ? Number(el.dataset.e) : el.classList.contains("lc-bar") ? NOW : undefined;
         ovHtml += mini(i, `lc-ov-mark ${lane ?? ""}${e === undefined ? " dot" : ""}`, s, e);
       }
@@ -428,6 +428,8 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
   .lc-chart .lc-named.dim { opacity: 1; background: color-mix(in srgb, var(--lane) 22%, var(--paper)); }
   .lc-chart .lc-named.dim b { color: color-mix(in srgb, var(--lane) 70%, var(--ink)); }
   .lc-ver.pre b { color: var(--muted); }
+  .lc-chart .lc-bar.lane-mix, .lc-ov-mark.lane-mix, .lane-mix > .lc-item-title i { background: var(--stripes); }
+  .lc-chart .lc-named.lane-mix.dim { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--c-gpt) 22%, var(--paper)) 0 3px, color-mix(in srgb, var(--c-cla) 22%, var(--paper)) 3px 6px); }
   .lc-pub { position: absolute; top: 50%; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%; background: var(--ink); transition: opacity .2s; }
   .lc-pub.co { background: var(--paper); box-shadow: inset 0 0 0 1.5px var(--ink); }
   .lc-flag { position: absolute; top: 50%; width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px; border-radius: 50%; box-shadow: 0 0 0 1.5px var(--paper); transition: opacity .2s; }
@@ -445,7 +447,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
 
   .lc-ov { display: grid; grid-template-columns: var(--lc-gutter) minmax(0, 1fr); align-items: start; margin-top: .9rem; }
   .lc-ov-label { font-size: .72rem; color: var(--muted); padding-top: .5rem; }
-  .lc-ov-track { position: relative; height: 4.2rem; touch-action: none; cursor: crosshair; user-select: none; -webkit-user-select: none; }
+  .lc-ov-track { position: relative; height: 4.55rem; touch-action: none; cursor: crosshair; user-select: none; -webkit-user-select: none; }
   .lc-ov-plot { position: absolute; inset: 0 0 1.25rem; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); overflow: hidden; }
   .lc-ov-mark { position: absolute; height: 3px; border-radius: 1px; background: var(--lane, var(--muted)); }
   .lc-ov-mark.dot { width: 3px; margin-left: -1.5px; background: var(--ink); }
@@ -501,8 +503,11 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
     .lc-slice { grid-template-columns: 1fr 1fr; }
     .lc-slice > :first-child { grid-column: 1 / -1; }
   }
+  .lc-short { display: none; }
   @media (max-width: 760px) {
     .lc { --lc-gutter: 5.3rem; }
+    .lc-full { display: none; }
+    .lc-short { display: inline; }
     .lc-head { grid-template-columns: 1fr; gap: .9rem; margin-bottom: 1.8rem; }
     .lc-label { font-size: .64rem; }
     .lc-sub { padding-left: 0; font-size: .6rem; }

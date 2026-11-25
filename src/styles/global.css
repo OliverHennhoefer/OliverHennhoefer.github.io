@@ -18,6 +18,9 @@
   --c-tea: #8f7299;
   --c-mus: #b0787a;
   --c-spo: #5c9690;
+  --c-ai: #8e8e93;
+  --c-gpt: #74747a;
+  --c-cla: #c2704f;
   --serif: "Newsreader", Georgia, serif;
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
@@ -48,6 +51,9 @@
     --c-tea: #b49cbc;
     --c-mus: #cf9a9b;
     --c-spo: #8cc0ba;
+    --c-ai: #8e8e93;
+    --c-gpt: #a3a3a8;
+    --c-cla: #dc9172;
   }
 }
 * { box-sizing: border-box; }
@@ -125,6 +131,11 @@ main.page-full { --content-width: var(--page-width); padding-block: 0 2rem; }
 .lane-tea { --lane: var(--c-tea); }
 .lane-mus { --lane: var(--c-mus); }
 .lane-spo { --lane: var(--c-spo); }
+.lane-ai { --lane: var(--c-ai); }
+.lane-gpt { --lane: var(--c-gpt); }
+.lane-cla { --lane: var(--c-cla); }
+/* Two assistants at once: diagonal stripes of both colours. */
+.lane-mix { --lane: var(--c-cla); --stripes: repeating-linear-gradient(135deg, var(--c-gpt) 0 3px, var(--c-cla) 3px 6px); }
 .role-line { margin: .7rem 0 0; font-size: .85rem; color: var(--muted); }
 
 /* Software list */

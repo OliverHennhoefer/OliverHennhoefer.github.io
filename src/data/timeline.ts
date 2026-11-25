@@ -30,10 +30,12 @@ const school = [
 
 export const timelineRoles = [...cvRoles, ...school];
 
-// Music and sport outside the CV, mostly given as ages. An entry without an end is ongoing.
+// Music, sport and AI assistants outside the CV, mostly given as ages. An entry without an end is ongoing.
+// An entry's own `lane` overrides the row colour (the AI row colours each assistant).
 const at = (years: number) => (site.birth ? site.birth.year + (site.birth.month - 1) / 12 : 1995) + years;
-type Hobby = { title: string; start: number; end?: number; period: string };
-export const timelineHobbies: { row: string; lane: string; entries: Hobby[] }[] = [
+type Hobby = { title: string; start: number; end?: number; period: string; lane?: string };
+/** `short` replaces the row label on phones when the full one does not fit. */
+export const timelineHobbies: { row: string; short?: string; lane: string; entries: Hobby[] }[] = [
   { row: "Music", lane: "mus", entries: [
     { title: "Choir", start: at(5), end: at(16), period: "2000 – 11" },
     { title: "Drums", start: at(16), end: 2022 + 6 / 12, period: "2011 – 22" },
@@ -43,6 +45,13 @@ export const timelineHobbies: { row: string; lane: string; entries: Hobby[] }[] 
     { title: "Athletics", start: 2001 + 8 / 12, end: at(9), period: "2001 – 04" },
     { title: "Table tennis", start: at(9), end: at(14), period: "2004 – 09" },
     { title: "Strength training", start: 2015, period: "2015 – now" },
+  ] },
+  // Main AI assistant, with a wink. ChatGPT launched 30 Nov 2022; since Nov 2026 both are in use (striped).
+  { row: "Meat-proxy for", short: "Meat-proxy", lane: "ai", entries: [
+    { title: "ChatGPT", lane: "gpt", start: 2022 + 11 / 12, end: 2025 + 5 / 12, period: "Nov 2022 – May 2025" },
+    { title: "Claude", lane: "cla", start: 2025 + 5 / 12, end: 2026 + 3 / 12, period: "Jun 2025 – Mar 2026" },
+    { title: "ChatGPT", lane: "gpt", start: 2026 + 3 / 12, end: 2026 + 10 / 12, period: "Apr – Oct 2026" },
+    { title: "ChatGPT + Claude", lane: "mix", start: 2026 + 10 / 12, period: "Nov 2026 – now" },
   ] },
 ];
 
