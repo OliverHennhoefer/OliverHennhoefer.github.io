@@ -1,5 +1,5 @@
 ---
-import { birth, timelineHobbies, timelinePackages, timelinePublications, timelineRoles, timelineStart, timelineTrips } from "../data/timeline";
+import { birth, timelineHobbies, timelinePackages, timelinePlatforms, timelinePublications, timelineRoles, timelineStart, timelineTrips } from "../data/timeline";
 
 // The home page timeline: one chart of every role, paper, release and trip, and below it a
 // "time slice" that lists what was going on at the month under the cursor. The markup is
@@ -80,6 +80,14 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
     ))}
     <div class="lc-gap"></div>
     <div class="lc-row lc-row-head"><a class="lc-label" href="/software/"><i></i>Software</a><div></div></div>
+    {timelinePlatforms.map((platform) => (
+      <div class="lc-row lc-row-pkg" data-ov={pkgOv}>
+        <a class="lc-label lc-sub" href={`/software/#${platform.name}`}>{platform.name}</a>
+        <div class="lc-track">
+          <span class="lc-bar lc-ver dev" data-s={platform.start} style={span(platform.start)} title={`${platform.name} · in development since ${platform.since} · no releases yet`}><b>in development</b></span>
+        </div>
+      </div>
+    ))}
     {timelinePackages.map((pkg) => (
       <div class="lc-row lc-row-pkg" data-ov={pkgOv}>
         <a class="lc-label lc-sub" href={`/software/#${pkg.name}`}>{pkg.name}</a>
@@ -116,6 +124,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
     <span><i class="k-dot co"></i>Co-authored</span>
     <span><i class="k-ver pre"></i>0.x on PyPI</span>
     <span><i class="k-ver"></i>Major version</span>
+    <span><i class="k-ver dev"></i>In development</span>
     <button type="button" class="lc-replay" hidden>Replay</button>
     <button type="button" class="lc-now" hidden>Back to now</button>
   </div>
@@ -162,6 +171,12 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
     <div class="lc-col">
       <h3><a href="/software/">Building</a></h3>
       <ul>
+        {timelinePlatforms.map((platform) => (
+          <li data-since={platform.start} hidden={platform.start > today}>
+            <div class="lc-item-title"><a class="lc-pkg" href={`/software/#${platform.name}`}>{platform.name}</a></div>
+            <p class="lc-item-meta">{platform.role} · in development since {platform.since}</p>
+          </li>
+        ))}
         {packagesNow.map(({ pkg, latest }) => {
           return (
             <li data-releases={JSON.stringify(pkg.releases.map((release) => [release.at, release.version]))} hidden={latest.length === 0}>
@@ -250,6 +265,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
     const doing = [...root.querySelectorAll<HTMLElement>(".lc-slice [data-s]")];
     const writing = [...root.querySelectorAll<HTMLElement>(".lc-col [data-year]")];
     const travel = [...root.querySelectorAll<HTMLElement>(".lc-when-trips [data-year]")];
+    const platforms = [...root.querySelectorAll<HTMLElement>(".lc-slice [data-since]")];
     const building = [...root.querySelectorAll<HTMLElement>(".lc-slice [data-releases]")].map((el) => ({ el, releases: JSON.parse(el.dataset.releases!) as [number, string][] }));
     const empties = [...root.querySelectorAll<HTMLElement>(".lc-slice [data-empty]")];
     const title = root.querySelector<HTMLElement>(".lc-when-title")!, sub = root.querySelector<HTMLElement>(".lc-when-sub")!;
@@ -266,6 +282,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
       empties[1].hidden = any; empties[1].querySelector("span")!.textContent = String(f.y);
       for (const el of travel) el.hidden = Number(el.dataset.year) !== f.y;
       any = false;
+      for (const el of platforms) { const on = Number(el.dataset.since) <= t; el.hidden = !on; any ||= on; }
       for (const { el, releases } of building) {
         const done = releases.filter(([at]) => at <= t);
         el.hidden = done.length === 0; any ||= done.length > 0;
@@ -440,7 +457,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
   /* Past-the-cursor named bars fade their fill, not their text, so the label stays legible. */
   .lc-chart .lc-named.dim { opacity: 1; background: color-mix(in srgb, var(--lane) 22%, var(--paper)); }
   .lc-chart .lc-named.dim b { color: color-mix(in srgb, var(--lane) 70%, var(--ink)); }
-  .lc-ver.pre b { color: var(--muted); }
+  .lc-ver.pre b, .lc-ver.dev b { color: var(--muted); }
   .lc-chart .lc-bar.lane-mix, .lc-ov-mark.lane-mix, .lane-mix > .lc-item-title i { background: var(--stripes); }
   .lc-chart .lc-named.lane-mix.dim { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--c-gpt) 22%, var(--paper)) 0 3px, color-mix(in srgb, var(--c-cla) 22%, var(--paper)) 3px 6px); }
   .lc-pub { position: absolute; top: 50%; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%; background: var(--ink); transition: opacity .2s; }
@@ -483,6 +500,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
   .k-dot.co { background: transparent; box-shadow: inset 0 0 0 1.5px var(--ink); }
   .k-ver { width: 18px; height: 9px; border-radius: 2px; background: var(--muted); }
   .k-ver.pre { background: transparent; box-shadow: inset 0 0 0 1.5px var(--muted); }
+  .k-ver.dev, .lc-ver.dev { background: transparent; border: 1.5px dashed var(--muted); box-sizing: border-box; }
   .lc-key button { border: 0; background: none; padding: 0; font: inherit; color: var(--muted); text-decoration: underline; text-decoration-color: var(--faint); text-underline-offset: .2em; cursor: pointer; }
   .lc-key button:hover { color: var(--ink); }
 

@@ -91,3 +91,8 @@ export const timelineTrips = trips.filter((trip) => trip.year).map((trip, _, dat
   const sameYear = dated.filter((other) => other.year === trip.year && !other.month);
   return { ...trip, label, at: trip.year! + (sameYear.indexOf(trip) + 1) / (sameYear.length + 1) };
 });
+
+// Software that ships as a platform rather than on PyPI: one bar from the first commit, no versions.
+export const timelinePlatforms = [
+  { name: "off-key", role: projects.find((project) => project.name === "off-key")?.role ?? "", start: 2025 + 8 / 365, since: "Jan 2025" },
+];
