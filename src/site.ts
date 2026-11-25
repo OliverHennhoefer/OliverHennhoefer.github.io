@@ -21,7 +21,7 @@ export const site = {
    * Month of birth, used by the home page timeline for ages and the "Since birth" / "Since 18" ranges.
    * Leave null to hide them; the timeline then starts with the first CV entry.
    */
-  birth: null as null | { year: number; month: number },
+  birth: { year: 1995, month: 3 } as null | { year: number; month: number },
   thesis:
     "Operationalizing Conformal Anomaly Detection: Scoring, Calibration, Error Control, and Deployment Beyond Idealized Conditions",
   knowsAbout: [

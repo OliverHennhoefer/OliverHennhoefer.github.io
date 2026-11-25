@@ -3,6 +3,7 @@ import { projects } from "./projects";
 import { publications } from "./publications";
 import releaseData from "./releases.json";
 import { site } from "../site";
+import { trips } from "./trips";
 
 // Everything the home page timeline plots, in decimal years (month / 12), derived from the
 // CV, publication and PyPI data so the chart never drifts from the rest of the site.
@@ -45,3 +46,12 @@ export const timelinePackages = Object.entries(releaseData as Record<string, str
 
 export const timelineStart = Math.min(...timelineRoles.map((role) => role.start));
 export const birth = site.birth ? site.birth.year + (site.birth.month - 1) / 12 : null;
+
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+// Trips with a month sit in the middle of it; trips with only a year are spread across that year.
+export const timelineTrips = trips.filter((trip) => trip.year).map((trip, _, dated) => {
+  const label = `${trip.month ? `${monthNames[trip.month - 1]} ` : ""}${trip.year}`;
+  if (trip.month) return { ...trip, label, at: trip.year! + (trip.month - 0.5) / 12 };
+  const sameYear = dated.filter((other) => other.year === trip.year && !other.month);
+  return { ...trip, label, at: trip.year! + (sameYear.indexOf(trip) + 1) / (sameYear.length + 1) };
+});

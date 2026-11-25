@@ -1,6 +1,5 @@
 ---
-import { birth, timelinePackages, timelinePublications, timelineRoles, timelineStart } from "../data/timeline";
-import { trips } from "../data/trips";
+import { birth, timelinePackages, timelinePublications, timelineRoles, timelineStart, timelineTrips } from "../data/timeline";
 
 // The home page timeline: one chart of every role, paper, release and trip, and below it a
 // "time slice" that lists what was going on at the month under the cursor. The markup is
@@ -15,7 +14,7 @@ const pct = (t: number) => (((t - v0) / (v1 - v0)) * 100).toFixed(3);
 const span = (start: number, end = today) => `left:${pct(start)}%;width:calc(${(((end - start) / (v1 - v0)) * 100).toFixed(3)}% - 2px)`;
 
 const lanes = [["Education", "edu"], ["Industry", "ind"], ["Research", "res"], ["Teaching", "tea"]] as const;
-const datedTrips = trips.filter((trip) => trip.year).map((trip) => ({ ...trip, at: trip.year! + ((trip.month ?? 7) - 1) / 12 + (trip.month ? 0.5 / 12 : 0) }));
+const datedTrips = timelineTrips;
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const nowLabel = `${months[now.getUTCMonth()]} ${now.getUTCFullYear()}`;
 const active = (start: number, end?: number) => start <= today && today < (end ?? Infinity);
@@ -62,7 +61,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
       <div class="lc-row" data-ov="5">
         <span class="lc-label"><i></i>Travel</span>
         <div class="lc-track">
-          {datedTrips.map((trip) => <img class="lc-flag" src={`/flags/${trip.flag}.svg`} alt={`${trip.country}, ${trip.month ? `${months[trip.month - 1]} ` : ""}${trip.year}`} title={`${trip.country} · ${trip.month ? `${months[trip.month - 1]} ` : ""}${trip.year}`} data-s={trip.at} style={`left:${pct(trip.at)}%`} width="13" height="13" loading="lazy" />)}
+          {datedTrips.map((trip) => <img class="lc-flag" src={`/flags/${trip.flag}.svg`} alt={`${trip.country}, ${trip.label}`} title={`${trip.country} · ${trip.label}`} data-s={trip.at} style={`left:${pct(trip.at)}%`} width="13" height="13" loading="lazy" />)}
         </div>
       </div>
     )}
@@ -103,6 +102,9 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
     <div class="lc-when">
       <p class="lc-when-title">Now</p>
       <p class="lc-when-sub">{nowLabel}</p>
+      <p class="lc-when-trips" aria-label="Travel that year">
+        {datedTrips.map((trip) => <img src={`/flags/${trip.flag}.svg`} alt={trip.country} title={`${trip.country} · ${trip.label}`} data-year={trip.year} hidden={trip.year !== now.getUTCFullYear()} width="16" height="16" loading="lazy" />)}
+      </p>
     </div>
     <div class="lc-col">
       <h3><a href="/career/">Doing</a></h3>
@@ -210,7 +212,8 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
 
     /* The slice: show the list entries that belong to the month at t */
     const doing = [...root.querySelectorAll<HTMLElement>(".lc-slice [data-s]")];
-    const writing = [...root.querySelectorAll<HTMLElement>(".lc-slice [data-year]")];
+    const writing = [...root.querySelectorAll<HTMLElement>(".lc-col [data-year]")];
+    const travel = [...root.querySelectorAll<HTMLElement>(".lc-when-trips [data-year]")];
     const building = [...root.querySelectorAll<HTMLElement>(".lc-slice [data-releases]")].map((el) => ({ el, releases: JSON.parse(el.dataset.releases!) as [number, string][] }));
     const empties = [...root.querySelectorAll<HTMLElement>(".lc-slice [data-empty]")];
     const title = root.querySelector<HTMLElement>(".lc-when-title")!, sub = root.querySelector<HTMLElement>(".lc-when-sub")!;
@@ -225,6 +228,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
       any = false;
       for (const el of writing) { const on = Number(el.dataset.year) === f.y; el.hidden = !on; any ||= on; }
       empties[1].hidden = any; empties[1].querySelector("span")!.textContent = String(f.y);
+      for (const el of travel) el.hidden = Number(el.dataset.year) !== f.y;
       any = false;
       for (const { el, releases } of building) {
         const done = releases.filter(([at]) => at <= t);
@@ -443,6 +447,8 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
   .lc-slice { display: grid; grid-template-columns: var(--label-width) repeat(3, minmax(0, 1fr)); gap: 2rem; margin-top: 2rem; padding-block: 1.6rem 2.4rem; border-top: 1px solid var(--line); }
   .lc-slice > * { min-width: 0; }
   .lc-when-title { font: 300 2rem/1.05 var(--serif); letter-spacing: -.03em; margin: 0; }
+  .lc-when-trips { display: flex; flex-wrap: wrap; gap: .3rem; margin: .8rem 0 0; }
+  .lc-when-trips img { width: 16px; height: 16px; border-radius: 50%; }
   .lc-when-sub { margin: .5rem 0 0; font-size: .78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
   .lc-col h3 { font: 500 .72rem/1.9 var(--sans); color: var(--muted); margin: 0 0 .5rem; text-transform: uppercase; letter-spacing: .07em; }
   .lc-col h3 a { text-decoration: none; }
