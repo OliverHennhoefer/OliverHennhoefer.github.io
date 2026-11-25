@@ -215,7 +215,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
             const px = (t: number) => ((t - V0) / (V1 - V0)) * width;
             const shift = Math.max(0, -px(m.s)), room = Math.min(px(m.e), width) - Math.max(px(m.s), 0) - 2;
             m.label.style.marginLeft = `${shift}px`;
-            m.label.hidden = room < m.labelWidth + 6;
+            m.label.hidden = room < m.labelWidth + 14;
           }
         }
       }
@@ -424,7 +424,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
   .lc-ver, .lc-named { height: 16px; margin-top: -8px; border-radius: 4px; display: flex; align-items: center; overflow: hidden; }
   .lc-ver { --lane: var(--muted); }
   .lc-ver.pre { background: transparent; box-shadow: inset 0 0 0 1.5px var(--muted); }
-  .lc-ver b, .lc-named b { font: 500 .62rem/1 var(--sans); letter-spacing: .01em; color: var(--paper); padding: 0 6px; white-space: nowrap; }
+  .lc-ver b, .lc-named b { font: 500 .62rem/1 var(--sans); letter-spacing: .01em; color: var(--paper); padding: 0 6px; white-space: nowrap; transform: translateY(1px); }
   /* Past-the-cursor named bars fade their fill, not their text, so the label stays legible. */
   .lc-chart .lc-named.dim { opacity: 1; background: color-mix(in srgb, var(--lane) 22%, var(--paper)); }
   .lc-chart .lc-named.dim b { color: color-mix(in srgb, var(--lane) 70%, var(--ink)); }
