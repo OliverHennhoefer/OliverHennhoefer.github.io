@@ -37,7 +37,7 @@ export const skills: Skill[] = [
   {
     area: "Cloud & infrastructure",
     methods: ["Infrastructure as Code"],
-    tools: [{ name: "Cloudflare", icon: "cloudflare" }, { name: "Docker", icon: "docker" }, { name: "Ansible", icon: "ansible" }, { name: "Traefik", icon: "traefik" }, { name: "Tailscale", icon: "tailscale" }, { name: "Linux", icon: "linux" }],
+    tools: [{ name: "Cloudflare", icon: "cloudflare" }, { name: "Docker", icon: "docker" }, { name: "Ansible", icon: "ansible" }, { name: "Traefik", icon: "traefik" }, { name: "Tailscale", icon: "tailscale" }, { name: "Linux", icon: "linux" }, { name: "Grafana", icon: "grafana" }, { name: "Loki", icon: "loki" }],
   },
   {
     area: "DevOps",
