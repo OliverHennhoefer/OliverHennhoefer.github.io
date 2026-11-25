@@ -20,6 +20,10 @@ const nowLabel = `${months[now.getUTCMonth()]} ${now.getUTCFullYear()}`;
 const active = (start: number, end?: number) => start <= today && today < (end ?? Infinity);
 const firstRelease = timelinePackages.flatMap((pkg) => pkg.releases).sort((a, b) => a.at - b.at)[0];
 const packagesNow = timelinePackages.map((pkg) => ({ pkg, latest: pkg.releases.filter((release) => release.at <= today) }));
+// Overview band rows: lanes 0-3, papers 4, trips 5, hobbies, Software, then hobbies marked `last`.
+const upperHobbies = timelineHobbies.filter((hobby) => !hobby.last);
+const pkgOv = 6 + upperHobbies.length;
+const hobbyRows = timelineHobbies.map((hobby) => ({ hobby, ov: hobby.last ? pkgOv + 1 + timelineHobbies.filter((h) => h.last).indexOf(hobby) : 6 + upperHobbies.indexOf(hobby) }));
 const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) => Math.ceil(v0) + i);
 ---
 <section class="lc" id="timeline" aria-labelledby="timeline-heading" data-birth={birth ?? ""} data-start={careerStart}>
@@ -66,8 +70,8 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
         </div>
       </div>
     )}
-    {timelineHobbies.map((hobby, i) => (
-      <div class={`lc-row lane-${hobby.lane}`} data-ov={6 + i}>
+    {hobbyRows.filter((row) => !row.hobby.last).map(({ hobby, ov }) => (
+      <div class={`lc-row lane-${hobby.lane}`} data-ov={ov}>
         <span class="lc-label"><i></i>{hobby.short ? <><span class="lc-full">{hobby.row}</span><span class="lc-short">{hobby.short}</span></> : hobby.row}</span>
         <div class="lc-track">
           {hobby.entries.map((entry) => <span class={`lc-bar lc-named lane-${entry.lane ?? hobby.lane}`} data-s={entry.start} data-e={entry.end} style={span(entry.start, entry.end)} title={`${entry.title} · ${entry.period}`}><b>{entry.title}</b></span>)}
@@ -77,12 +81,21 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
     <div class="lc-gap"></div>
     <div class="lc-row lc-row-head"><a class="lc-label" href="/software/"><i></i>Software</a><div></div></div>
     {timelinePackages.map((pkg) => (
-      <div class="lc-row lc-row-pkg" data-ov={6 + timelineHobbies.length}>
+      <div class="lc-row lc-row-pkg" data-ov={pkgOv}>
         <a class="lc-label lc-sub" href={`/software/#${pkg.name}`}>{pkg.name}</a>
         <div class="lc-track">
           {pkg.majors.map((major) => (
             <span class:list={["lc-bar", "lc-ver", { pre: major.major === 0 }]} data-s={major.start} data-e={major.end} style={span(major.start, major.end)} title={`${pkg.name} ${major.major}.x · from ${major.date} · ${major.count} release${major.count > 1 ? "s" : ""}`}><b>{major.major === 0 ? "0.x" : `v${major.major}`}</b></span>
           ))}
+        </div>
+      </div>
+    ))}
+    {hobbyRows.some((row) => row.hobby.last) && <div class="lc-gap"></div>}
+    {hobbyRows.filter((row) => row.hobby.last).map(({ hobby, ov }) => (
+      <div class={`lc-row lane-${hobby.lane}`} data-ov={ov}>
+        <span class="lc-label"><i></i>{hobby.short ? <><span class="lc-full">{hobby.row}</span><span class="lc-short">{hobby.short}</span></> : hobby.row}</span>
+        <div class="lc-track">
+          {hobby.entries.map((entry) => <span class={`lc-bar lc-named lane-${entry.lane ?? hobby.lane}`} data-s={entry.start} data-e={entry.end} style={span(entry.start, entry.end)} title={`${entry.title} · ${entry.period}`}><b>{entry.title}</b></span>)}
         </div>
       </div>
     ))}
@@ -418,7 +431,7 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
   .lc-sub { padding-left: .95rem; font: .68rem/1.4 var(--mono); }
   .lc-track { position: relative; height: 100%; overflow: hidden; }
   .lc-track::before { content: ""; position: absolute; inset: 50% 0 auto; border-top: 1px dotted var(--faint); }
-  .lc-bar { position: absolute; top: 50%; height: 10px; margin-top: -5px; border-radius: 3px; background: var(--lane); transform-origin: left center; transition: opacity .2s, filter .15s; text-decoration: none; }
+  .lc-bar { position: absolute; top: 50%; height: 16px; margin-top: -8px; border-radius: 4px; background: var(--lane); transform-origin: left center; transition: opacity .2s, filter .15s; text-decoration: none; }
   a.lc-bar:hover { filter: brightness(.88); }
   .lc-ver, .lc-named { height: 16px; margin-top: -8px; border-radius: 4px; display: flex; align-items: center; overflow: hidden; }
   .lc-ver { --lane: var(--muted); }
