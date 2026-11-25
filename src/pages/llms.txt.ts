@@ -27,6 +27,7 @@ export const GET: APIRoute = () => {
     "## Profiles",
     "",
     `- [Google Scholar](${site.socials.scholar})`,
+    `- [alphaXiv](${site.socials.alphaxiv})`,
     `- [GitHub](${site.socials.github})`,
     `- [LinkedIn](${site.socials.linkedin})`,
     `- [X](${site.socials.x})`,
