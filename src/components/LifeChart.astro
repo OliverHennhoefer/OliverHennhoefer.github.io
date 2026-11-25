@@ -1,0 +1,481 @@
+---
+import { birth, timelinePackages, timelinePublications, timelineRoles, timelineStart } from "../data/timeline";
+import { trips } from "../data/trips";
+
+// The home page timeline: one chart of every role, paper, release and trip, and below it a
+// "time slice" that lists what was going on at the month under the cursor. The markup is
+// complete at build time (positioned for the career view, sliced at the build date); the
+// script only re-positions it for other ranges and re-slices it as the cursor moves.
+const now = new Date();
+const today = now.getUTCFullYear() + now.getUTCMonth() / 12 + (now.getUTCDate() - 1) / 365;
+const careerStart = Math.floor(timelineStart) - 0.4;
+const padTo = (start: number) => today + (today - start) * 0.03;
+const [v0, v1] = [careerStart, padTo(careerStart)];
+const pct = (t: number) => (((t - v0) / (v1 - v0)) * 100).toFixed(3);
+const span = (start: number, end = today) => `left:${pct(start)}%;width:calc(${(((end - start) / (v1 - v0)) * 100).toFixed(3)}% - 2px)`;
+
+const lanes = [["Education", "edu"], ["Industry", "ind"], ["Research", "res"], ["Teaching", "tea"]] as const;
+const datedTrips = trips.filter((trip) => trip.year).map((trip) => ({ ...trip, at: trip.year! + ((trip.month ?? 7) - 1) / 12 + (trip.month ? 0.5 / 12 : 0) }));
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const nowLabel = `${months[now.getUTCMonth()]} ${now.getUTCFullYear()}`;
+const active = (start: number, end?: number) => start <= today && today < (end ?? Infinity);
+const firstRelease = timelinePackages.flatMap((pkg) => pkg.releases).sort((a, b) => a.at - b.at)[0];
+const packagesNow = timelinePackages.map((pkg) => ({ pkg, latest: pkg.releases.filter((release) => release.at <= today) }));
+const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) => Math.ceil(v0) + i);
+---
+<section class="lc" id="timeline" aria-labelledby="timeline-heading" data-birth={birth ?? ""} data-start={careerStart}>
+  <div class="lc-head">
+    <h2 id="timeline-heading">Timeline</h2>
+    <div class="lc-range" hidden>
+      <span class="lc-range-label tnum"></span>
+      <div class="lc-presets" role="group" aria-label="Time range">
+        {birth !== null && <><button type="button" data-range="life">Since birth</button><button type="button" data-range="18">Since 18</button></>}
+        <button type="button" data-range="career" aria-pressed="true">Since {Math.floor(timelineStart)}</button>
+        <button type="button" data-range="5">5y</button>
+        <button type="button" data-range="1">1y</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="lc-chart" tabindex="0" role="slider" aria-label="Timeline. Move through time with the arrow keys; the list below follows." aria-valuetext={nowLabel}>
+    <div class="lc-grid" aria-hidden="true">{ticks.map((year) => <i style={`left:${pct(year)}%`}></i>)}</div>
+    {lanes.map(([lane, key], i) => (
+      <div class={`lc-row lane-${key}`} data-ov={i}>
+        <a class="lc-label" href="/career/"><i></i>{lane}</a>
+        <div class="lc-track">
+          {timelineRoles.filter((role) => role.lane === lane && !role.hideBar).map((role) => (
+            <a class="lc-bar" href={`/career/#${role.id}`} data-s={role.start} data-e={role.end} style={span(role.start, role.end)} title={`${role.title} · ${role.orgName} · ${role.period}`} aria-label={`${role.title}, ${role.orgName}, ${role.period}`}></a>
+          ))}
+        </div>
+      </div>
+    ))}
+    <div class="lc-gap"></div>
+    <div class="lc-row" data-ov="4">
+      <a class="lc-label" href="/publications/"><i></i>Papers</a>
+      <div class="lc-track">
+        {timelinePublications.map((publication) => (
+          <a class:list={["lc-pub", { co: !publication.first }]} href={publication.url} data-s={publication.at} style={`left:${pct(publication.at)}%`} title={`${publication.title} · ${publication.venueShort} ${publication.year}`} aria-label={`${publication.title}, ${publication.venueShort} ${publication.year}`}></a>
+        ))}
+      </div>
+    </div>
+    {datedTrips.length > 0 && (
+      <div class="lc-row" data-ov="5">
+        <span class="lc-label"><i></i>Travel</span>
+        <div class="lc-track">
+          {datedTrips.map((trip) => <img class="lc-flag" src={`/flags/${trip.flag}.svg`} alt={`${trip.country}, ${trip.month ? `${months[trip.month - 1]} ` : ""}${trip.year}`} title={`${trip.country} · ${trip.month ? `${months[trip.month - 1]} ` : ""}${trip.year}`} data-s={trip.at} style={`left:${pct(trip.at)}%`} width="13" height="13" loading="lazy" />)}
+        </div>
+      </div>
+    )}
+    <div class="lc-gap"></div>
+    <div class="lc-row lc-row-head"><a class="lc-label" href="/software/"><i></i>Software</a><div></div></div>
+    {timelinePackages.map((pkg) => (
+      <div class="lc-row lc-row-pkg" data-ov="6">
+        <a class="lc-label lc-sub" href={`/software/#${pkg.name}`}>{pkg.name}</a>
+        <div class="lc-track">
+          {pkg.majors.map((major) => (
+            <span class:list={["lc-bar", "lc-ver", { pre: major.major === 0 }]} data-s={major.start} data-e={major.end} style={span(major.start, major.end)} title={`${pkg.name} ${major.major}.x · from ${major.date} · ${major.count} release${major.count > 1 ? "s" : ""}`}><b>{major.major === 0 ? "0.x" : `v${major.major}`}</b></span>
+          ))}
+        </div>
+      </div>
+    ))}
+    <div class="lc-row lc-axis" aria-hidden="true">
+      <div></div>
+      <div class="lc-track lc-ticks">{ticks.filter((year) => year % 2 === 0).map((year) => <span class="tnum" style={`left:${pct(year)}%`}>{year}</span>)}</div>
+    </div>
+    <div class="lc-scrub" aria-hidden="true"><div class="lc-scrub-line" style={`left:${pct(today)}%`}></div><div class="lc-scrub-tag" style={`left:${pct(today)}%`}>Now</div></div>
+  </div>
+
+  <div class="lc-ov" hidden>
+    <span class="lc-ov-label">Overview</span>
+    <div class="lc-ov-track" aria-label="Overview. Drag the window to choose the visible years."></div>
+  </div>
+
+  <div class="lc-key">
+    <span><i class="k-dot"></i>First-author paper</span>
+    <span><i class="k-dot co"></i>Co-authored</span>
+    <span><i class="k-ver pre"></i>0.x on PyPI</span>
+    <span><i class="k-ver"></i>Major version</span>
+    <button type="button" class="lc-replay" hidden>Replay</button>
+    <button type="button" class="lc-now" hidden>Back to now</button>
+  </div>
+
+  <div class="lc-slice" aria-live="polite">
+    <div class="lc-when">
+      <p class="lc-when-title">Now</p>
+      <p class="lc-when-sub">{nowLabel}</p>
+    </div>
+    <div class="lc-col">
+      <h3><a href="/career/">Doing</a></h3>
+      <ul>
+        {timelineRoles.map((role) => (
+          <li class={role.laneClass} data-s={role.start} data-e={role.end} hidden={!active(role.start, role.end)}>
+            <div class="lc-item-title"><i></i><a href={`/career/#${role.id}`}>{role.title}</a></div>
+            <p class="lc-item-meta">{role.orgName} · {role.period}</p>
+            {role.points && <ul class="lc-points">{role.points.map((point) => <li>{point}</li>)}</ul>}
+          </li>
+        ))}
+        <li class="lc-empty" data-empty hidden={timelineRoles.some((role) => active(role.start, role.end))}>Between stations.</li>
+      </ul>
+    </div>
+    <div class="lc-col">
+      <h3><a href="/publications/">Writing</a></h3>
+      <ul>
+        {timelinePublications.map((publication) => (
+          <li data-year={publication.year} hidden={publication.year !== now.getUTCFullYear()}>
+            <a class="lc-paper" href={publication.url}>{publication.title}</a>
+            <p class="lc-item-meta">{publication.venueShort} · {publication.year}{publication.first && " · first author"}</p>
+          </li>
+        ))}
+        <li class="lc-empty" data-empty hidden={timelinePublications.some((publication) => publication.year === now.getUTCFullYear())}>No papers in <span>{now.getUTCFullYear()}</span>.</li>
+      </ul>
+    </div>
+    <div class="lc-col">
+      <h3><a href="/software/">Building</a></h3>
+      <ul>
+        {packagesNow.map(({ pkg, latest }) => {
+          return (
+            <li data-releases={JSON.stringify(pkg.releases.map((release) => [release.at, release.version]))} hidden={latest.length === 0}>
+              <div class="lc-item-title"><a class="lc-pkg" href={`/software/#${pkg.name}`}>{pkg.name}</a> <span class="lc-version">{latest.at(-1)?.version}</span></div>
+              <p class="lc-item-meta">{pkg.role} · <span class="lc-count">{latest.length} release{latest.length === 1 ? "" : "s"}</span> so far</p>
+            </li>
+          );
+        })}
+        <li class="lc-empty" data-empty hidden>Nothing on PyPI yet. The first package ships in {firstRelease ? `${months[Number(firstRelease.date.slice(5, 7)) - 1]} ${firstRelease.date.slice(0, 4)}` : "the future"}.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>(".lc");
+  if (root) {
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const d = new Date();
+    const NOW = d.getFullYear() + d.getMonth() / 12 + (d.getDate() - 1) / 365;
+    const birth = root.dataset.birth ? Number(root.dataset.birth) : null;
+    const careerStart = Number(root.dataset.start);
+    const T0 = birth ?? careerStart;
+    const padTo = (start: number) => NOW + (NOW - start) * 0.03;
+    const END = padTo(T0);
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let V0 = careerStart, V1 = padTo(careerStart), cur = NOW, pinned = NOW, shown = -1;
+
+    const chart = root.querySelector<HTMLElement>(".lc-chart")!;
+    const firstTrack = () => chart.querySelector<HTMLElement>(".lc-track")!;
+    const line = root.querySelector<HTMLElement>(".lc-scrub-line")!, tag = root.querySelector<HTMLElement>(".lc-scrub-tag")!;
+    const grid = root.querySelector<HTMLElement>(".lc-grid")!, ticksEl = root.querySelector<HTMLElement>(".lc-ticks")!;
+    const marks = [...chart.querySelectorAll<HTMLElement>("[data-s]")].map((el) => ({
+      el, s: Number(el.dataset.s), e: el.dataset.e ? Number(el.dataset.e) : el.classList.contains("lc-bar") ? NOW : null, label: el.querySelector("b"),
+    }));
+    const pct = (t: number) => ((t - V0) / (V1 - V0)) * 100;
+    const fmt = (t: number) => { const y = Math.floor(t + 1e-6), m = Math.min(11, Math.floor((t - y) * 12 + 1e-6)); return { y, label: `${months[m]} ${y}`, short: `${months[m].slice(0, 3)} ${y}` }; };
+    const age = (t: number) => (birth === null ? null : Math.floor(t - birth + 1e-6));
+
+    /* Layout for the visible window */
+    function ticks() {
+      const span = V1 - V0, width = firstTrack().getBoundingClientRect().width || 600, out: { t: number; text: string; sub?: string }[] = [];
+      // The finest step that still leaves about 56px per label.
+      const step = [1 / 12, 0.25, 1, 2, 5, 10].find((s) => (s / span) * width >= 56) ?? 10;
+      for (let t = Math.ceil(V0 / step - 1e-9) * step; t < Math.min(V1, NOW); t += step) {
+        const y = Math.floor(t + 1e-6), m = Math.round((t - y) * 12) % 12;
+        const a = age(t + 0.99);
+        out.push(m === 0 ? { t, text: `${y}`, sub: a === null ? undefined : `age ${a}` } : { t, text: months[m].slice(0, 3) });
+      }
+      return out;
+    }
+    let activeRange: string | null = "career";
+    function layout() {
+      const width = firstTrack().getBoundingClientRect().width || 1;
+      for (const m of marks) {
+        m.el.style.left = `${pct(m.s)}%`;
+        if (m.e !== null) {
+          m.el.style.width = `max(0px, calc(${pct(m.e) - pct(m.s)}% - 2px))`;
+          if (m.label) m.label.hidden = ((m.e - m.s) / (V1 - V0)) * width < 26;
+        }
+      }
+      const tk = ticks();
+      ticksEl.innerHTML = tk.map((k) => `<span class="tnum" style="left:${pct(k.t)}%">${k.text}${k.sub ? `<small>${k.sub}</small>` : ""}</span>`).join("");
+      grid.innerHTML = tk.map((k) => `<i style="left:${pct(k.t)}%"></i>`).join("");
+      placeScrub();
+      placeBrush();
+      const from = Math.max(V0, T0), a0 = age(from), a1 = age(Math.min(V1, NOW));
+      rangeLabel.textContent = `${fmt(from).short} – ${V1 >= NOW ? "now" : fmt(V1).short}${a0 === null ? "" : ` · age ${a0} to ${a1}`}`;
+      for (const b of presetButtons) b.setAttribute("aria-pressed", String(b.dataset.range === activeRange));
+    }
+    function placeScrub() {
+      const x = pct(cur), visible = x >= 0 && x <= 100;
+      line.hidden = tag.hidden = !visible;
+      line.style.left = tag.style.left = `${x}%`;
+    }
+
+    /* The slice: show the list entries that belong to the month at t */
+    const doing = [...root.querySelectorAll<HTMLElement>(".lc-slice [data-s]")];
+    const writing = [...root.querySelectorAll<HTMLElement>(".lc-slice [data-year]")];
+    const building = [...root.querySelectorAll<HTMLElement>(".lc-slice [data-releases]")].map((el) => ({ el, releases: JSON.parse(el.dataset.releases!) as [number, string][] }));
+    const empties = [...root.querySelectorAll<HTMLElement>(".lc-slice [data-empty]")];
+    const title = root.querySelector<HTMLElement>(".lc-when-title")!, sub = root.querySelector<HTMLElement>(".lc-when-sub")!;
+    function slice(t: number) {
+      const f = fmt(t), isNow = Math.abs(t - NOW) < 1 / 24, a = age(t);
+      title.textContent = isNow ? "Now" : f.label;
+      sub.textContent = isNow ? `${f.label}${a === null ? "" : ` · age ${a}`}` : `${a === null ? "" : `age ${a} · `}${Math.max(0, Math.round((NOW - t) * 12))} months ago`;
+      let any = false;
+      for (const el of doing) { const on = Number(el.dataset.s) <= t && t < (el.dataset.e ? Number(el.dataset.e) : Infinity); el.hidden = !on; any ||= on; }
+      empties[0].hidden = any;
+      empties[0].textContent = t < careerStart + 0.4 ? "Before the first CV entry." : "Between stations.";
+      any = false;
+      for (const el of writing) { const on = Number(el.dataset.year) === f.y; el.hidden = !on; any ||= on; }
+      empties[1].hidden = any; empties[1].querySelector("span")!.textContent = String(f.y);
+      any = false;
+      for (const { el, releases } of building) {
+        const done = releases.filter(([at]) => at <= t);
+        el.hidden = done.length === 0; any ||= done.length > 0;
+        if (done.length) { el.querySelector(".lc-version")!.textContent = done[done.length - 1][1]; el.querySelector(".lc-count")!.textContent = `${done.length} release${done.length === 1 ? "" : "s"}`; }
+      }
+      empties[2].hidden = any;
+    }
+    function set(t: number, intro = false) {
+      cur = Math.max(T0, Math.min(NOW, t));
+      placeScrub();
+      const f = fmt(cur);
+      tag.textContent = Math.abs(cur - NOW) < 1 / 24 ? "Now" : f.short;
+      chart.setAttribute("aria-valuetext", f.label);
+      for (const m of marks) {
+        if (intro) {
+          m.el.style.opacity = m.s <= cur ? "1" : "0";
+          if (m.e !== null) m.el.style.transform = `scaleX(${Math.max(0, Math.min(1, (cur - m.s) / Math.max(1e-3, m.e - m.s)))})`;
+        } else { m.el.style.opacity = ""; m.el.style.transform = ""; m.el.classList.toggle("dim", m.s > cur + 1e-6); }
+      }
+      if (ovNow) ovNow.style.left = `${opct(cur)}%`;
+      const key = Math.round(cur * 12);
+      if (key !== shown) { shown = key; slice(cur); }
+    }
+
+    /* Overview band: always birth (or the first CV entry) to now, with a draggable window */
+    const ov = root.querySelector<HTMLElement>(".lc-ov-track")!;
+    const opct = (t: number) => ((t - T0) / (END - T0)) * 100;
+    const mini = (row: number, cls: string, s: number, e?: number) => `<span class="${cls}" style="top:${4 + row * 5}px;left:${opct(s)}%${e === undefined ? "" : `;width:${opct(e) - opct(s)}%`}"></span>`;
+    let ovHtml = `<div class="lc-ov-plot">`;
+    for (const row of chart.querySelectorAll<HTMLElement>(".lc-row[data-ov]")) {
+      const i = Number(row.dataset.ov);
+      for (const el of row.querySelectorAll<HTMLElement>("[data-s]")) {
+        const lane = [...row.classList].find((c) => c.startsWith("lane-"));
+        const s = Number(el.dataset.s), e = el.dataset.e ? Number(el.dataset.e) : el.classList.contains("lc-bar") ? NOW : undefined;
+        ovHtml += mini(i, `lc-ov-mark ${lane ?? ""}${e === undefined ? " dot" : ""}`, s, e);
+      }
+    }
+    ovHtml += `</div><div class="lc-ov-axis">`;
+    const yearStep = END - T0 > 20 ? 5 : 2;
+    for (let y = Math.ceil(T0 / yearStep) * yearStep; y < NOW; y += yearStep) ovHtml += `<span class="tnum" style="left:${opct(y)}%">${y}</span>`;
+    ovHtml += `</div>`;
+    if (birth !== null) ovHtml += `<div class="lc-ov-18" style="left:${opct(birth + 18)}%"><span>age 18</span></div>`;
+    ovHtml += `<div class="lc-ov-shade l"></div><div class="lc-ov-shade r"></div><div class="lc-ov-now"></div><div class="lc-brush"><span class="h" data-h="l"></span><span class="h" data-h="r"></span></div>`;
+    ov.innerHTML = ovHtml;
+    const brush = ov.querySelector<HTMLElement>(".lc-brush")!, ovNow = ov.querySelector<HTMLElement>(".lc-ov-now")!;
+    const shadeL = ov.querySelector<HTMLElement>(".lc-ov-shade.l")!, shadeR = ov.querySelector<HTMLElement>(".lc-ov-shade.r")!;
+    function placeBrush() {
+      const a = opct(V0), b = opct(V1);
+      brush.style.left = `${a}%`; brush.style.width = `${b - a}%`;
+      shadeL.style.width = `${Math.max(0, a)}%`; shadeR.style.width = `${Math.max(0, 100 - b)}%`;
+    }
+    const MIN = 0.6;
+    const clampView = (a: number, b: number): [number, number] => { a = Math.max(T0, a); b = Math.min(END, b); if (b - a < MIN) { if (a <= T0) b = a + MIN; else a = b - MIN; } return [a, b]; };
+    const ovTime = (e: PointerEvent) => { const r = ov.getBoundingClientRect(); return T0 + ((e.clientX - r.left) / r.width) * (END - T0); };
+    let drag: { mode: string; off?: number; span?: number; anchor?: number } | null = null;
+    ov.addEventListener("pointerdown", (e) => {
+      const t = ovTime(e), handle = (e.target as HTMLElement).dataset.h;
+      activeRange = null;
+      if (handle) drag = { mode: handle };
+      else if (e.target === brush) drag = { mode: "pan", off: t - V0, span: V1 - V0 };
+      else { drag = { mode: "new", anchor: t }; [V0, V1] = clampView(t - 0.3, t + 0.3); }
+      ov.setPointerCapture(e.pointerId); layout(); e.preventDefault();
+    });
+    ov.addEventListener("pointermove", (e) => {
+      if (!drag) return;
+      const t = ovTime(e);
+      if (drag.mode === "l") [V0, V1] = clampView(Math.min(t, V1 - MIN), V1);
+      else if (drag.mode === "r") [V0, V1] = clampView(V0, Math.max(t, V0 + MIN));
+      else if (drag.mode === "pan") { const a = Math.max(T0, Math.min(END - drag.span!, t - drag.off!)); V0 = a; V1 = a + drag.span!; }
+      else [V0, V1] = clampView(Math.min(drag.anchor!, t), Math.max(drag.anchor!, t));
+      layout();
+    });
+    ov.addEventListener("pointerup", () => { drag = null; });
+
+    /* Range presets, like a dashboard's "Last 7 days" in life units */
+    const rangeLabel = root.querySelector<HTMLElement>(".lc-range-label")!;
+    const presetButtons = [...root.querySelectorAll<HTMLButtonElement>(".lc-presets button")];
+    const starts: Record<string, number> = { career: careerStart, "5": NOW - 5, "1": NOW - 1 };
+    if (birth !== null) { starts.life = birth; starts["18"] = birth + 18; }
+    let tween = 0;
+    function goTo(name: string) {
+      activeRange = name;
+      const a = starts[name], b = Math.min(END, padTo(a)), a0 = V0, b0 = V1, t0 = performance.now(), dur = reduced ? 0 : 420;
+      cancelAnimationFrame(tween);
+      const step = (time: number) => { const k = dur ? Math.min(1, (time - t0) / dur) : 1, ease = 1 - Math.pow(1 - k, 3); V0 = a0 + (a - a0) * ease; V1 = b0 + (b - b0) * ease; layout(); if (k < 1) tween = requestAnimationFrame(step); };
+      tween = requestAnimationFrame(step);
+    }
+    for (const b of presetButtons) b.addEventListener("click", () => goTo(b.dataset.range!));
+
+    /* Scrubbing: hover with a mouse, drag with a finger, arrow keys on the focused chart */
+    const fromEvent = (e: PointerEvent) => { const r = firstTrack().getBoundingClientRect(); return V0 + ((e.clientX - r.left) / r.width) * (V1 - V0); };
+    let dragging = false, moved = false, downX = 0, playing = false;
+    chart.addEventListener("pointermove", (e) => {
+      if (playing) return;
+      if (dragging && Math.abs(e.clientX - downX) > 6) moved = true;
+      if (e.pointerType === "mouse" || dragging) set(fromEvent(e));
+    });
+    chart.addEventListener("pointerdown", (e) => {
+      if (playing || (e.pointerType === "mouse" && (e.target as HTMLElement).closest("a"))) return;
+      dragging = true; moved = false; downX = e.clientX;
+      if (e.pointerType === "mouse") { chart.setPointerCapture(e.pointerId); set(fromEvent(e)); }
+    });
+    chart.addEventListener("pointerup", (e) => { if (dragging && e.pointerType !== "mouse" && !moved) set(fromEvent(e)); dragging = false; pinned = cur; });
+    chart.addEventListener("pointercancel", () => { dragging = false; });
+    chart.addEventListener("click", (e) => { if (moved) { e.preventDefault(); moved = false; } }, true);
+    chart.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse" && !dragging && !playing) set(pinned); });
+    chart.addEventListener("keydown", (e) => {
+      const step = e.shiftKey ? 1 : 1 / 12;
+      if (e.key === "ArrowLeft") set(cur - step); else if (e.key === "ArrowRight") set(cur + step);
+      else if (e.key === "Home") set(Math.max(T0, V0)); else if (e.key === "End") set(NOW); else return;
+      pinned = cur; e.preventDefault();
+    });
+    const nowButton = root.querySelector<HTMLButtonElement>(".lc-now")!, replay = root.querySelector<HTMLButtonElement>(".lc-replay")!;
+    nowButton.addEventListener("click", () => { pinned = NOW; set(NOW); });
+    function play() {
+      if (reduced) { set(NOW); return; }
+      playing = true;
+      const t0 = performance.now(), dur = 2600, from = Math.max(T0, V0);
+      const step = (time: number) => {
+        const k = Math.min(1, (time - t0) / dur), ease = 1 - Math.pow(1 - k, 2.2);
+        set(from + (NOW - from) * ease, true);
+        if (k < 1) requestAnimationFrame(step); else { playing = false; pinned = NOW; set(NOW); }
+      };
+      requestAnimationFrame(step);
+    }
+    replay.addEventListener("click", play);
+
+    for (const el of root.querySelectorAll<HTMLElement>(".lc-range, .lc-ov, .lc-replay, .lc-now")) el.hidden = false;
+    root.classList.add("is-live");
+    new ResizeObserver(() => layout()).observe(chart);
+    layout();
+    set(NOW);
+    // The sweep from the first entry to today plays once per visit.
+    let seen = false;
+    try { seen = sessionStorage.getItem("lc-played") === "1"; sessionStorage.setItem("lc-played", "1"); } catch {}
+    if (!seen && !navigator.webdriver) play();
+  }
+</script>
+
+<style is:global>
+  .lc [hidden] { display: none !important; }
+  .lc { padding-block: 1.9rem 0; border-bottom: 1px solid var(--line); --lc-gutter: calc(var(--label-width) + 2rem); }
+  .lc-head { display: grid; grid-template-columns: var(--lc-gutter) minmax(0, 1fr); align-items: baseline; margin-bottom: 2.2rem; }
+  .lc-head h2 { font: 500 .78rem/1.9 var(--sans); color: var(--muted); margin: 0; }
+  .lc-range { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; }
+  .lc-range-label { font-size: .78rem; color: var(--muted); }
+  .lc-presets { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+  .lc-presets button { border: 0; border-left: 1px solid var(--line); background: var(--paper); color: var(--muted); padding: .28rem .7rem; font: 400 .74rem/1.4 var(--sans); cursor: pointer; font-variant-numeric: tabular-nums; }
+  .lc-presets button:first-child { border-left: 0; }
+  .lc-presets button:hover { color: var(--ink); }
+  .lc-presets button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+  .lc-chart { position: relative; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+  .is-live .lc-chart { cursor: ew-resize; }
+  .lc-chart:focus-visible { outline: 2px solid var(--ink); outline-offset: 6px; border-radius: 2px; }
+  .lc-row { display: grid; grid-template-columns: var(--lc-gutter) minmax(0, 1fr); align-items: center; height: 1.75rem; }
+  .lc-row-head { height: 1.2rem; }
+  .lc-row-pkg { height: 1.35rem; }
+  .lc-gap { height: .7rem; }
+  .lc-label { display: flex; align-items: center; gap: .45rem; min-width: 0; font-size: .72rem; color: var(--muted); text-decoration: none; white-space: nowrap; overflow: hidden; }
+  a.lc-label:hover { color: var(--ink); }
+  .lc-label i { width: .5rem; height: .5rem; border-radius: 50%; background: var(--lane, var(--ink)); flex: none; }
+  .lc-sub { padding-left: .95rem; font: .68rem/1.4 var(--mono); }
+  .lc-track { position: relative; height: 100%; overflow: hidden; }
+  .lc-track::before { content: ""; position: absolute; inset: 50% 0 auto; border-top: 1px dotted var(--faint); }
+  .lc-bar { position: absolute; top: 50%; height: 10px; margin-top: -5px; border-radius: 3px; background: var(--lane); transform-origin: left center; transition: opacity .2s, filter .15s; text-decoration: none; }
+  a.lc-bar:hover { filter: brightness(.88); }
+  .lc-ver { --lane: var(--muted); height: 13px; margin-top: -6.5px; display: flex; align-items: center; overflow: hidden; }
+  .lc-ver.pre { background: transparent; box-shadow: inset 0 0 0 1.5px var(--muted); }
+  .lc-ver b { font: 500 .56rem/1 var(--mono); color: var(--paper); padding-left: 4px; white-space: nowrap; }
+  .lc-ver.pre b { color: var(--muted); }
+  .lc-pub { position: absolute; top: 50%; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%; background: var(--ink); transition: opacity .2s; }
+  .lc-pub.co { background: var(--paper); box-shadow: inset 0 0 0 1.5px var(--ink); }
+  .lc-flag { position: absolute; top: 50%; width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px; border-radius: 50%; box-shadow: 0 0 0 1.5px var(--paper); transition: opacity .2s; }
+  .lc-chart .dim { opacity: .28; }
+  .lc-axis { height: 2.1rem; align-items: start; }
+  .lc-ticks { overflow: visible; border-top: 1px solid var(--line); }
+  .lc-ticks::before { display: none; }
+  .lc-ticks span { position: absolute; top: .3rem; transform: translateX(-50%); font-size: .68rem; line-height: 1.3; color: var(--muted); white-space: nowrap; text-align: center; }
+  .lc-ticks small { display: block; font-size: .6rem; color: var(--faint); }
+  .lc-grid { position: absolute; top: 0; bottom: 2.1rem; left: var(--lc-gutter); right: 0; pointer-events: none; }
+  .lc-grid i { position: absolute; top: 0; bottom: 0; border-left: 1px solid var(--line); opacity: .6; }
+  .lc-scrub { position: absolute; top: -1.9rem; bottom: 2.1rem; left: var(--lc-gutter); right: 0; pointer-events: none; }
+  .lc-scrub-line { position: absolute; top: 1.5rem; bottom: 0; border-left: 1.5px solid var(--ink); }
+  .lc-scrub-tag { position: absolute; top: 0; transform: translateX(-50%); font: 500 .7rem/1 var(--sans); background: var(--ink); color: var(--paper); padding: .28rem .45rem; border-radius: 3px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+  .lc-ov { display: grid; grid-template-columns: var(--lc-gutter) minmax(0, 1fr); align-items: start; margin-top: .9rem; }
+  .lc-ov-label { font-size: .72rem; color: var(--muted); padding-top: .5rem; }
+  .lc-ov-track { position: relative; height: 3.6rem; touch-action: none; cursor: crosshair; user-select: none; -webkit-user-select: none; }
+  .lc-ov-plot { position: absolute; inset: 0 0 1.25rem; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); overflow: hidden; }
+  .lc-ov-mark { position: absolute; height: 3px; border-radius: 1px; background: var(--lane, var(--muted)); }
+  .lc-ov-mark.dot { width: 3px; margin-left: -1.5px; background: var(--ink); }
+  .lc-ov-axis span { position: absolute; bottom: 0; transform: translateX(-50%); font-size: .62rem; color: var(--muted); white-space: nowrap; }
+  .lc-ov-18 { position: absolute; top: 0; bottom: 1.25rem; border-left: 1px dashed var(--faint); }
+  .lc-ov-18 span { position: absolute; top: 2px; right: 4px; font-size: .58rem; color: var(--muted); white-space: nowrap; }
+  .lc-ov-now { position: absolute; top: 0; bottom: 1.25rem; border-left: 1.5px solid var(--ink); pointer-events: none; }
+  .lc-ov-shade { position: absolute; top: 0; bottom: 1.25rem; background: color-mix(in srgb, var(--paper) 55%, transparent); pointer-events: none; }
+  .lc-ov-shade.l { left: 0; } .lc-ov-shade.r { right: 0; }
+  .lc-brush { position: absolute; top: -3px; bottom: calc(1.25rem - 3px); border: 1.5px solid var(--ink); border-radius: 4px; background: color-mix(in srgb, var(--ink) 7%, transparent); cursor: grab; }
+  .lc-brush:active { cursor: grabbing; }
+  .lc-brush .h { position: absolute; top: 50%; width: 9px; height: 22px; margin-top: -11px; border-radius: 3px; background: var(--ink); cursor: ew-resize; }
+  .lc-brush .h[data-h="l"] { left: -5px; } .lc-brush .h[data-h="r"] { right: -5px; }
+  .lc-brush .h::after { content: ""; position: absolute; inset: -10px -8px; }
+
+  .lc-key { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem 1.2rem; margin: .7rem 0 0; font-size: .74rem; color: var(--muted); }
+  .lc-key span { display: inline-flex; align-items: center; gap: .4rem; }
+  .lc-key i { flex: none; }
+  .k-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ink); }
+  .k-dot.co { background: transparent; box-shadow: inset 0 0 0 1.5px var(--ink); }
+  .k-ver { width: 18px; height: 9px; border-radius: 2px; background: var(--muted); }
+  .k-ver.pre { background: transparent; box-shadow: inset 0 0 0 1.5px var(--muted); }
+  .lc-key button { border: 0; background: none; padding: 0; font: inherit; color: var(--muted); text-decoration: underline; text-decoration-color: var(--faint); text-underline-offset: .2em; cursor: pointer; }
+  .lc-key button:hover { color: var(--ink); }
+
+  .lc-slice { display: grid; grid-template-columns: var(--label-width) repeat(3, minmax(0, 1fr)); gap: 2rem; margin-top: 2rem; padding-block: 1.6rem 2.4rem; border-top: 1px solid var(--line); }
+  .lc-slice > * { min-width: 0; }
+  .lc-when-title { font: 300 2rem/1.05 var(--serif); letter-spacing: -.03em; margin: 0; }
+  .lc-when-sub { margin: .5rem 0 0; font-size: .78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .lc-col h3 { font: 500 .72rem/1.9 var(--sans); color: var(--muted); margin: 0 0 .5rem; text-transform: uppercase; letter-spacing: .07em; }
+  .lc-col h3 a { text-decoration: none; }
+  .lc-col h3 a:hover { color: var(--ink); }
+  .lc-col h3 a::after { content: " →"; }
+  .lc-col > ul { list-style: none; padding: 0; margin: 0; display: grid; gap: .9rem; }
+  .lc-col li { margin: 0; }
+  .lc-item-title { display: flex; gap: .45rem; align-items: baseline; font-size: .9rem; font-weight: 500; line-height: 1.4; }
+  .lc-item-title a { text-decoration: none; }
+  .lc-item-title a:hover { text-decoration: underline; }
+  .lc-item-title i { width: .5rem; height: .5rem; border-radius: 50%; background: var(--lane, var(--ink)); flex: none; transform: translateY(-.05rem); }
+  .lc-item-meta { margin: .1rem 0 0; font-size: .78rem; color: var(--muted); }
+  .lc-points { list-style: none; padding: 0; margin: .3rem 0 0; }
+  .lc-points li { position: relative; margin: .15rem 0 0; padding-left: .8rem; font-size: .8rem; line-height: 1.45; color: var(--muted); }
+  .lc-points li::before { content: ""; position: absolute; left: 0; top: .66em; width: .32rem; border-top: 1px solid var(--faint); }
+  .lc-paper { font: 400 1rem/1.35 var(--serif); text-decoration: none; }
+  .lc-paper:hover { text-decoration: underline; }
+  .lc-pkg { font: .82rem var(--mono); }
+  .lc-version { font: 400 .74rem var(--mono); color: var(--muted); }
+  .lc-empty { font-size: .82rem; color: var(--faint); }
+
+  @media (max-width: 900px) {
+    .lc-slice { grid-template-columns: 1fr 1fr; }
+    .lc-slice > :first-child { grid-column: 1 / -1; }
+  }
+  @media (max-width: 760px) {
+    .lc { --lc-gutter: 4.8rem; }
+    .lc-head { grid-template-columns: 1fr; gap: .9rem; margin-bottom: 1.8rem; }
+    .lc-label { font-size: .64rem; }
+    .lc-sub { padding-left: 0; font-size: .6rem; }
+    .lc-ver b { display: none; }
+    .lc-slice { grid-template-columns: 1fr; gap: 1.5rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .lc-bar, .lc-pub, .lc-flag { transition: none; } }
+  @media print { .lc { display: none; } }
+</style>

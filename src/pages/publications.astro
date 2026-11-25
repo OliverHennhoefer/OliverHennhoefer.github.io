@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageIntro from "../components/PageIntro.astro";
+import { publications } from "../data/publications";
+import { site } from "../site";
+
+const surname = "Hennhöfer";
+const authorParts = (authors: string) => authors.split(",").map((name) => name.trim().split(" ").slice(1).join(" "));
+const years = [...new Set(publications.map((publication) => publication.year))].sort((a, b) => b - a);
+const firstAuthor = publications.filter((publication) => authorParts(publication.authors)[0] === surname).length;
+---
+<BaseLayout title="Publications" description="Publications of Oliver Hennhöfer (Hennhoefer) on conformal anomaly detection, uncertainty quantification and related work, by year." canonical="/publications/" full>
+  <PageIntro title="Publications" lede="Papers, preprints and talks, newest first." />
+  <section class="index-row" aria-labelledby="publications-heading">
+    <h2 id="publications-heading">By year</h2>
+    <div>
+      <p class="pub-summary">{publications.length} publications, {firstAuthor} as first author. <a href={site.socials.scholar}>Google Scholar ↗</a></p>
+      {years.map((year) => (
+        <div class="pub-year-group" id={`y${year}`}>
+          <span class="pub-year tnum">{year}</span>
+          <ol class="pubs">
+            {publications.filter((publication) => publication.year === year).map((publication) => {
+              const authors = authorParts(publication.authors);
+              const shown = authors.length > 4 ? [authors[0], "et al."] : authors;
+              return (
+                <li>
+                  <a class="pub-title" href={publication.url}>{publication.title}</a>
+                  <p class="pub-meta">
+                    <span class="venue">{publication.venueShort}</span>
+                    <span class="kind">{publication.kind}</span>
+                    {publication.talk && <span class="talk">{publication.talk}</span>}
+                    <span class="authors">{shown.map((name, i) => <>{i > 0 && (name === "et al." ? " " : ", ")}{name === surname ? <span class="me">{name}</span> : name}</>)}</span>
+                  </p>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

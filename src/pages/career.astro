@@ -1,0 +1,15 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageIntro from "../components/PageIntro.astro";
+import Stations from "../components/Stations.astro";
+---
+<BaseLayout title="Career" description="Career of Oliver Hennhöfer (Hennhoefer): research, teaching, industry and education stations, from geoinformation management to conformal anomaly detection at HKA Karlsruhe." canonical="/career/" full>
+  <PageIntro title="Career" lede="Every station with its roles, newest first. The timeline on the home page plots the same entries." />
+  <section class="index-row" aria-labelledby="stations-heading">
+    <h2 id="stations-heading">Stations</h2>
+    <div>
+      <Stations />
+      <a class="more-link" href="/cv/">Printable CV with skills and teaching details →</a>
+    </div>
+  </section>
+</BaseLayout>

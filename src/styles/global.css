@@ -102,6 +102,10 @@ main.page-full { --content-width: var(--page-width); padding-block: 0 2rem; }
 .index-intro > .intro-body { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) var(--portrait-width); gap: 0 3rem; align-items: center; --portrait-width: clamp(13rem, 24vw, 18rem); }
 .intro-body > .portrait { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
 .more-link { display: inline-block; margin-top: .9rem; font-size: .85rem; color: var(--muted); }
+/* Sub-page title block */
+.page-intro { --name-size: clamp(2.4rem, 5vw, 3.6rem); padding-block: 3.5rem 2.4rem; }
+.page-intro h1 { margin-bottom: 0; }
+.page-intro .lede { margin: .9rem 0 0; color: var(--muted); font-size: 1.02rem; }
 
 /* Profile links with icons */
 .profiles { display: flex; flex-wrap: wrap; gap: .2rem 1.3rem; margin: 1.5rem 0 0; padding: 0; list-style: none; font-size: .85rem; }
@@ -119,7 +123,7 @@ main.page-full { --content-width: var(--page-width); padding-block: 0 2rem; }
 
 /* Software list */
 .software { list-style: none; padding: 0; margin: 0; }
-.software > li { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 1rem; margin: 0; padding-block: .9rem; border-top: 1px solid var(--line); }
+.software > li { scroll-margin-top: 5rem; display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 1rem; margin: 0; padding-block: .9rem; border-top: 1px solid var(--line); }
 .software > li:first-child { border-top: 0; padding-top: 0; }
 .software h3 { font: 400 1.25rem/1.3 var(--serif); margin: 0; }
 .software h3 a { text-decoration: none; }
@@ -151,17 +155,6 @@ main.page-full { --content-width: var(--page-width); padding-block: 0 2rem; }
 .goals .done .check::after { content: ""; position: absolute; left: .24rem; top: .06rem; width: .22rem; height: .45rem; border: solid var(--paper); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
 .goals .done .goal-title { color: var(--muted); }
 .goal-detail, .goal-year { color: var(--muted); font-size: .85rem; }
-
-/* Perspectives */
-.mini-map { margin: 0; display: grid; grid-template-columns: minmax(0, 30rem) minmax(0, 1fr); gap: 1.6rem; align-items: end; }
-.mini-map svg { display: block; width: 100%; height: auto; }
-.mini-map .country { fill: var(--map-land); stroke: var(--paper); stroke-width: .4; stroke-linejoin: round; }
-.mini-map .country.visited { fill: var(--ink); }
-.mini-map .country:hover { fill: var(--faint); }
-.mini-map .country.visited:hover { fill: var(--muted); }
-.mini-map figcaption { font-size: .8rem; line-height: 1.7; color: var(--muted); }
-.mini-map .count { color: var(--ink); }
-
 
 /* Publications */
 .pub-summary { font-size: .85rem; color: var(--muted); margin: 0 0 1.1rem; }
@@ -218,9 +211,9 @@ address { font-style: normal; }
   .nameplate { display: block; }
   .nameplate .lede { width: auto; font-size: 1.05rem; }
   .project { grid-template-columns: 1fr; gap: .1rem; }
-  .software > li, .skills-list > li, .mini-map { grid-template-columns: 1fr; gap: .2rem; }
+  .software > li, .skills-list > li { grid-template-columns: 1fr; gap: .2rem; }
   .pub-year-group { grid-template-columns: 1fr; gap: .5rem; }
-  .site-header nav a:not([href="/cv/"]):not([href="/#cv"]) { display: none; }
+  .site-header nav a:not([href="/cv/"]):not([href="/career/"]):not([href="/publications/"]) { display: none; }
   .career li { padding-block: .5rem; }
   .skills-list .tools { margin-top: .35rem; }
 }

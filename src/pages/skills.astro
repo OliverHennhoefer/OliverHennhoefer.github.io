@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+import PageIntro from "../components/PageIntro.astro";
+import { skills } from "../data/skills";
+---
+<BaseLayout title="Skills" description="Skills of Oliver Hennhöfer (Hennhoefer): uncertainty quantification, conformal prediction, anomaly detection, Python, R, TypeScript, data systems and infrastructure." canonical="/skills/" full>
+  <PageIntro title="Skills" lede="Methods first, then the tools I use them with." />
+  <section class="index-row" aria-labelledby="skills-heading">
+    <h2 id="skills-heading">Areas</h2>
+    <ul class="skills-list">
+      {skills.map((skill) => (
+        <li>
+          <h3>{skill.area}</h3>
+          <ul class="tools" aria-label={skill.area}>
+            {skill.methods.map((method) => <li class="method">{method}</li>)}
+            {skill.tools.map((tool) => <li>{tool.icon && <Icon name={tool.icon} size={14} />}{tool.name}</li>)}
+          </ul>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>
