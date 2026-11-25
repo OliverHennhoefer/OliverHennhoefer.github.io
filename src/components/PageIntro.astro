@@ -1,0 +1,12 @@
+---
+// Title block for the sub-pages: the same label/content grid as the home page, with a smaller name size.
+type Props = { title: string; lede: string };
+const { title, lede } = Astro.props;
+---
+<section class="index-row index-intro page-intro" aria-labelledby="page-heading">
+  <span class="index-label">Oliver Hennhöfer</span>
+  <div>
+    <h1 id="page-heading">{title}</h1>
+    <p class="lede">{lede}</p>
+  </div>
+</section>

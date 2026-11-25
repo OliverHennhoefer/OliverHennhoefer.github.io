@@ -100,7 +100,7 @@ export const stations: Station[] = [
     org: "hka",
     period: "2013 – 2017",
     roles: [
-      { title: "B.Sc. Geoinformation Management", lane: "Education", start: 2013, end: 2017, period: "2013 – 17",
+      { title: "B.Sc. Geoinformation Management", lane: "Education", start: 2013 + 9 / 12, end: 2017, period: "2013 – 17",
         points: ["Thesis: Statistik und Geoanalyse mit R im hochschulischen Kontext."] },
     ],
   },

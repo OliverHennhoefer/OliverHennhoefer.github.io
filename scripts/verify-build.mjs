@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { resolve, join, extname, relative } from 'node:path';
-import { geoContains } from 'd3-geo';
 
 const root = resolve('dist');
 const origin = 'https://oliverhennhoefer.github.io';
@@ -105,30 +104,14 @@ assert(!/^Disallow: \/\s*$/m.test(robots), 'robots.txt must not block the site')
 const llms = await readFile(join(root, 'llms.txt'), 'utf8');
 assert.match(llms, /^# Oliver Hennhöfer\n\n> /, 'llms.txt must start with a title and summary');
 assert(llms.includes('Hennhoefer') && llms.includes(`${origin}/cv/`), 'llms.txt must give the ASCII spelling and link the CV');
-const travel = documents.get(join(root, 'index.html'));
-assert(travel, 'Home page with the travel map must be generated');
-const expectedPlaces = JSON.parse(await readFile('src/data/visited-countries.json', 'utf8')).sort();
-const mapRegions = [...travel.matchAll(/<path\b[^>]*data-country="[^"]+"[^>]*>/g)]
-  .map(([tag]) => attributes(tag));
-const markedPlaces = mapRegions.filter((region) => region.class.split(' ').includes('visited'))
-  .map((region) => region['data-country']).sort();
-assert.deepEqual(markedPlaces, expectedPlaces, 'Map highlights must match the supplied destinations');
-assert(mapRegions.length > 200, 'World map must include the country boundaries');
-assert(travel.length < 400_000, 'Home page map must stay light');
-assert(mapRegions.every((region) => region.d && !/NaN|Infinity/.test(region.d)), 'Map paths must be valid');
-assert(!mapRegions.some((region) => region['data-country'] === 'United Kingdom'), 'UK must use constituent-country boundaries');
-for (const name of ['England', 'Scotland', 'Wales', 'Northern Ireland']) {
-  assert(mapRegions.some((region) => region['data-country'] === name), `Missing UK boundary: ${name}`);
+for (const page of ['/career/', '/software/', '/publications/', '/skills/']) {
+  assert(sitemapUrls.includes(page), `Sitemap must list ${page}`);
 }
-const mapData = JSON.parse(await readFile('src/data/maps/map-units.json', 'utf8'));
-for (const [mainland, territory, point] of [
-  ['France', 'French Guiana', [-52.33, 4.94]],
-  ['Norway', 'Svalbard', [15.63, 78.22]],
-  ['Norway', 'Jan Mayen', [-8.4, 71]],
-]) {
-  assert(mapRegions.some((region) => region['data-country'] === territory), `Missing territory: ${territory}`);
-  assert(geoContains(mapData.features.find((region) => region.properties.name === territory), point), `${territory} must contain its own territory`);
-  assert(!geoContains(mapData.features.find((region) => region.properties.name === mainland), point), `${mainland} must not include ${territory}`);
-}
-
-console.log(`Verified ${htmlFiles.length} pages: headings, internal links, anchors, metadata, structured data, sitemap, robots, llms.txt, travel map, and math CSS isolation.`);
+const timeline = home.match(/<section class="lc"[\s\S]*?<\/section>/)?.[0];
+assert(timeline, 'Home page must include the timeline');
+const plotted = [...timeline.matchAll(/class="lc-(?:bar|pub|flag)[^"]*"[^>]*data-s="([^"]+)"/g)].map(([, at]) => Number(at));
+assert(plotted.length > 10 && plotted.every((at) => at > 1900 && at < 2200), 'Timeline marks need valid dates');
+const flags = [...timeline.matchAll(/<img[^>]*class="lc-flag"[^>]*src="([^"]+)"/g)].map(([, src]) => src);
+for (const src of flags) await destination(src);
+assert(home.length < 400_000, 'Home page must stay light');
+console.log(`Verified ${htmlFiles.length} pages: headings, internal links, anchors, metadata, structured data, sitemap, robots, llms.txt, home timeline, and math CSS isolation.`);
