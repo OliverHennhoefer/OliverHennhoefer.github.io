@@ -153,15 +153,6 @@ main.page-full { --content-width: var(--page-width); padding-block: 0 2rem; }
 .tools .icon { flex: none; }
 .tools .method { background: var(--soft, rgba(127,127,127,.08)); border-color: transparent; }
 
-/* Goals */
-.goals { list-style: none; padding: 0; margin: 0; }
-.goals li { display: grid; grid-template-columns: 1.4rem minmax(0, 1fr) auto; gap: .6rem; align-items: baseline; margin: 0; padding-block: .5rem; border-bottom: 1px solid var(--line); }
-.goals .check { width: .85rem; height: .85rem; border: 1px solid var(--ink); border-radius: 3px; transform: translateY(.1rem); position: relative; }
-.goals .done .check { background: var(--ink); }
-.goals .done .check::after { content: ""; position: absolute; left: .24rem; top: .06rem; width: .22rem; height: .45rem; border: solid var(--paper); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
-.goals .done .goal-title { color: var(--muted); }
-.goal-detail, .goal-year { color: var(--muted); font-size: .85rem; }
-
 /* Publications */
 .pub-summary { font-size: .85rem; color: var(--muted); margin: 0 0 1.1rem; }
 .pub-summary a { color: var(--ink); }

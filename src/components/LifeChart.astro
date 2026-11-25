@@ -29,7 +29,6 @@ const ticks = Array.from({ length: Math.ceil(today) - Math.ceil(v0) }, (_, i) =>
       <span class="lc-range-label tnum"></span>
       <div class="lc-presets" role="group" aria-label="Time range">
         {birth !== null && <><button type="button" data-range="life">Since birth</button><button type="button" data-range="18">Since 18</button></>}
-        <button type="button" data-range="career" aria-pressed="true">Since {Math.floor(timelineStart)}</button>
         <button type="button" data-range="5">5y</button>
         <button type="button" data-range="1">1y</button>
       </div>
