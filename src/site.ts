@@ -49,6 +49,7 @@ export const site = {
     linkedin: "https://linkedin.com/in/oliver-hennhoefer",
     x: "https://x.com/OHennhoefer",
     scholar: "https://scholar.google.com/citations?user=Q6W4KREAAAAJ&hl=de",
+    alphaxiv: "https://www.alphaxiv.org/@oliver-hennhofer",
   },
   /** Profiles only used for identity links (JSON-LD sameAs, rel="me"), not shown in the page. Add ORCID here once registered. */
   identities: [] as string[],
