@@ -36,16 +36,16 @@ const at = (years: number) => (site.birth ? site.birth.year + (site.birth.month 
 type Hobby = { title: string; start: number; end?: number; period: string; lane?: string };
 /** `short` replaces the row label on phones when the full one does not fit; `last` puts the row below Software. */
 export const timelineHobbies: { row: string; short?: string; lane: string; last?: boolean; entries: Hobby[] }[] = [
-  // Choir 2000 – 2011 and drums 2009 – 2012; the overlap is striped.
+  // Choir 2000 – 2011 and drums 2009 – 2017; the overlap is striped.
   { row: "Music", lane: "mus", entries: [
     { title: "Choir", start: 2000, end: 2009, period: "2000 – 11" },
     { title: "Choir + Drums", lane: "musmix", start: 2009, end: 2011, period: "2009 – 11" },
-    { title: "Drums", lane: "dru", start: 2011, end: 2012, period: "2009 – 12" },
+    { title: "Drums", lane: "dru", start: 2011, end: 2017, period: "2009 – 17" },
   ] },
-  // Athletics from school start (assumed) to 9, table tennis from 9 to 14, strength training since 2015.
+  // Athletics from school start (assumed) to 9, table tennis from 9 until 2011, strength training since 2015.
   { row: "Sport", lane: "spo", entries: [
     { title: "Athletics", start: 2001 + 8 / 12, end: at(9), period: "2001 – 04" },
-    { title: "Table tennis", start: at(9), end: at(14), period: "2004 – 09" },
+    { title: "Table tennis", start: at(9), end: 2011, period: "2004 – 11" },
     { title: "Strength training", start: 2015, period: "2015 – now" },
   ] },
   // Main AI assistant, with a wink. ChatGPT launched 30 Nov 2022; since Nov 2026 both are in use (striped).
