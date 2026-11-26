@@ -18,6 +18,10 @@
   --c-tea: #8f7299;
   --c-mus: #b0787a;
   --c-spo: #5c9690;
+  --c-dru: #8a5456;
+  --c-ai: #8e8e93;
+  --c-gpt: #74747a;
+  --c-cla: #c2704f;
   --serif: "Newsreader", Georgia, serif;
   --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
@@ -48,6 +52,10 @@
     --c-tea: #b49cbc;
     --c-mus: #cf9a9b;
     --c-spo: #8cc0ba;
+    --c-dru: #e6b9ba;
+    --c-ai: #8e8e93;
+    --c-gpt: #a3a3a8;
+    --c-cla: #dc9172;
   }
 }
 * { box-sizing: border-box; }
@@ -125,6 +133,14 @@ main.page-full { --content-width: var(--page-width); padding-block: 0 2rem; }
 .lane-tea { --lane: var(--c-tea); }
 .lane-mus { --lane: var(--c-mus); }
 .lane-spo { --lane: var(--c-spo); }
+.lane-ai { --lane: var(--c-ai); }
+.lane-gpt { --lane: var(--c-gpt); }
+.lane-cla { --lane: var(--c-cla); }
+.lane-dru { --lane: var(--c-dru); }
+/* Two things at once (two assistants, choir and drums): diagonal stripes of both colours. */
+.lane-mix { --lane: var(--c-cla); --stripe-a: var(--c-gpt); --stripe-b: var(--c-cla); }
+.lane-musmix { --lane: var(--c-mus); --stripe-a: var(--c-mus); --stripe-b: var(--c-dru); }
+.lane-mix, .lane-musmix { --stripes: repeating-linear-gradient(135deg, var(--stripe-a) 0 3px, var(--stripe-b) 3px 6px); }
 .role-line { margin: .7rem 0 0; font-size: .85rem; color: var(--muted); }
 
 /* Software list */
@@ -152,15 +168,6 @@ main.page-full { --content-width: var(--page-width); padding-block: 0 2rem; }
 .tools li { display: inline-flex; align-items: center; gap: .4rem; margin: 0; font-size: .78rem; padding: .22rem .65rem; border: 1px solid var(--line); border-radius: 999px; }
 .tools .icon { flex: none; }
 .tools .method { background: var(--soft, rgba(127,127,127,.08)); border-color: transparent; }
-
-/* Goals */
-.goals { list-style: none; padding: 0; margin: 0; }
-.goals li { display: grid; grid-template-columns: 1.4rem minmax(0, 1fr) auto; gap: .6rem; align-items: baseline; margin: 0; padding-block: .5rem; border-bottom: 1px solid var(--line); }
-.goals .check { width: .85rem; height: .85rem; border: 1px solid var(--ink); border-radius: 3px; transform: translateY(.1rem); position: relative; }
-.goals .done .check { background: var(--ink); }
-.goals .done .check::after { content: ""; position: absolute; left: .24rem; top: .06rem; width: .22rem; height: .45rem; border: solid var(--paper); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
-.goals .done .goal-title { color: var(--muted); }
-.goal-detail, .goal-year { color: var(--muted); font-size: .85rem; }
 
 /* Publications */
 .pub-summary { font-size: .85rem; color: var(--muted); margin: 0 0 1.1rem; }

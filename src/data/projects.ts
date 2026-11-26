@@ -53,15 +53,4 @@ export const projects: Project[] = [
       { label: "PyPI", href: "https://pypi.org/project/aberrant/" },
     ],
   },
-  {
-    name: "talk-tag",
-    summary: "A fine-tuned, 4-bit quantised language model that tags morphosyntactic errors in speech transcripts in CHAT format, trained on very little data.",
-    description: "LLM-based annotation of morphosyntactic errors in speech transcripts, developed for language research with limited training data.",
-    role: "Python · NLP",
-    links: [
-      { label: "Code", href: "https://github.com/OliverHennhoefer/talk-tag" },
-      { label: "PyPI", href: "https://pypi.org/project/talk-tag/" },
-      { label: "Paper", href: "https://aclanthology.org/2026.law-main.20/" },
-    ],
-  },
 ];
